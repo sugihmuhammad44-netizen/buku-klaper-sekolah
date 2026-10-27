@@ -475,45 +475,103 @@
             }
         }
 
-        // Excel Import
+        // Excel Import - Smart Row Detection
         window.handleExcelImport = function(e) {
             const file = e.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(evt) {
-                const data = new Uint8Array(evt.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-                
-                // Convert Sheet to JSON
-                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                
-                let count = 0;
-                // Loop skipping headers (rows 0 to 3)
-                for (let i = 4; i < jsonData.length; i++) {
-                    const row = jsonData[i];
-                    if (row && row[2]) { // If student name exists
-                        push(studentsRef, {
-                            nis: row[1] ? String(row[1]) : '',
-                            name: String(row[2]).trim().toUpperCase(),
-                            gender: row[3] ? String(row[3]).trim().toUpperCase() : 'L',
-                            parentName: row[4] ? String(row[4]).trim().toUpperCase() : '',
-                            entryDate: row[5] ? String(row[5]) : '',
-                            class1: row[6] ? String(row[6]) : '',
-                            class2: row[7] ? String(row[7]) : '',
-                            class3: row[8] ? String(row[8]) : '',
-                            class4: row[9] ? String(row[9]) : '',
-                            class5: row[10] ? String(row[10]) : '',
-                            class6: row[11] ? String(row[11]) : '',
-                            exitDate: row[12] ? String(row[12]) : '',
-                            notes: row[13] ? String(row[13]).trim().toUpperCase() : ''
-                        });
-                        count++;
+                try {
+                    const data = new Uint8Array(evt.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    
+                    // Convert Sheet to 2D Array
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    
+                    let count = 0;
+                    // Scan rows to find actual student data
+                    for (let i = 0; i < jsonData.length; i++) {
+                        const row = jsonData[i];
+                        if (!row || row.length === 0) continue;
+
+                        // Check if row contains student name (look at column index 1 or 2)
+                        let studentName = '';
+                        let nis = '';
+                        let gender = 'L';
+                        let parentName = '';
+                        let entryDate = '';
+                        let class1 = '', class2 = '', class3 = '', class4 = '', class5 = '', class6 = '';
+                        let exitDate = '';
+                        let notes = '';
+
+                        // Determine columns dynamically
+                        for (let col = 0; col < row.length; col++) {
+                            const val = row[col] ? String(row[col]).trim() : '';
+                            if (!val) continue;
+
+                            // Skip header row keywords
+                            if (val.toUpperCase().includes('NAMA SISWA') || 
+                                val.toUpperCase().includes('NOMOR INDUK') || 
+                                val.toUpperCase().includes('NO. URUT') ||
+                                val.toUpperCase().includes('BUKU KLAPER')) {
+                                studentName = '';
+                                break;
+                            }
+
+                            // Identify name: text with letters, not a number, length > 2
+                            if (!studentName && isNaN(val) && val.length >= 3 && !['L', 'P', 'LULUS', 'MUTASI', 'AKTIF', 'KELAS'].includes(val.toUpperCase())) {
+                                studentName = val;
+                            }
+                        }
+
+                        if (studentName) {
+                            // Map values based on position in row
+                            nis = row[1] ? String(row[1]).trim() : (row[0] ? String(row[0]).trim() : '');
+                            studentName = row[2] ? String(row[2]).trim() : studentName;
+                            gender = row[3] ? String(row[3]).trim().toUpperCase() : 'L';
+                            parentName = row[4] ? String(row[4]).trim() : '';
+                            entryDate = row[5] ? String(row[5]).trim() : '';
+                            class1 = row[6] ? String(row[6]).trim() : '';
+                            class2 = row[7] ? String(row[7]).trim() : '';
+                            class3 = row[8] ? String(row[8]).trim() : '';
+                            class4 = row[9] ? String(row[9]).trim() : '';
+                            class5 = row[10] ? String(row[10]).trim() : '';
+                            class6 = row[11] ? String(row[11]).trim() : '';
+                            exitDate = row[12] ? String(row[12]).trim() : '';
+                            notes = row[13] ? String(row[13]).trim() : (row[10] ? String(row[10]).trim() : '');
+
+                            // Push to Cloud Database
+                            push(studentsRef, {
+                                nis: nis,
+                                name: studentName.toUpperCase(),
+                                gender: gender.toUpperCase() === 'P' ? 'P' : 'L',
+                                parentName: parentName.toUpperCase(),
+                                entryDate: entryDate,
+                                class1: class1,
+                                class2: class2,
+                                class3: class3,
+                                class4: class4,
+                                class5: class5,
+                                class6: class6,
+                                exitDate: exitDate,
+                                notes: notes.toUpperCase()
+                            });
+                            count++;
+                        }
                     }
+
+                    if (count > 0) {
+                        alert(`Berhasil mengimpor ${count} data siswa ke Cloud Database!`);
+                    } else {
+                        alert('Tidak ada data siswa yang valid ditemukan dalam berkas Excel tersebut. Pastikan berkas menggunakan kolom Nama Siswa di kolom C.');
+                    }
+                } catch (err) {
+                    console.error("Import Error:", err);
+                    alert("Gagal memproses berkas Excel. Pastikan format berkas sesuai.");
                 }
-                alert(`Berhasil mengimpor ${count} data siswa ke Cloud Database!`);
                 e.target.value = '';
             };
             reader.readAsArrayBuffer(file);
