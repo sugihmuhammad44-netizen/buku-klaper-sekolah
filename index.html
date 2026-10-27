@@ -18,7 +18,6 @@
             body { background: white; color: black; }
             table { border-collapse: collapse; width: 100%; font-size: 9pt; }
             th, td { border: 1px solid #000 !important; padding: 4px 5px !important; }
-            /* Memastikan tajuk cetak muncul di setiap halaman */
             #printHeader { display: block !important; margin-bottom: 20px; text-align: center; }
         }
     </style>
@@ -30,8 +29,8 @@
         <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <!-- Brand & Logo Container -->
             <div class="flex items-center space-x-4">
-                <!-- Logo Image (Visible only on web) -->
-                <img src="https://raw.githubusercontent.com/username/buku-klaper-sdn186/main/image_0.png" alt="Logo SDN 186 Cipadung" class="h-16 w-16 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
+                <!-- Logo Sekolah -->
+                <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-16 w-16 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight uppercase">BUKU KLAPER SDN 186 CIPADUNG</h1>
                     <p class="text-indigo-200 text-sm">Arsip & Pendaftaran Data Siswa Sekolah (Realtime Cloud)</p>
@@ -103,10 +102,10 @@
             </div>
         </div>
 
-        <!-- Print Header with Logo (Hidden by default, shown when printing) -->
+        <!-- Print Header with Logo -->
         <div id="printHeader" class="hidden print-only mb-6 text-center border-b-2 border-black pb-4">
             <div class="flex items-center justify-center space-x-4">
-                <img src="https://raw.githubusercontent.com/username/buku-klaper-sdn186/main/image_0.png" alt="Logo SDN 186 Cipadung" class="h-20 w-20 object-contain">
+                <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-20 w-20 object-contain">
                 <div>
                     <h1 class="text-xl font-bold uppercase tracking-wider">BUKU KLAPER SISWA SEKOLAH</h1>
                     <h2 class="text-lg font-semibold uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h2>
@@ -259,7 +258,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, push, set, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Konfigurasi Database Publik Firebase
+        // Ganti URL ini dengan Realtime Database URL milik Anda dari Firebase Console
         const firebaseConfig = {
             databaseURL: "https://buku-klaper-sdn186-default-rtdb.asia-southeast1.firebasedatabase.app"
         };
@@ -469,10 +468,8 @@
             };
 
             if (key) {
-                // Update
                 update(ref(db, `students/${key}`), studentPayload);
             } else {
-                // Create
                 push(studentsRef, studentPayload);
             }
 
@@ -506,7 +503,7 @@
             }
         }
 
-        // Excel Import - Dynamic Column Scanner
+        // Excel Import
         window.handleExcelImport = function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -530,19 +527,16 @@
                         let entryDate = '', exitDate = '', notes = '';
                         let class1 = '', class2 = '', class3 = '', class4 = '', class5 = '', class6 = '';
 
-                        // Scan non-empty cells in the row
                         for (let col = 0; col < row.length; col++) {
                             const val = row[col] ? String(row[col]).trim() : '';
                             if (!val) continue;
 
                             const upperVal = val.toUpperCase();
-                            // Skip header rows
                             if (upperVal.includes('NAMA SISWA') || upperVal.includes('NOMOR INDUK') || upperVal.includes('BUKU KLAPER') || upperVal.includes('NO. URUT')) {
                                 name = '';
                                 break;
                             }
 
-                            // Detect Student Name: Any text string with letters and length >= 3
                             if (!name && isNaN(val) && val.length >= 3 && !['L', 'P', 'LULUS', 'AKTIF', 'MUTASI', 'KELAS'].includes(upperVal)) {
                                 name = val;
                             }
