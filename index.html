@@ -211,6 +211,21 @@
                     <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
                     <p class="text-slate-500 font-medium">Belum ada data siswa yang cocok.</p>
                 </div>
+
+                <!-- CONTROLLER PAGINATION KLAPER -->
+                <div id="klaperPagination" class="no-print p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="text-slate-600">Tampilkan</span>
+                        <select id="klaperPageSize" onchange="changeKlaperPageSize()" class="border rounded px-2 py-1 text-xs bg-white">
+                            <option value="10">10</option>
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <span id="klaperInfoText" class="text-slate-600 font-medium">Menampilkan 0 - 0 dari 0 data</span>
+                    </div>
+                    <div id="klaperPageButtons" class="flex items-center gap-1"></div>
+                </div>
             </div>
         </div>
 
@@ -247,6 +262,21 @@
             </div>
 
             <div id="indukGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+            <!-- CONTROLLER PAGINATION INDUK -->
+            <div id="indukPagination" class="no-print mt-6 p-4 bg-white rounded-xl shadow-md border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-600">Tampilkan per Halaman</span>
+                    <select id="indukPageSize" onchange="changeIndukPageSize()" class="border rounded px-2 py-1 text-xs bg-slate-50">
+                        <option value="6">6</option>
+                        <option value="12" selected>12</option>
+                        <option value="24">24</option>
+                        <option value="48">48</option>
+                    </select>
+                    <span id="indukInfoText" class="text-slate-600 font-medium">Menampilkan 0 - 0 dari 0 Kartu</span>
+                </div>
+                <div id="indukPageButtons" class="flex items-center gap-1"></div>
+            </div>
         </div>
 
         <!-- VIEW 3: MANAJEMEN NOMOR SURAT -->
@@ -737,7 +767,7 @@
         const studentsRef = ref(db, 'students');
         const suratRef = ref(db, 'surat_keluar');
 
-        /* DATA MASTER KLASIFIKASI ARSIP SURAT DARI EXCEL */
+        /* DATA MASTER KLASIFIKASI ARSIP SURAT */
         const KLASIFIKASI_SURAT_LIST = [
             {"kode": "HM", "nama": "Hubungan Masyarakat"}, {"kode": "HK", "nama": "Hukum"}, {"kode": "KP", "nama": "Kepegawaian"}, {"kode": "RT", "nama": "Kerumahtanggaan"}, {"kode": "TU", "nama": "Ketatausahaan"}, {"kode": "KU", "nama": "Keuangan"}, {"kode": "TL", "nama": "Organisasi dan Tata Laksana"}, {"kode": "PP", "nama": "Penelitian, Pengkajian, dan Pengembangan"}, {"kode": "PW", "nama": "Pengawasan"}, {"kode": "AR", "nama": "Kearsipan"}, {"kode": "LH", "nama": "Lingkungan Hidup"}, {"kode": "PA", "nama": "Pemberdayaan Perempuan dan Perlindungan Anak"}, {"kode": "PD", "nama": "Pemerintahan Daerah"}, {"kode": "PO", "nama": "Pemuda dan Olahraga"}, {"kode": "PB", "nama": "Penanggulangan Bencana"}, {"kode": "PK", "nama": "Pendidikan dan Kebudayaan"}, {"kode": "PN", "nama": "Perencanaan dan Pembangunan"}, {"kode": "HB", "nama": "Perhubungan"}, {"kode": "PS", "nama": "Perpustakaan"}, {"kode": "HM.01", "nama": "Penerangan dan Publikasi"}, {"kode": "HM.03", "nama": "Hubungan Antar Lembaga"}, {"kode": "HM.03.04", "nama": "Organisasi Kemasyarakatan"}, {"kode": "HM.03.05", "nama": "Perguruan Tinggi/Sekolah"}, {"kode": "HM.04.01", "nama": "Upacara/Acara Kedinasan"}, {"kode": "HM.04.02", "nama": "Kunjungan"}, {"kode": "HM.04.03", "nama": "Agenda Pimpinan"}, {"kode": "HK.01", "nama": "Program Pembentukan Peraturan Daerah"}, {"kode": "HK.01.01", "nama": "Perencanaan Program Pembentukan Peraturan Daerah"}, {"kode": "HK.01.02", "nama": "Evaluasi Program Pembentukan Peraturan Daerah"}, {"kode": "HK.02", "nama": "Produk Hukum"}, {"kode": "HK.02.01", "nama": "Proses Penyusunan Peraturan Daerah"}, {"kode": "HK.02.02", "nama": "Proses Penyusunan Peraturan Wali Kota"}, {"kode": "HK.02.03", "nama": "Proses Penyusunan Keputusan Wali Kota"}, {"kode": "HK.03", "nama": "Perjanjian Kerja Sama"}, {"kode": "HK.03.01", "nama": "Kerja Sama Dalam Negeri"}, {"kode": "HK.03.02", "nama": "Kerja Sama Luar Negeri"}, {"kode": "HK.04", "nama": "Bantuan Hukum"}, {"kode": "HK.04.01", "nama": "Bantuan Hukum Kasus Perdata"}, {"kode": "HK.04.02", "nama": "Bantuan Hukum Kasus Pidana"}, {"kode": "HK.06", "nama": "Sosialisasi Hukum"}, {"kode": "HK.07", "nama": "Dokumentasi Hukum"}, {"kode": "HK.07.01", "nama": "Kegiatan Pengembangan Dokumentasi Hukum"}, {"kode": "HK.07.02", "nama": "Data Base Dokumentasi Hukum"}, {"kode": "HK.09", "nama": "Penegakan Hukum"}, {"kode": "HK.09.01", "nama": "Kegiatan Penegakan Peraturan Daerah dan Peraturan Kepala Daerah"}, {"kode": "HK.10.02", "nama": "Pembinaan PPNS"}, {"kode": "KP.01", "nama": "Persediaan Pegawai"}, {"kode": "KP.02", "nama": "Formasi Pegawai"}, {"kode": "KP.02.01", "nama": "Usulan Unit Kerja"}, {"kode": "KP.02.02", "nama": "Usulan Formasi"}, {"kode": "KP.02.03", "nama": "Persetujuan/Penetapan Formasi"}, {"kode": "KP.02.04", "nama": "Penetapan Formasi Khusus"}, {"kode": "KP.03", "nama": "Pengadaan Formasi"}, {"kode": "KP.04", "nama": "Ujian Kenaikan Pangkat/Jabatan"}, {"kode": "KP.03.01", "nama": "Penerimaan"}, {"kode": "KP.03.02", "nama": "Pengangkatan CPNS dan PNS"}, {"kode": "KP.03.03", "nama": "Prajabatan"}, {"kode": "KP.04.01", "nama": "Ujian Penyesuaian Ijazah"}, {"kode": "KP.04.02", "nama": "Ujian Dinas"}, {"kode": "KP.05", "nama": "Ujian Kompetensi"}, {"kode": "KP.05.01", "nama": "Assessment Test Pegawai"}, {"kode": "KP.05.02", "nama": "Talent Mapping/Pemetaan Pegawai"}, {"kode": "KP.06", "nama": "Mutasi"}, {"kode": "KP.06.01", "nama": "Kenaikan Pangkat/Golongan"}, {"kode": "KP.06.02", "nama": "Kenaikan Gaji Berkala"}, {"kode": "KP.06.03", "nama": "Penyesuaian Masa Kerja"}, {"kode": "KP.06.04", "nama": "Penyesuaian Tunjangan Keluarga"}, {"kode": "KP.06.05", "nama": "Penyesuaian Kelas Jabatan"}, {"kode": "KP.06.06", "nama": "Alih Tugas"}, {"kode": "KP.07", "nama": "Pengangkatan dan Pemberhentian Jabatan"}, {"kode": "KP.07.01", "nama": "Pengangkatan Jabatan"}, {"kode": "KP.07.02", "nama": "Pemberhentian Jabatan Struktural"}, {"kode": "KP.08", "nama": "Pendelegasian Wewenang"}, {"kode": "KP.08.01", "nama": "Penjabat (Pj)"}, {"kode": "KP.08.02", "nama": "Pelaksana Tugas (Plt)"}, {"kode": "KP.08.03", "nama": "Pelaksana Harian (Plh)"}, {"kode": "KP.09", "nama": "Pendidikan dan Pelatihan Pegawai"}, {"kode": "KP.09.04", "nama": "Pendidikan dan Pelatihan Penjenjangan"}, {"kode": "KP.09.05", "nama": "Kursus/Diklat Fungsional"}, {"kode": "KP.09.06", "nama": "Kurus/Diklat Teknis"}, {"kode": "KP.09.07", "nama": "Orientasi CPNS"}, {"kode": "KP.10", "nama": "Administrasi Pegawai"}, {"kode": "KP.10.01", "nama": "Data/Keterangan Pegawai"}, {"kode": "KP.10.02", "nama": "Kartu Pegawai"}, {"kode": "KP.10.03", "nama": "Karis/Karsu"}, {"kode": "KP.10.04", "nama": "Kartu Taspen"}, {"kode": "KP.10.05", "nama": "Kartu Jaminan Kesehatan"}, {"kode": "KP.10.06", "nama": "Tanda Jasa"}, {"kode": "KP.10.07", "nama": "Keterangan Penerimaan Pembiayaan Penghasilan Pegawai (KP4)"}, {"kode": "KP.10.08", "nama": "Laporan Harta Kekayaan Penyelenggara Negara (LHKPN)"}, {"kode": "KP.10.09", "nama": "Tunjangan Kinerja dan Uang Makan"}, {"kode": "KP.11", "nama": "Cuti Pegawai"}, {"kode": "KP.11.01", "nama": "Cuti Tahunan"}, {"kode": "KP.11.02", "nama": "Cuti Besar"}, {"kode": "KP.11.03", "nama": "Cuti Sakit"}, {"kode": "KP.11.04", "nama": "Cuti Bersalin"}, {"kode": "KP.11.05", "nama": "Cuti Karena Alasan Penting"}, {"kode": "KP.11.06", "nama": "Cuti di Luar Tanggungan Negara"}, {"kode": "KP.12", "nama": "Pembinaan Pegawai"}, {"kode": "KP.12.01", "nama": "Penilaian Prestasi Kerja"}, {"kode": "KP.12.02", "nama": "Sasaran Kerja Pegawai"}, {"kode": "KP.12.03", "nama": "Pembinaan Mental"}, {"kode": "KP.12.04", "nama": "Hukuman Disiplin"}, {"kode": "KP.13", "nama": "Pembinaan Jabatan Fungsional"}, {"kode": "KP.13.01", "nama": "Pengangkatan Jabatan Fungsional Tertentu"}, {"kode": "KP.13.02", "nama": "Kenaikan Jenjang Jabatan"}, {"kode": "KP.13.03", "nama": "Pemindahan Jabatan Fungsional Tertentu"}, {"kode": "KP.13.04", "nama": "Pengangkatan Jabatan Fungsional Umum"}, {"kode": "KP.13.05", "nama": "Pemindahan Jabatan Fungsional Umum"}, {"kode": "KP.13.06", "nama": "Pemberhentian"}, {"kode": "KP.14", "nama": "Kesejahteraan"}, {"kode": "KP.14.01", "nama": "Kesehatan"}, {"kode": "KP.14.03", "nama": "Bantuan Sosial"}, {"kode": "KP.15", "nama": "Pemberhentian Pegawai"}, {"kode": "KP.16", "nama": "Pemberhentian dan Penetapan Pensiun Pegawai/Janda /Duda/PNS yang Tewas"}, {"kode": "KP.17", "nama": "Perselisihan/Sengketa Pegawai"}, {"kode": "KP.18", "nama": "Organisasi Non Kedinasan"}, {"kode": "KP.18.03", "nama": "Koperasi"}, {"kode": "RT.01", "nama": "Perjalanan Dinas Pimpinan"}, {"kode": "RT.02", "nama": "Rapat Pimpinan"}, {"kode": "RT.02.01", "nama": "Sarana dan Prasarana"}, {"kode": "RT.02.02", "nama": "Jamuan Rapat"}, {"kode": "RT.03.01", "nama": "Pemeliharaan Gedung"}, {"kode": "RT.03.02", "nama": "Perlengkapan Kantor"}, {"kode": "RT.03.03", "nama": "Air, Listrik dan Telekomunikasi"}, {"kode": "RT.03.04", "nama": "Keamanan Kantor"}, {"kode": "RT.03.05", "nama": "Kebersihan Kantor"}, {"kode": "RT.03.06", "nama": "Jamuan Tamu"}, {"kode": "RT.05", "nama": "Fasilitas Pimpinan"}, {"kode": "RT.05.01", "nama": "Kendaraan Dinas"}, {"kode": "RT.05.02", "nama": "Pengawalan dan Pengamanan"}, {"kode": "TU.01", "nama": "Persuratan"}, {"kode": "TU.01.01", "nama": "Pengurusan Surat Masuk"}, {"kode": "TU.01.02", "nama": "Pengurusan Surat Keluar"}, {"kode": "TU.01.03", "nama": "Korepondensi Internal"}, {"kode": "KT.01", "nama": "Perencanaan Tenaga Kerja"}, {"kode": "TU.03", "nama": "Agenda kegiatan"}, {"kode": "TU.04", "nama": "Rapat/Rakor/Rakernis"}, {"kode": "KU.01", "nama": "Rencana Anggaran Pendapatan dan Belanja Daerah"}, {"kode": "KU.01.01", "nama": "Penyusunan Prioritas Plafon Anggaran"}, {"kode": "KU.01.01.01", "nama": "Kebijakan Umum, Strategi, Prioritas dan Renstra"}, {"kode": "KU.01.01.02", "nama": "Dokumen Rancangan kebijakan Umum Anggaran (KUA)"}, {"kode": "KU.01.01.03", "nama": "KUA beserta Nota Kesepakatannya"}, {"kode": "KU.01.01.04", "nama": "Dokumen Rancangan Prioritas Plafon Anggaran Sementara (PPAS)"}, {"kode": "KU.01.01.05", "nama": "Nota Kesepakatan PPA"}, {"kode": "KU.01.01.06", "nama": "Prioritas Plafon Anggaran"}, {"kode": "KU.01.02", "nama": "Penyusunan Rencana Kerja Anggaran SKPD (RKA-SKPD)"}, {"kode": "KU.01.02.01", "nama": "Dokumen Pedoman Penyusunan RKA-SKPD"}, {"kode": "KU.01.02.02", "nama": "Dokumen RKA-SKPD"}, {"kode": "KU.01.03", "nama": "Penyampaian RAPBD kepada DPRD"}, {"kode": "KU.01.03.01", "nama": "Pengantar Nota Keuangan dan Raperda APBD"}, {"kode": "KU.01.03.08", "nama": "Peraturan Daerah tentang APBD"}, {"kode": "KU.03.01", "nama": "Surat Penyedia Dana (SPP, SPM, dan SP2D)"}, {"kode": "KU.03.10", "nama": "Dokumen Belanja Langsung"}, {"kode": "KU.03.10.01", "nama": "Belanja Pegawai"}, {"kode": "KU.05", "nama": "Dokumen Penatausahaan Keuangan"}, {"kode": "KU.05.01", "nama": "Surat Penyediaan Dana (SPD)"}, {"kode": "KU.05.02", "nama": "Surat Permohonan Pembayaran (SPP)"}, {"kode": "KU.05.03", "nama": "Surat Perintah Membayar (SPM)"}, {"kode": "KU.05.04", "nama": "Surat Perintah Pencairan Dana (SP2D)"}, {"kode": "PB.01", "nama": "Pencegahan dan Kesiapsiagaan Bencana"}, {"kode": "PK.01", "nama": "Kebijakan Bersifat Pengaturan Pendidikan"}, {"kode": "PK.01.01", "nama": "Kebijakan tentang Pendidikan dan Kebudayaan"}, {"kode": "PK.02", "nama": "Kebijakan Bersifat Penerapan Pendidikan"}, {"kode": "PK.03", "nama": "Pembinaan Pendidikan"}, {"kode": "PK.03.01", "nama": "Pendidikan Anak Usia Dini, Non Formal dan Informal"}, {"kode": "PK.03.01.01", "nama": "PAUD (Bahan Ajar, Pelatihan)"}, {"kode": "PK.03.01.04", "nama": "Pendidikan Masyarakat"}, {"kode": "PK.03.02", "nama": "Pendidikan Dasar"}, {"kode": "PK.03.02.01", "nama": "Sekolah Dasar (Kurikulum, Bahan Ajar dan Pelatihan) bisa digunakan untuk mutasi siswa"}, {"kode": "PK.03.02.02", "nama": "Sekolah Dasar (Block Grant)"}, {"kode": "PK.03.02.03", "nama": "Sekolah Dasar (Bimbingan Teknis, Sosialisasi, Lomba, Sayembara, Festival)"}, {"kode": "PK.03.02.04", "nama": "Sekolah Dasar (BOS dan Bantuan Siswa Miskin)"}, {"kode": "PK.03.02.05", "nama": "Sekolah Menengah Pertama"}, {"kode": "AR.01.01.05", "nama": "Sosialisasi Peraturan Daerah"}, {"kode": "AR.03.01.01", "nama": "Pencatatan (Buku Agenda, Kartu Kendali dan Lembar Pengantar)"}, {"kode": "AR.03.05.03", "nama": "Berita Acara"}, {"kode": "AR.03.08.03.02", "nama": "Notulen Rapat"}, {"kode": "PK.05", "nama": "Kurikulum"}, {"kode": "PK.05.01", "nama": "Pembinaan Kurikulum"}, {"kode": "PK.06", "nama": "Perbukuan"}, {"kode": "PK.07", "nama": "Penilaian Pendidikan"}, {"kode": "PK.07.01", "nama": "Penilaian Akademik"}, {"kode": "PK.07.02", "nama": "Penilaian Non Akademik"}, {"kode": "PK.08", "nama": "Pengembangan dan Pembinaan Bahasa"}, {"kode": "PK.09.04", "nama": "Penjaminan Mutu Pendidikan"}, {"kode": "PK.10", "nama": "Teknologi Informasi dan Komunikasi Pendidikan"}, {"kode": "PK.11", "nama": "Data dan Statistik Pendidikan"}, {"kode": "PK.11.01", "nama": "Data Peserta Didik, Pendidik, dan Tenaga Kependidikan"}, {"kode": "PK.13", "nama": "Monitoring dan Evaluasi Pendidikan"}
         ];
@@ -752,6 +782,13 @@
         let currentSearchQuery = '';
         let currentIndukQuery = '';
         let currentUserRole = 'VIEWER';
+
+        /* VARIABEL PAGINATION BUKU KLAPER & INDUK */
+        let klaperCurrentPage = 1;
+        let klaperPageSize = 25;
+
+        let indukCurrentPage = 1;
+        let indukPageSize = 12;
 
         onAuthStateChanged(auth, (user) => {
             const loginModal = document.getElementById('loginModal');
@@ -857,7 +894,270 @@
             }
         }
 
-        /* --- LOGIK PENOMORAN SURAT DENGAN KLASIFIKASI EXCEL --- */
+        /* --- FUNGSI KLAPER & PAGINATION KLAPER --- */
+        window.renderData = function() {
+            const tbody = document.getElementById('tableBody');
+            const emptyState = document.getElementById('emptyState');
+            const statusFilter = document.getElementById('filterStatus').value;
+
+            const actionColumns = document.querySelectorAll('.action-column');
+            actionColumns.forEach(col => {
+                if (currentUserRole === 'ADMIN') col.classList.remove('hidden');
+                else col.classList.add('hidden');
+            });
+
+            let studentArray = Object.keys(studentsData).map(key => ({
+                key: key,
+                ...studentsData[key]
+            }));
+
+            studentArray.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            if (currentLetterFilter !== 'ALL') {
+                studentArray = studentArray.filter(s => (s.name || '').trim().toUpperCase().startsWith(currentLetterFilter));
+            }
+
+            if (currentSearchQuery.trim() !== '') {
+                const q = currentSearchQuery.toLowerCase();
+                studentArray = studentArray.filter(s => 
+                    (s.name || '').toLowerCase().includes(q) ||
+                    (s.nis || '').toLowerCase().includes(q) ||
+                    (s.nisn || '').toLowerCase().includes(q) ||
+                    (s.parentName || '').toLowerCase().includes(q)
+                );
+            }
+
+            if (statusFilter !== 'ALL') {
+                studentArray = studentArray.filter(s => (s.notes || '').toUpperCase().includes(statusFilter));
+            }
+
+            const totalFiltered = studentArray.length;
+            document.getElementById('totalStudentsCount').textContent = Object.keys(studentsData).length;
+
+            if (totalFiltered === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                renderKlaperPaginationControls(0, 0, 0);
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            // Hitung kalkulasi Halaman
+            const totalPages = Math.ceil(totalFiltered / klaperPageSize);
+            if (klaperCurrentPage > totalPages) klaperCurrentPage = totalPages;
+            if (klaperCurrentPage < 1) klaperCurrentPage = 1;
+
+            const startIndex = (klaperCurrentPage - 1) * klaperPageSize;
+            const endIndex = Math.min(startIndex + klaperPageSize, totalFiltered);
+            const pageStudents = studentArray.slice(startIndex, endIndex);
+
+            tbody.innerHTML = pageStudents.map((student, index) => `
+                <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-500 font-medium">${startIndex + index + 1}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 font-mono text-slate-700">${student.nis || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200 font-semibold text-slate-900">${student.name || '-'}</td>
+                    <td class="py-2.5 px-2 text-center border-r border-slate-200 font-bold ${student.gender === 'L' ? 'text-blue-600' : 'text-pink-600'}">${student.gender || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200 text-slate-700">${student.parentName || '-'}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-600 whitespace-nowrap">${student.entryDate || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class1 || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class2 || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class3 || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class4 || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class5 || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class6 || '-'}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-600 whitespace-nowrap">${student.exitDate || '-'}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 whitespace-nowrap">
+                        <span class="px-2 py-0.5 rounded text-xs font-bold ${
+                            (student.notes || '').includes('LULUS') ? 'bg-emerald-100 text-emerald-800' :
+                            (student.notes || '').includes('AKTIF') ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-700'
+                        }">${student.notes || '-'}</span>
+                    </td>
+                    <td class="py-2.5 px-3 text-center no-print action-column ${currentUserRole === 'ADMIN' ? '' : 'hidden'}">
+                        <div class="flex justify-center gap-2">
+                            <button onclick="editStudent('${student.key}')" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 rounded text-xs font-medium transition flex items-center gap-1">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </button>
+                            <button onclick="deleteStudent('${student.key}', '${student.name}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded text-xs font-medium transition flex items-center gap-1">
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            renderKlaperPaginationControls(startIndex + 1, endIndex, totalFiltered, totalPages);
+        }
+
+        function renderKlaperPaginationControls(start, end, total, totalPages) {
+            document.getElementById('klaperInfoText').textContent = `Menampilkan ${start} - ${end} dari ${total} data`;
+            const container = document.getElementById('klaperPageButtons');
+            if (total === 0 || totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = `
+                <button onclick="goToKlaperPage(${klaperCurrentPage - 1})" ${klaperCurrentPage === 1 ? 'disabled' : ''} class="px-2.5 py-1 rounded border text-xs bg-white hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-white font-medium">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+            `;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= klaperCurrentPage - 1 && i <= klaperCurrentPage + 1)) {
+                    html += `
+                        <button onclick="goToKlaperPage(${i})" class="px-3 py-1 rounded border text-xs font-bold transition ${i === klaperCurrentPage ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white hover:bg-slate-100 text-slate-700'}">
+                            ${i}
+                        </button>
+                    `;
+                } else if (i === klaperCurrentPage - 2 || i === klaperCurrentPage + 2) {
+                    html += `<span class="px-1 text-slate-400">...</span>`;
+                }
+            }
+
+            html += `
+                <button onclick="goToKlaperPage(${klaperCurrentPage + 1})" ${klaperCurrentPage === totalPages ? 'disabled' : ''} class="px-2.5 py-1 rounded border text-xs bg-white hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-white font-medium">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        window.goToKlaperPage = function(page) {
+            klaperCurrentPage = page;
+            renderData();
+        }
+
+        window.changeKlaperPageSize = function() {
+            klaperPageSize = parseInt(document.getElementById('klaperPageSize').value, 10);
+            klaperCurrentPage = 1;
+            renderData();
+        }
+
+        /* --- FUNGSI INDUK & PAGINATION INDUK --- */
+        window.renderIndukGrid = function() {
+            const grid = document.getElementById('indukGrid');
+            let studentArray = Object.keys(studentsData).map(key => ({
+                key: key,
+                ...studentsData[key]
+            }));
+
+            studentArray.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            if (currentIndukQuery.trim() !== '') {
+                const q = currentIndukQuery.toLowerCase();
+                studentArray = studentArray.filter(s => 
+                    (s.name || '').toLowerCase().includes(q) ||
+                    (s.nis || '').toLowerCase().includes(q) ||
+                    (s.nisn || '').toLowerCase().includes(q) ||
+                    (s.nik || '').toLowerCase().includes(q) ||
+                    (s.parentName || '').toLowerCase().includes(q)
+                );
+            }
+
+            const totalFiltered = studentArray.length;
+
+            if (totalFiltered === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400"><i class="fa-solid fa-id-card text-4xl mb-2"></i><p>Tidak ada lembar Buku Induk siswa yang cocok.</p></div>`;
+                renderIndukPaginationControls(0, 0, 0);
+                return;
+            }
+
+            const totalPages = Math.ceil(totalFiltered / indukPageSize);
+            if (indukCurrentPage > totalPages) indukCurrentPage = totalPages;
+            if (indukCurrentPage < 1) indukCurrentPage = 1;
+
+            const startIndex = (indukCurrentPage - 1) * indukPageSize;
+            const endIndex = Math.min(startIndex + indukPageSize, totalFiltered);
+            const pageStudents = studentArray.slice(startIndex, endIndex);
+
+            grid.innerHTML = pageStudents.map(s => `
+                <div class="bg-white rounded-xl shadow-md border border-slate-200 p-5 flex flex-col justify-between hover:shadow-lg transition">
+                    <div>
+                        <div class="flex justify-between items-start mb-3 border-b pb-2">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">NIS: ${s.nis || '-'}</span>
+                                <h3 class="text-base font-bold text-slate-900 mt-1 uppercase">${s.name || '-'}</h3>
+                            </div>
+                            <span class="text-xs font-bold ${s.gender === 'L' ? 'text-blue-600 bg-blue-50' : 'text-pink-600 bg-pink-50'} px-2 py-0.5 rounded">${s.gender || '-'}</span>
+                        </div>
+                        
+                        <div class="space-y-1.5 text-xs text-slate-600 mb-4">
+                            <p><strong class="text-slate-800">NISN:</strong> ${s.nisn || '-'}</p>
+                            <p><strong class="text-slate-800">TTL:</strong> ${s.pobDob || '-'}</p>
+                            <p><strong class="text-slate-800">Orang Tua / Wali:</strong> ${s.parentName || '-'}</p>
+                            <p class="truncate"><strong class="text-slate-800">Alamat:</strong> ${s.address || '-'}</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t flex gap-2">
+                        <button onclick="viewIndukSheet('${s.key}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-file-lines"></i> Cetak Lembar Buku Induk
+                        </button>
+                        ${currentUserRole === 'ADMIN' ? `
+                            <button onclick="editStudent('${s.key}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg text-xs transition" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            renderIndukPaginationControls(startIndex + 1, endIndex, totalFiltered, totalPages);
+        }
+
+        function renderIndukPaginationControls(start, end, total, totalPages) {
+            document.getElementById('indukInfoText').textContent = `Menampilkan ${start} - ${end} dari ${total} Kartu`;
+            const container = document.getElementById('indukPageButtons');
+            if (total === 0 || totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = `
+                <button onclick="goToIndukPage(${indukCurrentPage - 1})" ${indukCurrentPage === 1 ? 'disabled' : ''} class="px-2.5 py-1 rounded border text-xs bg-white hover:bg-slate-100 disabled:opacity-40 font-medium">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+            `;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= indukCurrentPage - 1 && i <= indukCurrentPage + 1)) {
+                    html += `
+                        <button onclick="goToIndukPage(${i})" class="px-3 py-1 rounded border text-xs font-bold transition ${i === indukCurrentPage ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white hover:bg-slate-100 text-slate-700'}">
+                            ${i}
+                        </button>
+                    `;
+                } else if (i === indukCurrentPage - 2 || i === indukCurrentPage + 2) {
+                    html += `<span class="px-1 text-slate-400">...</span>`;
+                }
+            }
+
+            html += `
+                <button onclick="goToIndukPage(${indukCurrentPage + 1})" ${indukCurrentPage === totalPages ? 'disabled' : ''} class="px-2.5 py-1 rounded border text-xs bg-white hover:bg-slate-100 disabled:opacity-40 font-medium">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        window.goToIndukPage = function(page) {
+            indukCurrentPage = page;
+            renderIndukGrid();
+        }
+
+        window.changeIndukPageSize = function() {
+            indukPageSize = parseInt(document.getElementById('indukPageSize').value, 10);
+            indukCurrentPage = 1;
+            renderIndukGrid();
+        }
+
+        window.handleIndukSearch = function() {
+            currentIndukQuery = document.getElementById('indukSearchInput').value;
+            indukCurrentPage = 1;
+            renderIndukGrid();
+        }
+
+        /* --- LOGIK PENOMORAN SURAT --- */
         window.getRomawiBulan = function(monthNum) {
             const romawi = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
             return romawi[monthNum] || "I";
@@ -1171,7 +1471,7 @@
 
         window.exportSuratToExcel = function() {
             let suratArray = Object.values(suratData);
-            suratArray.sort((a, b) => (parseInt(a.urut, 10) || 0) - (parseInt(b.urut, 10) || 0));
+            suratArray.sort((a, b) => (parseInt(a.urut, 10) || 0) - (parseInt(a.urut, 10) || 0));
 
             const exportData = [
                 ["AGENDA SURAT KELUAR SDN 186 CIPADUNG"],
@@ -1191,7 +1491,7 @@
             XLSX.writeFile(wb, `Agenda_Surat_Keluar_SDN186_${new Date().toISOString().slice(0,10)}.xlsx`);
         }
 
-        /* --- FUNGSI BUKU KLAPER & INDUK --- */
+        /* --- FUNGSI MODAL LEMBAR INDUK & AKSI DAFTAR SISWA --- */
         window.initAlphabetButtons = function() {
             const container = document.getElementById('alphabetButtons');
             let html = `<button onclick="filterByLetter('ALL')" class="letter-btn bg-indigo-600 text-white font-bold px-3 py-1 rounded text-xs transition">SEMUA</button>`;
@@ -1200,148 +1500,6 @@
                 html += `<button onclick="filterByLetter('${char}')" class="letter-btn bg-slate-100 hover:bg-indigo-100 text-slate-700 font-medium px-2.5 py-1 rounded text-xs transition border border-slate-200">${char}</button>`;
             }
             container.innerHTML = html;
-        }
-
-        window.renderData = function() {
-            const tbody = document.getElementById('tableBody');
-            const emptyState = document.getElementById('emptyState');
-            const statusFilter = document.getElementById('filterStatus').value;
-
-            const actionColumns = document.querySelectorAll('.action-column');
-            actionColumns.forEach(col => {
-                if (currentUserRole === 'ADMIN') col.classList.remove('hidden');
-                else col.classList.add('hidden');
-            });
-
-            let studentArray = Object.keys(studentsData).map(key => ({
-                key: key,
-                ...studentsData[key]
-            }));
-
-            studentArray.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-
-            if (currentLetterFilter !== 'ALL') {
-                studentArray = studentArray.filter(s => (s.name || '').trim().toUpperCase().startsWith(currentLetterFilter));
-            }
-
-            if (currentSearchQuery.trim() !== '') {
-                const q = currentSearchQuery.toLowerCase();
-                studentArray = studentArray.filter(s => 
-                    (s.name || '').toLowerCase().includes(q) ||
-                    (s.nis || '').toLowerCase().includes(q) ||
-                    (s.nisn || '').toLowerCase().includes(q) ||
-                    (s.parentName || '').toLowerCase().includes(q)
-                );
-            }
-
-            if (statusFilter !== 'ALL') {
-                studentArray = studentArray.filter(s => (s.notes || '').toUpperCase().includes(statusFilter));
-            }
-
-            document.getElementById('totalStudentsCount').textContent = studentArray.length;
-
-            if (studentArray.length === 0) {
-                tbody.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            tbody.innerHTML = studentArray.map((student, index) => `
-                <tr class="hover:bg-slate-50 transition border-b border-slate-200">
-                    <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-500 font-medium">${index + 1}</td>
-                    <td class="py-2.5 px-3 text-center border-r border-slate-200 font-mono text-slate-700">${student.nis || '-'}</td>
-                    <td class="py-2.5 px-4 border-r border-slate-200 font-semibold text-slate-900">${student.name || '-'}</td>
-                    <td class="py-2.5 px-2 text-center border-r border-slate-200 font-bold ${student.gender === 'L' ? 'text-blue-600' : 'text-pink-600'}">${student.gender || '-'}</td>
-                    <td class="py-2.5 px-4 border-r border-slate-200 text-slate-700">${student.parentName || '-'}</td>
-                    <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-600 whitespace-nowrap">${student.entryDate || '-'}</td>
-                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class1 || '-'}</td>
-                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class2 || '-'}</td>
-                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class3 || '-'}</td>
-                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class4 || '-'}</td>
-                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class5 || '-'}</td>
-                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${student.class6 || '-'}</td>
-                    <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-600 whitespace-nowrap">${student.exitDate || '-'}</td>
-                    <td class="py-2.5 px-3 text-center border-r border-slate-200 whitespace-nowrap">
-                        <span class="px-2 py-0.5 rounded text-xs font-bold ${
-                            (student.notes || '').includes('LULUS') ? 'bg-emerald-100 text-emerald-800' :
-                            (student.notes || '').includes('AKTIF') ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-700'
-                        }">${student.notes || '-'}</span>
-                    </td>
-                    <td class="py-2.5 px-3 text-center no-print action-column ${currentUserRole === 'ADMIN' ? '' : 'hidden'}">
-                        <div class="flex justify-center gap-2">
-                            <button onclick="editStudent('${student.key}')" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 rounded text-xs font-medium transition flex items-center gap-1">
-                                <i class="fa-solid fa-pen-to-square"></i> Edit
-                            </button>
-                            <button onclick="deleteStudent('${student.key}', '${student.name}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded text-xs font-medium transition flex items-center gap-1">
-                                <i class="fa-solid fa-trash"></i> Hapus
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        window.renderIndukGrid = function() {
-            const grid = document.getElementById('indukGrid');
-            let studentArray = Object.keys(studentsData).map(key => ({
-                key: key,
-                ...studentsData[key]
-            }));
-
-            studentArray.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-
-            if (currentIndukQuery.trim() !== '') {
-                const q = currentIndukQuery.toLowerCase();
-                studentArray = studentArray.filter(s => 
-                    (s.name || '').toLowerCase().includes(q) ||
-                    (s.nis || '').toLowerCase().includes(q) ||
-                    (s.nisn || '').toLowerCase().includes(q) ||
-                    (s.nik || '').toLowerCase().includes(q) ||
-                    (s.parentName || '').toLowerCase().includes(q)
-                );
-            }
-
-            if (studentArray.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400"><i class="fa-solid fa-id-card text-4xl mb-2"></i><p>Tidak ada lembar Buku Induk siswa yang cocok.</p></div>`;
-                return;
-            }
-
-            grid.innerHTML = studentArray.map(s => `
-                <div class="bg-white rounded-xl shadow-md border border-slate-200 p-5 flex flex-col justify-between hover:shadow-lg transition">
-                    <div>
-                        <div class="flex justify-between items-start mb-3 border-b pb-2">
-                            <div>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">NIS: ${s.nis || '-'}</span>
-                                <h3 class="text-base font-bold text-slate-900 mt-1 uppercase">${s.name || '-'}</h3>
-                            </div>
-                            <span class="text-xs font-bold ${s.gender === 'L' ? 'text-blue-600 bg-blue-50' : 'text-pink-600 bg-pink-50'} px-2 py-0.5 rounded">${s.gender || '-'}</span>
-                        </div>
-                        
-                        <div class="space-y-1.5 text-xs text-slate-600 mb-4">
-                            <p><strong class="text-slate-800">NISN:</strong> ${s.nisn || '-'}</p>
-                            <p><strong class="text-slate-800">TTL:</strong> ${s.pobDob || '-'}</p>
-                            <p><strong class="text-slate-800">Orang Tua / Wali:</strong> ${s.parentName || '-'}</p>
-                            <p class="truncate"><strong class="text-slate-800">Alamat:</strong> ${s.address || '-'}</p>
-                        </div>
-                    </div>
-
-                    <div class="pt-3 border-t flex gap-2">
-                        <button onclick="viewIndukSheet('${s.key}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-file-lines"></i> Cetak Lembar Buku Induk
-                        </button>
-                        ${currentUserRole === 'ADMIN' ? `
-                            <button onclick="editStudent('${s.key}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg text-xs transition" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        window.handleIndukSearch = function() {
-            currentIndukQuery = document.getElementById('indukSearchInput').value;
-            renderIndukGrid();
         }
 
         window.viewIndukSheet = function(key) {
@@ -1474,6 +1632,7 @@
 
         window.filterByLetter = function(letter) {
             currentLetterFilter = letter;
+            klaperCurrentPage = 1;
             document.getElementById('activeLetterLabel').textContent = letter === 'ALL' ? 'Semua Siswa' : `Abjad ${letter}`;
             const buttons = document.querySelectorAll('.letter-btn');
             buttons.forEach(btn => {
@@ -1488,10 +1647,12 @@
 
         window.handleSearch = function() {
             currentSearchQuery = document.getElementById('searchInput').value;
+            klaperCurrentPage = 1;
             renderData();
         }
 
         window.applyFilters = function() {
+            klaperCurrentPage = 1;
             renderData();
         }
 
