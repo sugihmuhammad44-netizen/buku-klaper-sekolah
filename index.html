@@ -66,6 +66,9 @@
                     <button onclick="openModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
                         <i class="fa-solid fa-user-plus"></i> Tambah Siswa
                     </button>
+                    <button onclick="downloadTemplateExcel()" class="bg-teal-600 hover:bg-teal-700 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm" title="Unduh Format Isian Excel">
+                        <i class="fa-solid fa-file-arrow-down"></i> Template Excel
+                    </button>
                     <button onclick="document.getElementById('excelFileInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
                         <i class="fa-solid fa-file-excel"></i> Impor Excel
                     </button>
@@ -483,7 +486,6 @@
     <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA PERBAIKAN SCROLL & HEADER STICKY -->
     <div id="indukPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-2 sm:p-4 no-print">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col my-auto overflow-hidden">
-            <!-- HEADER MODAL FIXED (TIDAK IKUT SCROLL) -->
             <div class="flex justify-between items-center px-6 py-3.5 bg-slate-800 text-white shrink-0 border-b border-slate-700 no-print">
                 <h3 class="text-sm sm:text-base font-bold flex items-center gap-2">
                     <i class="fa-solid fa-file-lines text-yellow-400"></i> Pratinjau Lembar Buku Induk Siswa
@@ -498,11 +500,8 @@
                 </div>
             </div>
 
-            <!-- AREA KONTEN BISA DI-SCROLL -->
             <div class="p-4 sm:p-8 overflow-y-auto flex-grow bg-slate-100">
-                <div id="indukSheetContent" class="p-6 bg-white text-black font-serif text-[11px] leading-snug border border-slate-300 shadow-md max-w-3xl mx-auto">
-                    <!-- Content injected via JS -->
-                </div>
+                <div id="indukSheetContent" class="p-6 bg-white text-black font-serif text-[11px] leading-snug border border-slate-300 shadow-md max-w-3xl mx-auto"></div>
             </div>
         </div>
     </div>
@@ -763,7 +762,6 @@
             renderIndukGrid();
         }
 
-        // TAMPILAN CETAK LENGKAP A S.D J KETAT & RINGKAS
         window.viewIndukSheet = function(key) {
             const s = studentsData[key];
             if (!s) return;
@@ -1084,6 +1082,49 @@
             }
         }
 
+        // UNDUH TEMPLATE EXCEL KOSONG DENGAN FORMAT LENGKAP
+        window.downloadTemplateExcel = function() {
+            const templateData = [
+                ["TEMPLATE ISIAN DATA SISWA BUKU KLAPER & BUKU INDUK SDN 186 CIPADUNG"],
+                ["Petunjuk: Isilah data siswa di bawah ini sesuai kolom yang tersedia, lalu gunakan tombol 'Impor Excel' untuk mengunggah ke aplikasi."],
+                [
+                    "NIS *", "NISN", "NIK", "Nama Lengkap Siswa *", "Nama Panggilan", "JK (L/P) *", 
+                    "Tempat Tanggal Lahir", "Agama", "Kewarganegaraan", "Anak Ke-", "Jumlah Saudara", "Status Yatim/Piatu", 
+                    "Bahasa Rumah", "Alamat Lengkap", "Tinggal Dengan", "Jarak Sekolah", "Transportasi", "Berat Badan", 
+                    "Tinggi Badan", "Gol. Darah", "Penyakit Diderita", "Kelainan Jasmani", "Tanggal Masuk", "No. Ijazah Sebelumnya", 
+                    "Pindahan Dari", "Nama Ayah", "TTL Ayah", "Pendidikan Ayah", "Pekerjaan Ayah", "Penghasilan Ayah", 
+                    "Nama Ibu", "TTL Ibu", "Pendidikan Ibu", "Pekerjaan Ibu", "Penghasilan Ibu", "Nama Wali/Orang Tua *", 
+                    "Pekerjaan/Hubungan Wali", "No HP/WA Wali", "Tes IQ", "Prestasi", "Beasiswa", "Kelas 1", "Kelas 2", 
+                    "Kelas 3", "Kelas 4", "Kelas 5", "Kelas 6", "No. Ijazah Kelulusan", "Tanggal Keluar", "Status (AKTIF/LULUS/MUTASI) *"
+                ],
+                [
+                    "192001001", "0123456789", "3273010101120001", "AHMAD SANJAYA", "Ahmad", "L", 
+                    "Bandung, 12 Mei 2012", "ISLAM", "Indonesia", "1", "2", "-", 
+                    "Sunda", "Jl. Cipadung No. 12 RT 01 RW 02", "Orang Tua", "1 Km", "Jalan Kaki", "30 kg", 
+                    "135 cm", "O", "-", "-", "15 Juli 2019", "TK-00123", 
+                    "-", "BUDIMAN", "Bandung, 10 Jan 1980", "SMA", "Wiraswasta", "Rp 3.000.000", 
+                    "SITI AMINAH", "Bandung, 15 Mar 1985", "SMP", "Ibu Rumah Tangga", "-", "BUDIMAN", 
+                    "Ayah Kandung", "081234567890", "-", "Juara 1 Lomba Mewarnai", "PIP 2021", "I-A", "II-A", 
+                    "III-A", "IV-A", "V-A", "VI-A", "DN-01/D-SD/2025/001", "15 Juni 2025", "LULUS"
+                ],
+                [
+                    "192001002", "0123456790", "3273010101120002", "SITI NURHALIZA", "Siti", "P", 
+                    "Bandung, 20 Agustus 2012", "ISLAM", "Indonesia", "2", "3", "-", 
+                    "Indonesia", "Jl. Cibiru Raya No. 45", "Orang Tua", "500 m", "Motor", "28 kg", 
+                    "130 cm", "A", "-", "-", "15 Juli 2019", "TK-00124", 
+                    "-", "RUDI HERMAWAN", "Bandung, 05 Feb 1978", "S1", "PNS", "Rp 5.000.000", 
+                    "NINA MARLINA", "Bandung, 12 Des 1982", "S1", "Guru", "Rp 3.000.000", "RUDI HERMAWAN", 
+                    "Ayah Kandung", "089876543210", "-", "-", "-", "I-B", "II-B", 
+                    "III-B", "IV-B", "V-B", "VI-B", "-", "-", "AKTIF"
+                ]
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(templateData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Template_Siswa");
+            XLSX.writeFile(wb, "Template_Isian_Buku_Induk_SDN186.xlsx");
+        }
+
         window.handleExcelImport = function(e) {
             if (currentUserRole !== 'ADMIN') return;
             const file = e.target.files[0];
@@ -1103,35 +1144,83 @@
                         const row = jsonData[i];
                         if (!row || row.length === 0) continue;
 
-                        let name = '';
+                        let nis = '', name = '', gender = 'L', parentName = '';
+                        
+                        // Deteksi baris yang berisi data siswa
                         for (let col = 0; col < row.length; col++) {
                             const val = row[col] ? String(row[col]).trim() : '';
                             if (!val) continue;
                             const upperVal = val.toUpperCase();
-                            if (upperVal.includes('NAMA SISWA') || upperVal.includes('NOMOR INDUK') || upperVal.includes('BUKU KLAPER')) { name = ''; break; }
-                            if (!name && isNaN(val) && val.length >= 3 && !['L', 'P', 'LULUS', 'AKTIF', 'MUTASI'].includes(upperVal)) { name = val; }
+                            if (upperVal.includes('NAMA SISWA') || upperVal.includes('NOMOR INDUK') || upperVal.includes('BUKU KLAPER') || upperVal.includes('TEMPLATE')) { 
+                                name = ''; 
+                                break; 
+                            }
                         }
 
-                        if (name) {
+                        // Mengambil kolom jika ditemukan nama siswa (Kolom Indeks 3 untuk Nama)
+                        if (row[3] && isNaN(row[3]) && String(row[3]).trim().length >= 2 && !String(row[3]).toUpperCase().includes('NAMA')) {
+                            nis = row[0] ? String(row[0]).trim() : '';
+                            name = String(row[3]).trim().toUpperCase();
+                            gender = row[5] ? String(row[5]).trim().toUpperCase() : 'L';
+                            parentName = row[35] ? String(row[35]).trim().toUpperCase() : (row[25] ? String(row[25]).trim().toUpperCase() : '-');
+
                             push(studentsRef, {
-                                nis: row[1] ? String(row[1]).trim() : '',
-                                name: name.toUpperCase(),
-                                gender: row[3] ? String(row[3]).trim().toUpperCase() : 'L',
-                                parentName: row[4] ? String(row[4]).trim() : '',
-                                entryDate: row[5] ? String(row[5]).trim() : '',
-                                class1: row[6] ? String(row[6]).trim() : '',
-                                class2: row[7] ? String(row[7]).trim() : '',
-                                class3: row[8] ? String(row[8]).trim() : '',
-                                class4: row[9] ? String(row[9]).trim() : '',
-                                class5: row[10] ? String(row[10]).trim() : '',
-                                class6: row[11] ? String(row[11]).trim() : '',
-                                exitDate: row[12] ? String(row[12]).trim() : '',
-                                notes: row[13] ? String(row[13]).trim().toUpperCase() : 'AKTIF'
+                                nis: nis,
+                                nisn: row[1] ? String(row[1]).trim() : '',
+                                nik: row[2] ? String(row[2]).trim() : '',
+                                name: name,
+                                nickname: row[4] ? String(row[4]).trim() : '',
+                                gender: gender === 'P' ? 'P' : 'L',
+                                pobDob: row[6] ? String(row[6]).trim() : '',
+                                religion: row[7] ? String(row[7]).trim().toUpperCase() : '',
+                                citizenship: row[8] ? String(row[8]).trim() : 'Indonesia',
+                                childOrder: row[9] ? String(row[9]).trim() : '',
+                                siblingsCount: row[10] ? String(row[10]).trim() : '',
+                                orphanStatus: row[11] ? String(row[11]).trim() : '',
+                                language: row[12] ? String(row[12]).trim() : '',
+                                address: row[13] ? String(row[13]).trim() : '',
+                                livingWith: row[14] ? String(row[14]).trim() : '',
+                                distance: row[15] ? String(row[15]).trim() : '',
+                                transport: row[16] ? String(row[16]).trim() : '',
+                                weight: row[17] ? String(row[17]).trim() : '',
+                                height: row[18] ? String(row[18]).trim() : '',
+                                bloodType: row[19] ? String(row[19]).trim().toUpperCase() : '',
+                                medicalHistory: row[20] ? String(row[20]).trim() : '',
+                                disability: row[21] ? String(row[21]).trim() : '',
+                                entryDate: row[22] ? String(row[22]).trim() : '',
+                                prevDiploma: row[23] ? String(row[23]).trim() : '',
+                                transferFrom: row[24] ? String(row[24]).trim() : '',
+                                fatherName: row[25] ? String(row[25]).trim().toUpperCase() : '',
+                                fatherPobDob: row[26] ? String(row[26]).trim() : '',
+                                fatherEdu: row[27] ? String(row[27]).trim() : '',
+                                fatherJob: row[28] ? String(row[28]).trim() : '',
+                                fatherIncome: row[29] ? String(row[29]).trim() : '',
+                                motherName: row[30] ? String(row[30]).trim().toUpperCase() : '',
+                                motherPobDob: row[31] ? String(row[31]).trim() : '',
+                                motherEdu: row[32] ? String(row[32]).trim() : '',
+                                motherJob: row[33] ? String(row[33]).trim() : '',
+                                motherIncome: row[34] ? String(row[34]).trim() : '',
+                                parentName: parentName,
+                                guardianDetails: row[36] ? String(row[36]).trim() : '',
+                                phone: row[37] ? String(row[37]).trim() : '',
+                                iqTest: row[38] ? String(row[38]).trim() : '',
+                                achievements: row[39] ? String(row[39]).trim() : '',
+                                scholarship: row[40] ? String(row[40]).trim() : '',
+                                class1: row[41] ? String(row[41]).trim() : '',
+                                class2: row[42] ? String(row[42]).trim() : '',
+                                class3: row[43] ? String(row[43]).trim() : '',
+                                class4: row[44] ? String(row[44]).trim() : '',
+                                class5: row[45] ? String(row[45]).trim() : '',
+                                class6: row[46] ? String(row[46]).trim() : '',
+                                graduationInfo: row[47] ? String(row[47]).trim() : '',
+                                exitDate: row[48] ? String(row[48]).trim() : '',
+                                notes: row[49] ? String(row[49]).trim().toUpperCase() : 'AKTIF'
                             });
                             count++;
                         }
                     }
-                    if (count > 0) alert(`Berhasil mengimpor ${count} data siswa!`);
+                    if (count > 0) alert(`Berhasil mengimpor ${count} data siswa secara otomatis!`);
+                    else alert("Format data Excel tidak terbaca. Silakan gunakan tombol 'Template Excel' untuk mengunduh format yang benar.");
                 } catch (err) { alert("Gagal membaca berkas Excel."); }
                 e.target.value = '';
             };
@@ -1145,12 +1234,28 @@
             const exportData = [
                 ["BUKU INDUK & KLAPER SISWA SDN 186 CIPADUNG"],
                 [""],
-                ["No", "NIS", "NISN", "NIK", "Nama Lengkap", "Panggilan", "L/P", "TTL", "Agama", "Alamat", "Ayah", "Ibu", "Wali", "No Telp", "Tgl Masuk", "Kls 1", "Kls 2", "Kls 3", "Kls 4", "Kls 5", "Kls 6", "Tgl Keluar", "Status"]
+                [
+                    "NIS", "NISN", "NIK", "Nama Lengkap", "Nama Panggilan", "JK", 
+                    "TTL", "Agama", "Kewarganegaraan", "Anak Ke-", "Jumlah Saudara", "Status Yatim/Piatu", 
+                    "Bahasa Rumah", "Alamat Lengkap", "Tinggal Dengan", "Jarak Sekolah", "Transportasi", "Berat Badan", 
+                    "Tinggi Badan", "Gol. Darah", "Penyakit Diderita", "Kelainan Jasmani", "Tanggal Masuk", "No. Ijazah Sebelumnya", 
+                    "Pindahan Dari", "Nama Ayah", "TTL Ayah", "Pendidikan Ayah", "Pekerjaan Ayah", "Penghasilan Ayah", 
+                    "Nama Ibu", "TTL Ibu", "Pendidikan Ibu", "Pekerjaan Ibu", "Penghasilan Ibu", "Nama Wali", 
+                    "Hubungan Wali", "No HP/WA", "Tes IQ", "Prestasi", "Beasiswa", "Kelas 1", "Kelas 2", 
+                    "Kelas 3", "Kelas 4", "Kelas 5", "Kelas 6", "No. Ijazah Kelulusan", "Tanggal Keluar", "Status"
+                ]
             ];
 
             studentArray.forEach((s, i) => {
                 exportData.push([
-                    i + 1, s.nis||'', s.nisn||'', s.nik||'', s.name||'', s.nickname||'', s.gender||'', s.pobDob||'', s.religion||'', s.address||'', s.fatherName||'', s.motherName||'', s.parentName||'', s.phone||'', s.entryDate||'', s.class1||'', s.class2||'', s.class3||'', s.class4||'', s.class5||'', s.class6||'', s.exitDate||'', s.notes||''
+                    s.nis||'', s.nisn||'', s.nik||'', s.name||'', s.nickname||'', s.gender||'', 
+                    s.pobDob||'', s.religion||'', s.citizenship||'', s.childOrder||'', s.siblingsCount||'', s.orphanStatus||'', 
+                    s.language||'', s.address||'', s.livingWith||'', s.distance||'', s.transport||'', s.weight||'', 
+                    s.height||'', s.bloodType||'', s.medicalHistory||'', s.disability||'', s.entryDate||'', s.prevDiploma||'', 
+                    s.transferFrom||'', s.fatherName||'', s.fatherPobDob||'', s.fatherEdu||'', s.fatherJob||'', s.fatherIncome||'', 
+                    s.motherName||'', s.motherPobDob||'', s.motherEdu||'', s.motherJob||'', s.motherIncome||'', s.parentName||'', 
+                    s.guardianDetails||'', s.phone||'', s.iqTest||'', s.achievements||'', s.scholarship||'', s.class1||'', s.class2||'', 
+                    s.class3||'', s.class4||'', s.class5||'', s.class6||'', s.graduationInfo||'', s.exitDate||'', s.notes||''
                 ]);
             });
 
