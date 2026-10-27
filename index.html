@@ -15,10 +15,10 @@
         @media print {
             .no-print { display: none !important; }
             .print-only { display: block !important; }
-            body { background: white; color: black; }
-            table { border-collapse: collapse; width: 100%; font-size: 9pt; }
-            th, td { border: 1px solid #000 !important; padding: 4px 5px !important; }
-            #printHeader { display: block !important; margin-bottom: 20px; text-align: center; }
+            body { background: white; color: black; font-family: 'Times New Roman', Times, serif; }
+            table { border-collapse: collapse; width: 100%; font-size: 10pt; }
+            th, td { border: 1px solid #000 !important; padding: 3px 5px !important; }
+            #printHeader { display: block !important; margin-bottom: 15px; text-align: center; }
             .page-break { page-break-after: always; }
         }
     </style>
@@ -52,7 +52,6 @@
     <!-- Header Section -->
     <header class="bg-indigo-900 text-white shadow-lg no-print">
         <div class="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <!-- Brand & Logo Container -->
             <div class="flex items-center space-x-4">
                 <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-14 w-14 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
                 <div>
@@ -93,7 +92,7 @@
                     <i class="fa-solid fa-book"></i> Buku Klaper (Daftar Abjad)
                 </button>
                 <button id="tabIndukBtn" onclick="switchTab('induk')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition">
-                    <i class="fa-solid fa-address-card"></i> Buku Induk Siswa (Biodata Lengkap)
+                    <i class="fa-solid fa-address-card"></i> Buku Induk Siswa (Format MS Word)
                 </button>
             </div>
         </div>
@@ -114,9 +113,8 @@
             </div>
         </div>
 
-        <!-- VIEW 1: BUKU KLAPER (DAFTAR ABJAD) -->
+        <!-- VIEW 1: BUKU KLAPER -->
         <div id="viewKlaper">
-            <!-- Abjad A-Z Filter Buttons -->
             <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print">
                 <div class="flex items-center justify-between mb-3">
                     <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-2">
@@ -124,12 +122,9 @@
                     </h2>
                     <span id="activeLetterLabel" class="text-xs bg-indigo-100 text-indigo-800 font-bold px-2.5 py-1 rounded-full">Semua Siswa</span>
                 </div>
-                <div id="alphabetButtons" class="flex flex-wrap gap-1.5 justify-start">
-                    <!-- Abjad Buttons injected by JS -->
-                </div>
+                <div id="alphabetButtons" class="flex flex-wrap gap-1.5 justify-start"></div>
             </div>
 
-            <!-- Search Bar & Controls -->
             <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
                 <div class="relative w-full md:w-96">
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
@@ -146,7 +141,6 @@
                 </div>
             </div>
 
-            <!-- Print Header for Klaper -->
             <div id="printHeader" class="hidden print-only mb-6 text-center border-b-2 border-black pb-4">
                 <div class="flex items-center justify-center space-x-4">
                     <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-20 w-20 object-contain">
@@ -158,7 +152,6 @@
                 </div>
             </div>
 
-            <!-- Klaper Data Table -->
             <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm border-collapse" id="klaperTable">
@@ -193,9 +186,7 @@
                                 <th class="no-print action-column"></th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody" class="divide-y divide-slate-200">
-                            <!-- Rows rendered via JavaScript -->
-                        </tbody>
+                        <tbody id="tableBody" class="divide-y divide-slate-200"></tbody>
                     </table>
                 </div>
                 <div id="emptyState" class="hidden py-12 text-center">
@@ -205,7 +196,7 @@
             </div>
         </div>
 
-        <!-- VIEW 2: BUKU INDUK SISWA (GRID CARDS BIODATA) -->
+        <!-- VIEW 2: BUKU INDUK SISWA -->
         <div id="viewInduk" class="hidden">
             <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
                 <div class="relative w-full md:w-96">
@@ -213,166 +204,286 @@
                     <input type="text" id="indukSearchInput" placeholder="Cari Nama, NIS, NISN, atau NIK..." oninput="handleIndukSearch()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm">
                 </div>
                 <div class="text-xs text-slate-500">
-                    Klik tombol <strong>"Lihat Lembar Buku Induk"</strong> untuk melihat & mencetak biodata lengkap per siswa.
+                    Klik <strong>"Cetak Lembar Buku Induk"</strong> untuk melihat & mencetak isian format lengkap (A s.d J).
                 </div>
             </div>
 
-            <!-- Grid Cards Buku Induk -->
-            <div id="indukGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Injected via JS -->
-            </div>
+            <div id="indukGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
     </main>
 
-    <!-- Modal Form (Tambah / Edit Biodata Siswa & Buku Induk) -->
+    <!-- MODAL INPUT / EDIT LENGKAP A S.D J -->
     <div id="studentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 my-8 transform transition-all">
-            <div class="flex justify-between items-center border-b pb-4 mb-4">
-                <h3 id="modalTitle" class="text-xl font-bold text-slate-800">Tambah Data Siswa & Buku Induk</h3>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8 transform transition-all">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 id="modalTitle" class="text-xl font-bold text-slate-800">Formulir Isian Buku Induk Siswa</h3>
                 <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             
-            <form id="studentForm" onsubmit="handleFormSubmit(event)" class="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
+            <form id="studentForm" onsubmit="handleFormSubmit(event)" class="space-y-4 max-h-[78vh] overflow-y-auto pr-2 text-xs">
                 <input type="hidden" id="studentKey">
 
-                <!-- BAGIAN 1: IDENTITAS UTAMA -->
-                <div class="bg-indigo-50/50 p-3.5 rounded-xl border border-indigo-100">
-                    <h4 class="text-xs font-bold text-indigo-900 uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-id-card"></i> 1. Identitas Utama Siswa
-                    </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                <!-- KELOMPOK A. KETERANGAN PRIBADI -->
+                <div class="bg-indigo-50/60 p-3.5 rounded-xl border border-indigo-100">
+                    <h4 class="font-bold text-indigo-900 uppercase tracking-wider mb-2.5">A. KETERANGAN PRIBADI PESERTA DIDIK</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2">
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nomor Induk / NIS *</label>
-                            <input type="text" id="nis" required class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-semibold mb-1">Nomor Induk / NIS *</label>
+                            <input type="text" id="nis" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">NISN (Nomor Induk Siswa Nasional)</label>
-                            <input type="text" id="nisn" placeholder="0012345678" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-semibold mb-1">NISN</label>
+                            <input type="text" id="nisn" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">NIK Siswa</label>
-                            <input type="text" id="nik" placeholder="3273000000000000" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-semibold mb-1">NIK Siswa</label>
+                            <input type="text" id="nik" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                         </div>
                     </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2">
                         <div class="sm:col-span-2">
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nama Lengkap Siswa *</label>
-                            <input type="text" id="name" required class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
+                            <label class="block font-semibold mb-1">1. Nama Lengkap *</label>
+                            <input type="text" id="name" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 uppercase">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Jenis Kelamin *</label>
-                            <select id="gender" required class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-semibold mb-1">2. Nama Panggilan</label>
+                            <input type="text" id="nickname" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-2">
+                        <div>
+                            <label class="block font-semibold mb-1">3. Jenis Kelamin *</label>
+                            <select id="gender" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                                 <option value="L">Laki-laki (L)</option>
                                 <option value="P">Perempuan (P)</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tempat & Tanggal Lahir</label>
-                            <input type="text" id="pobDob" placeholder="Bandung, 12 Mei 2012" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <div class="sm:col-span-2">
+                            <label class="block font-semibold mb-1">4. Tempat & Tanggal Lahir</label>
+                            <input type="text" id="pobDob" placeholder="Bandung, 12 Mei 2012" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Agama</label>
-                            <input type="text" id="religion" placeholder="ISLAM" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
+                            <label class="block font-semibold mb-1">5. Agama</label>
+                            <input type="text" id="religion" placeholder="ISLAM" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 uppercase">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+                        <div>
+                            <label class="block font-semibold mb-1">6. Kewarganegaraan</label>
+                            <input type="text" id="citizenship" value="Indonesia" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">7. Anak Ke-</label>
+                            <input type="text" id="childOrder" placeholder="1" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">8. Jumlah Saudara</label>
+                            <input type="text" id="siblingsCount" placeholder="2" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">9. Status Yatim/Piatu</label>
+                            <input type="text" id="orphanStatus" placeholder="-" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">10. Bahasa Rumah</label>
+                            <input type="text" id="language" placeholder="Sunda / Indonesia" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                         </div>
                     </div>
                 </div>
 
-                <!-- BAGIAN 2: ORANG TUA & ALAMAT -->
+                <!-- KELOMPOK B. TEMPAT TINGGAL -->
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-users"></i> 2. Data Orang Tua & Alamat
-                    </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">B. KETERANGAN TEMPAT TINGGAL PESERTA DIDIK</h4>
+                    <div class="mb-2">
+                        <label class="block font-semibold mb-1">11. Alamat Peserta Didik</label>
+                        <textarea id="address" rows="1" placeholder="Jl. Cipadung No. 186..." class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500"></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nama Ayah Kandung</label>
-                            <input type="text" id="fatherName" placeholder="NAMA AYAH" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
+                            <label class="block font-semibold mb-1">12. Tinggal Dengan & No.Telp</label>
+                            <input type="text" id="livingWith" placeholder="Orang Tua, 0812345678" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nama Ibu Kandung</label>
-                            <input type="text" id="motherName" placeholder="NAMA IBU" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
+                            <label class="block font-semibold mb-1">13. Jarak Ke Sekolah</label>
+                            <input type="text" id="distance" placeholder="1 Km" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">14. Kendaraan / Transportasi</label>
+                            <input type="text" id="transport" placeholder="Jalan kaki / Motor" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                </div>
+
+                <!-- KELOMPOK C. KETERANGAN JASMANI & KESEHATAN -->
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">C. KETERANGAN JASMANI DAN KESEHATAN</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-2">
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nama Orang Tua / Wali (Tampilan Ringkas) *</label>
-                            <input type="text" id="parentName" required placeholder="NAMA ORANG TUA/WALI" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
+                            <label class="block font-semibold mb-1">15. Berat Badan Masuk/Keluar</label>
+                            <input type="text" id="weight" placeholder="30 kg / 45 kg" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nomor Kontak / WhatsApp</label>
-                            <input type="text" id="phone" placeholder="081234567890" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-semibold mb-1">16. Tinggi Badan Masuk/Keluar</label>
+                            <input type="text" id="height" placeholder="130 cm / 150 cm" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">17. Golongan Darah</label>
+                            <input type="text" id="bloodType" placeholder="O / A / B / AB" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 uppercase">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">19. Kelainan Jasmani</label>
+                            <input type="text" id="disability" placeholder="Tidak Ada (-)" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 mb-1">Alamat Tempat Tinggal Lengkap</label>
-                        <textarea id="address" rows="2" placeholder="Jl. Cipadung No. 186, RT 01 / RW 02, Cipadung, Cibiru, Kota Bandung" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+                        <label class="block font-semibold mb-1">18. Penyakit Berat Yang Pernah Diderita</label>
+                        <input type="text" id="medicalHistory" placeholder="Nama Penyakit, Tahun, Lama Sakit..." class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                     </div>
                 </div>
 
-                <!-- BAGIAN 3: TANGGAL SEKOLAH & RIWAYAT KELAS -->
+                <!-- KELOMPOK D. PENDIDIKAN SEBELUMNYA -->
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-graduation-cap"></i> 3. Riwayat Sekolah & Kelas (1 s.d 6)
-                    </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">D. KETERANGAN PENDIDIKAN SEBELUMNYA</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2">
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Masuk Sekolah</label>
-                            <input type="text" id="entryDate" placeholder="15 Juli 2019" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-semibold mb-1">20. Diterima Tgl / Asal Sekolah</label>
+                            <input type="text" id="entryDate" placeholder="15 Juli 2019 / TK Pembina" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Meninggalkan Sekolah</label>
-                            <input type="text" id="exitDate" placeholder="15 Juni 2025" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-semibold mb-1">No. Ijazah / Tanggal Ijazah</label>
+                            <input type="text" id="prevDiploma" placeholder="DN-01/D-SD/00000" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">21. Pindahan Dari (Jika Pindahan)</label>
+                            <input type="text" id="transferFrom" placeholder="SDN 1 Cibiru, Alasan..." class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
                         </div>
                     </div>
+                </div>
+
+                <!-- KELOMPOK E. ORANG TUA KANDUNG -->
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">E. KETERANGAN TENTANG ORANG TUA KANDUNG</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-2.5 bg-white rounded border">
+                            <p class="font-bold text-indigo-900 border-b pb-1 mb-2">DATA AYAH KANDUNG</p>
+                            <div class="space-y-1.5">
+                                <input type="text" id="fatherName" placeholder="Nama Ayah" class="w-full border rounded px-2 py-1 uppercase">
+                                <input type="text" id="fatherPobDob" placeholder="TTL Ayah" class="w-full border rounded px-2 py-1">
+                                <input type="text" id="fatherEdu" placeholder="Pendidikan Terakhir" class="w-full border rounded px-2 py-1">
+                                <input type="text" id="fatherJob" placeholder="Pekerjaan" class="w-full border rounded px-2 py-1">
+                                <input type="text" id="fatherIncome" placeholder="Penghasilan / Bulan" class="w-full border rounded px-2 py-1">
+                            </div>
+                        </div>
+                        <div class="p-2.5 bg-white rounded border">
+                            <p class="font-bold text-indigo-900 border-b pb-1 mb-2">DATA IBU KANDUNG</p>
+                            <div class="space-y-1.5">
+                                <input type="text" id="motherName" placeholder="Nama Ibu" class="w-full border rounded px-2 py-1 uppercase">
+                                <input type="text" id="motherPobDob" placeholder="TTL Ibu" class="w-full border rounded px-2 py-1">
+                                <input type="text" id="motherEdu" placeholder="Pendidikan Terakhir" class="w-full border rounded px-2 py-1">
+                                <input type="text" id="motherJob" placeholder="Pekerjaan" class="w-full border rounded px-2 py-1">
+                                <input type="text" id="motherIncome" placeholder="Penghasilan / Bulan" class="w-full border rounded px-2 py-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KELOMPOK F. WALI -->
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">F. KETERANGAN TENTANG WALI</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block font-semibold mb-1">Nama Wali (Tampilan Ringkas) *</label>
+                            <input type="text" id="parentName" required placeholder="NAMA ORANG TUA/WALI" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 uppercase">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Pekerjaan / Hubungan Wali</label>
+                            <input type="text" id="guardianDetails" placeholder="Paman / Wiraswasta" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Nomor Telepon Wali</label>
+                            <input type="text" id="phone" placeholder="081234567890" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KELOMPOK G. INTELEGENSI, KEPRIBADIAN & PRESTASI -->
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">G. INTELEGENSI, KEPRIBADIAN DAN PRESTASI</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2">
+                        <div>
+                            <label class="block font-semibold mb-1">24. Tes IQ / Tanggal</label>
+                            <input type="text" id="iqTest" placeholder="110 (12 Jan 2020)" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">26. Prestasi Kesenian / Olahraga</label>
+                            <input type="text" id="achievements" placeholder="Juara 1 Lomba Menggambar" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">27. Penerimaan Beasiswa</label>
+                            <input type="text" id="scholarship" placeholder="Beasiswa PIP 2021" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KELOMPOK H & I. KELAS, KEHADIRAN & MENINGGALKAN SEKOLAH -->
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">H & I. RIWAYAT KELAS, KEHADIRAN & KELULUSAN</h4>
                     <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-3">
                         <div>
-                            <label class="block text-[10px] font-medium text-slate-500">Kls 1</label>
-                            <input type="text" id="class1" placeholder="I-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-medium text-[10px]">Kls 1</label>
+                            <input type="text" id="class1" placeholder="I-A" class="w-full border rounded px-2 py-1 text-xs">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-medium text-slate-500">Kls 2</label>
-                            <input type="text" id="class2" placeholder="II-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-medium text-[10px]">Kls 2</label>
+                            <input type="text" id="class2" placeholder="II-A" class="w-full border rounded px-2 py-1 text-xs">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-medium text-slate-500">Kls 3</label>
-                            <input type="text" id="class3" placeholder="III-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-medium text-[10px]">Kls 3</label>
+                            <input type="text" id="class3" placeholder="III-A" class="w-full border rounded px-2 py-1 text-xs">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-medium text-slate-500">Kls 4</label>
-                            <input type="text" id="class4" placeholder="IV-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-medium text-[10px]">Kls 4</label>
+                            <input type="text" id="class4" placeholder="IV-A" class="w-full border rounded px-2 py-1 text-xs">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-medium text-slate-500">Kls 5</label>
-                            <input type="text" id="class5" placeholder="V-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-medium text-[10px]">Kls 5</label>
+                            <input type="text" id="class5" placeholder="V-A" class="w-full border rounded px-2 py-1 text-xs">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-medium text-slate-500">Kls 6</label>
-                            <input type="text" id="class6" placeholder="VI-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block font-medium text-[10px]">Kls 6</label>
+                            <input type="text" id="class6" placeholder="VI-A" class="w-full border rounded px-2 py-1 text-xs">
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 mb-1">Status / Keterangan</label>
-                        <input type="text" id="notes" placeholder="AKTIF / LULUS / MUTASI" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2">
+                        <div>
+                            <label class="block font-semibold mb-1">Tgl & No. Ijazah Kelulusan</label>
+                            <input type="text" id="graduationInfo" placeholder="15 Juni 2025 / DN-01/..." class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Tanggal Meninggalkan Sekolah</label>
+                            <input type="text" id="exitDate" placeholder="15 Juni 2025" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Status / Catatan Akhir *</label>
+                            <input type="text" id="notes" placeholder="LULUS / AKTIF / MUTASI" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 uppercase">
+                        </div>
                     </div>
                 </div>
 
                 <div class="flex justify-end gap-3 pt-3 border-t">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-100 transition">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow transition">Simpan Data</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow transition">Simpan Data Buku Induk</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA -->
+    <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA MS WORD FORMAT -->
     <div id="indukPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8">
             <div class="flex justify-between items-center border-b pb-3 mb-4 no-print">
-                <h3 class="text-lg font-bold text-slate-800">Pratinjau Lembar Buku Induk Siswa</h3>
+                <h3 class="text-lg font-bold text-slate-800">Pratinjau Lembar Buku Induk Siswa (MS Word Format)</h3>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow transition flex items-center gap-1.5">
                         <i class="fa-solid fa-print"></i> Cetak Lembar Ini
@@ -381,8 +492,8 @@
                 </div>
             </div>
 
-            <!-- LEMBAR INDUK RESMI UNTUK DICETAK -->
-            <div id="indukSheetContent" class="p-4 bg-white text-black font-serif text-sm">
+            <!-- TAMPILAN LEMBAR BUKU INDUK SESUAI FILE MS WORD -->
+            <div id="indukSheetContent" class="p-6 bg-white text-black font-serif text-xs leading-relaxed border border-slate-300 shadow-inner">
                 <!-- Content injected via JS -->
             </div>
         </div>
@@ -394,7 +505,6 @@
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, onValue, push, set, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Konfigurasi Asli Firebase Proyek Anda
         const firebaseConfig = {
             apiKey: "AIzaSyAKj0x9Wx537RE_45qstOIpalZX6BuRmPQ",
             authDomain: "buku-klaper-sdn186.firebaseapp.com",
@@ -415,7 +525,6 @@
         let currentSearchQuery = '';
         let currentIndukQuery = '';
         let currentUserRole = 'VIEWER';
-        let currentActiveTab = 'klaper';
 
         onAuthStateChanged(auth, (user) => {
             const loginModal = document.getElementById('loginModal');
@@ -432,7 +541,6 @@
                     document.getElementById('userRoleBadge').textContent = 'Guru / Viewer';
                     document.getElementById('adminActions').classList.add('hidden');
                 }
-                
                 listenToData();
             } else {
                 loginModal.classList.remove('hidden');
@@ -449,7 +557,6 @@
                 errorDiv.classList.add('hidden');
                 await signInWithEmailAndPassword(auth, email, password);
             } catch (error) {
-                console.error("Auth Error:", error);
                 errorDiv.textContent = "Gagal Masuk: Email atau Kata Sandi Salah.";
                 errorDiv.classList.remove('hidden');
             }
@@ -476,9 +583,7 @@
             });
         }
 
-        // TAB SWITCHING LOGIC
         window.switchTab = function(tabName) {
-            currentActiveTab = tabName;
             const viewKlaper = document.getElementById('viewKlaper');
             const viewInduk = document.getElementById('viewInduk');
             const btnKlaper = document.getElementById('tabKlaperBtn');
@@ -501,7 +606,6 @@
         window.initAlphabetButtons = function() {
             const container = document.getElementById('alphabetButtons');
             let html = `<button onclick="filterByLetter('ALL')" class="letter-btn bg-indigo-600 text-white font-bold px-3 py-1 rounded text-xs transition">SEMUA</button>`;
-            
             for (let i = 65; i <= 90; i++) {
                 const char = String.fromCharCode(i);
                 html += `<button onclick="filterByLetter('${char}')" class="letter-btn bg-slate-100 hover:bg-indigo-100 text-slate-700 font-medium px-2.5 py-1 rounded text-xs transition border border-slate-200">${char}</button>`;
@@ -509,7 +613,6 @@
             container.innerHTML = html;
         }
 
-        // Render Klaper Table Data
         window.renderData = function() {
             const tbody = document.getElementById('tableBody');
             const emptyState = document.getElementById('emptyState');
@@ -517,11 +620,8 @@
 
             const actionColumns = document.querySelectorAll('.action-column');
             actionColumns.forEach(col => {
-                if (currentUserRole === 'ADMIN') {
-                    col.classList.remove('hidden');
-                } else {
-                    col.classList.add('hidden');
-                }
+                if (currentUserRole === 'ADMIN') col.classList.remove('hidden');
+                else col.classList.add('hidden');
             });
 
             let studentArray = Object.keys(studentsData).map(key => ({
@@ -594,7 +694,6 @@
             `).join('');
         }
 
-        // Render Cards Buku Induk Siswa
         window.renderIndukGrid = function() {
             const grid = document.getElementById('indukGrid');
             let studentArray = Object.keys(studentsData).map(key => ({
@@ -635,14 +734,13 @@
                             <p><strong class="text-slate-800">NISN:</strong> ${s.nisn || '-'}</p>
                             <p><strong class="text-slate-800">TTL:</strong> ${s.pobDob || '-'}</p>
                             <p><strong class="text-slate-800">Orang Tua / Wali:</strong> ${s.parentName || '-'}</p>
-                            <p><strong class="text-slate-800">Kontak:</strong> ${s.phone || '-'}</p>
                             <p class="truncate"><strong class="text-slate-800">Alamat:</strong> ${s.address || '-'}</p>
                         </div>
                     </div>
 
                     <div class="pt-3 border-t flex gap-2">
                         <button onclick="viewIndukSheet('${s.key}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-file-lines"></i> Lihat Lembar Buku Induk
+                            <i class="fa-solid fa-file-lines"></i> Cetak Lembar Buku Induk
                         </button>
                         ${currentUserRole === 'ADMIN' ? `
                             <button onclick="editStudent('${s.key}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg text-xs transition" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -657,75 +755,139 @@
             renderIndukGrid();
         }
 
-        // TAMPILKAN LEMBAR BUKU INDUK SISWA LENGKAP
+        // TAMPILAN CETAK LENGKAP BUKU INDUK A S.D J (SAMA PERSIS MS WORD)
         window.viewIndukSheet = function(key) {
             const s = studentsData[key];
             if (!s) return;
 
             const html = `
-                <div class="text-center border-b-2 border-black pb-4 mb-4">
-                    <div class="flex items-center justify-center space-x-4 mb-2">
-                        <img src="logo.png" alt="Logo Sekolah" class="h-16 w-16 object-contain">
+                <div class="text-center font-bold text-sm uppercase mb-4 pb-2 border-b-2 border-black">
+                    <div class="flex items-center justify-center space-x-3 mb-1">
+                        <img src="logo.png" alt="Logo" class="h-14 w-14 object-contain">
                         <div>
-                            <h2 class="text-lg font-bold uppercase">LEMBAR BUKU INDUK SISWA</h2>
-                            <h3 class="text-base font-semibold uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h3>
-                            <p class="text-xs">Alamat: Jl. Cipadung, Cibiru, Kota Bandung, Jawa Barat</p>
+                            <h2 class="text-base">LEMBAR BUKU INDUK PESERTA DIDIK</h2>
+                            <h3 class="text-sm font-normal">SDN 186 CIPADUNG - KOTA BANDUNG</h3>
                         </div>
                     </div>
+                    <p class="text-xs font-normal mt-2">Nomor Induk / NISN : ${s.nis || '..........'} / ${s.nisn || '..........'}</p>
                 </div>
 
-                <div class="mb-4">
-                    <h4 class="font-bold underline uppercase text-sm mb-2">A. IDENTITAS PESERTA DIDIK</h4>
-                    <table class="w-full text-xs">
-                        <tr><td class="w-48 py-1">1. Nama Lengkap</td><td class="w-4">:</td><td class="font-bold uppercase">${s.name || '-'}</td></tr>
-                        <tr><td class="py-1">2. Nomor Induk Siswa (NIS)</td><td>:</td><td class="font-mono">${s.nis || '-'}</td></tr>
-                        <tr><td class="py-1">3. NISN</td><td>:</td><td class="font-mono">${s.nisn || '-'}</td></tr>
-                        <tr><td class="py-1">4. NIK Siswa</td><td>:</td><td class="font-mono">${s.nik || '-'}</td></tr>
-                        <tr><td class="py-1">5. Jenis Kelamin</td><td>:</td><td>${s.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</td></tr>
-                        <tr><td class="py-1">6. Tempat, Tanggal Lahir</td><td>:</td><td>${s.pobDob || '-'}</td></tr>
-                        <tr><td class="py-1">7. Agama</td><td>:</td><td class="uppercase">${s.religion || '-'}</td></tr>
-                        <tr><td class="py-1">8. Alamat Tempat Tinggal</td><td>:</td><td>${s.address || '-'}</td></tr>
-                        <tr><td class="py-1">9. Nomor Telepon / HP</td><td>:</td><td>${s.phone || '-'}</td></tr>
+                <!-- A. KETERANGAN PRIBADI PESERTA DIDIK -->
+                <div class="mb-3">
+                    <h4 class="font-bold uppercase mb-1">A. KETERANGAN PRIBADI PESERTA DIDIK</h4>
+                    <table class="w-full">
+                        <tr><td class="w-56 py-0.5">1. Nama Lengkap</td><td class="w-3">:</td><td class="font-bold uppercase">${s.name || '-'}</td></tr>
+                        <tr><td class="py-0.5">2. Nama Panggilan</td><td>:</td><td>${s.nickname || '-'}</td></tr>
+                        <tr><td class="py-0.5">3. Jenis Kelamin</td><td>:</td><td>${s.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</td></tr>
+                        <tr><td class="py-0.5">4. Tempat dan tanggal lahir</td><td>:</td><td>${s.pobDob || '-'}</td></tr>
+                        <tr><td class="py-0.5">5. Agama</td><td>:</td><td class="uppercase">${s.religion || '-'}</td></tr>
+                        <tr><td class="py-0.5">6. Kewarganegaraan</td><td>:</td><td>${s.citizenship || 'Indonesia'}</td></tr>
+                        <tr><td class="py-0.5">7. Anak ke</td><td>:</td><td>${s.childOrder || '-'}</td></tr>
+                        <tr><td class="py-0.5">8. Jumlah saudara</td><td>:</td><td>${s.siblingsCount || '-'}</td></tr>
+                        <tr><td class="py-0.5">9. Anak yatim/piatu/yatim piatu</td><td>:</td><td>${s.orphanStatus || '-'}</td></tr>
+                        <tr><td class="py-0.5">10. Bahasa sehari-hari dirumah</td><td>:</td><td>${s.language || '-'}</td></tr>
                     </table>
                 </div>
 
-                <div class="mb-4">
-                    <h4 class="font-bold underline uppercase text-sm mb-2">B. DATA ORANG TUA / WALI</h4>
-                    <table class="w-full text-xs">
-                        <tr><td class="w-48 py-1">1. Nama Ayah Kandung</td><td class="w-4">:</td><td class="uppercase">${s.fatherName || '-'}</td></tr>
-                        <tr><td class="py-1">2. Nama Ibu Kandung</td><td>:</td><td class="uppercase">${s.motherName || '-'}</td></tr>
-                        <tr><td class="py-1">3. Nama Wali</td><td>:</td><td class="uppercase">${s.parentName || '-'}</td></tr>
+                <!-- B. KETERANGAN TEMPAT TINGGAL -->
+                <div class="mb-3">
+                    <h4 class="font-bold uppercase mb-1">B. KETERANGAN TEMPAT TINGGAL PESERTA DIDIK</h4>
+                    <table class="w-full">
+                        <tr><td class="w-56 py-0.5">11. Alamat Peserta Didik</td><td class="w-3">:</td><td>${s.address || '-'}</td></tr>
+                        <tr><td class="py-0.5">12. Selama bersekolah tinggal dengan</td><td>:</td><td>${s.livingWith || '-'}</td></tr>
+                        <tr><td class="py-0.5">13. Jarak dari tempat tinggal ke sekolah</td><td>:</td><td>${s.distance || '-'}</td></tr>
+                        <tr><td class="py-0.5">14. Ke sekolah dengan kendaraan / jalan kaki</td><td>:</td><td>${s.transport || '-'}</td></tr>
                     </table>
                 </div>
 
-                <div class="mb-4">
-                    <h4 class="font-bold underline uppercase text-sm mb-2">C. RIWAYAT KELAS & KELULUSAN</h4>
-                    <table class="w-full text-xs border border-black text-center mb-2">
+                <!-- C. KETERANGAN JASMANI DAN KESEHATAN -->
+                <div class="mb-3">
+                    <h4 class="font-bold uppercase mb-1">C. KETERANGAN JASMANI DAN KESEHATAN PESERTA DIDIK</h4>
+                    <table class="w-full mb-1">
+                        <tr><td class="w-56 py-0.5">15. Berat badan waktu diterima/keluar</td><td class="w-3">:</td><td>${s.weight || '-'}</td></tr>
+                        <tr><td class="py-0.5">16. Tinggi badan waktu diterima/keluar</td><td>:</td><td>${s.height || '-'}</td></tr>
+                        <tr><td class="py-0.5">17. Golongan darah</td><td>:</td><td class="uppercase">${s.bloodType || '-'}</td></tr>
+                        <tr><td class="py-0.5">18. Penyakit pernah diderita</td><td>:</td><td>${s.medicalHistory || '-'}</td></tr>
+                        <tr><td class="py-0.5">19. Kelainan jasmaniah / lainnya</td><td>:</td><td>${s.disability || '-'}</td></tr>
+                    </table>
+                </div>
+
+                <!-- D. KETERANGAN TENTANG PENDIDIKAN SEBELUMNYA -->
+                <div class="mb-3">
+                    <h4 class="font-bold uppercase mb-1">D. KETERANGAN TENTANG PENDIDIKAN SEBELUMNYA</h4>
+                    <table class="w-full">
+                        <tr><td class="w-56 py-0.5">20. Diterima di sekolah ini tanggal / asal sekolah</td><td class="w-3">:</td><td>${s.entryDate || '-'}</td></tr>
+                        <tr><td class="py-0.5">    Tanggal dan No. Ijazah Sebelumnya</td><td>:</td><td>${s.prevDiploma || '-'}</td></tr>
+                        <tr><td class="py-0.5">21. Diterima sebagai siswa pindahan</td><td>:</td><td>${s.transferFrom || '-'}</td></tr>
+                    </table>
+                </div>
+
+                <!-- E. KETERANGAN ORANG TUA KANDUNG -->
+                <div class="mb-3">
+                    <h4 class="font-bold uppercase mb-1">E. KETERANGAN TENTANG ORANG TUA KANDUNG</h4>
+                    <table class="w-full text-center border border-black mb-1">
                         <tr class="bg-gray-100 font-bold border-b border-black">
-                            <td class="border-r border-black p-1">Kelas 1</td>
-                            <td class="border-r border-black p-1">Kelas 2</td>
-                            <td class="border-r border-black p-1">Kelas 3</td>
-                            <td class="border-r border-black p-1">Kelas 4</td>
-                            <td class="border-r border-black p-1">Kelas 5</td>
-                            <td class="p-1">Kelas 6</td>
+                            <td class="p-1 border-r border-black w-40">Data Orang Tua Kandung</td>
+                            <td class="p-1 border-r border-black">Ayah</td>
+                            <td class="p-1">Ibu</td>
+                        </tr>
+                        <tr class="border-b border-black"><td class="p-1 border-r border-black text-left font-semibold">Nama</td><td class="p-1 border-r border-black uppercase">${s.fatherName || '-'}</td><td class="p-1 uppercase">${s.motherName || '-'}</td></tr>
+                        <tr class="border-b border-black"><td class="p-1 border-r border-black text-left font-semibold">Tempat & Tanggal Lahir</td><td class="p-1 border-r border-black">${s.fatherPobDob || '-'}</td><td class="p-1">${s.motherPobDob || '-'}</td></tr>
+                        <tr class="border-b border-black"><td class="p-1 border-r border-black text-left font-semibold">Pendidikan Terakhir</td><td class="p-1 border-r border-black">${s.fatherEdu || '-'}</td><td class="p-1">${s.motherEdu || '-'}</td></tr>
+                        <tr class="border-b border-black"><td class="p-1 border-r border-black text-left font-semibold">Pekerjaan</td><td class="p-1 border-r border-black">${s.fatherJob || '-'}</td><td class="p-1">${s.motherJob || '-'}</td></tr>
+                        <tr><td class="p-1 border-r border-black text-left font-semibold">Penghasilan / Bulan</td><td class="p-1 border-r border-black">${s.fatherIncome || '-'}</td><td class="p-1">${s.motherIncome || '-'}</td></tr>
+                    </table>
+                </div>
+
+                <!-- F. WALI -->
+                <div class="mb-3">
+                    <h4 class="font-bold uppercase mb-1">F. KETERANGAN TENTANG WALI</h4>
+                    <table class="w-full">
+                        <tr><td class="w-56 py-0.5">23. Nama Wali / Hubungan</td><td class="w-3">:</td><td class="uppercase">${s.parentName || '-'} (${s.guardianDetails || '-'})</td></tr>
+                        <tr><td class="py-0.5">    No. Telepon Wali</td><td>:</td><td>${s.phone || '-'}</td></tr>
+                    </table>
+                </div>
+
+                <!-- G. INTELEGENSI, KEPRIBADIAN DAN PRESTASI -->
+                <div class="mb-3">
+                    <h4 class="font-bold uppercase mb-1">G. KETERANGAN INTELEGENSI, KEPRIBADIAN DAN PRESTASI</h4>
+                    <table class="w-full">
+                        <tr><td class="w-56 py-0.5">24. Intelegensi (IQ) / Tanggal Tes</td><td class="w-3">:</td><td>${s.iqTest || '-'}</td></tr>
+                        <tr><td class="py-0.5">26. Prestasi Yang Pernah Dicapai</td><td>:</td><td>${s.achievements || '-'}</td></tr>
+                        <tr><td class="py-0.5">27. Penerimaan Beasiswa</td><td>:</td><td>${s.scholarship || '-'}</td></tr>
+                    </table>
+                </div>
+
+                <!-- H & I. KEHADIRAN & MENINGGALKAN SEKOLAH -->
+                <div class="mb-3">
+                    <h4 class="font-bold uppercase mb-1">H & I. RIWAYAT KELAS & KELULUSAN</h4>
+                    <table class="w-full text-center border border-black mb-1">
+                        <tr class="bg-gray-100 font-bold border-b border-black">
+                            <td class="p-1 border-r border-black">Kls 1</td>
+                            <td class="p-1 border-r border-black">Kls 2</td>
+                            <td class="p-1 border-r border-black">Kls 3</td>
+                            <td class="p-1 border-r border-black">Kls 4</td>
+                            <td class="p-1 border-r border-black">Kls 5</td>
+                            <td class="p-1">Kls 6</td>
                         </tr>
                         <tr>
-                            <td class="border-r border-black p-1.5">${s.class1 || '-'}</td>
-                            <td class="border-r border-black p-1.5">${s.class2 || '-'}</td>
-                            <td class="border-r border-black p-1.5">${s.class3 || '-'}</td>
-                            <td class="border-r border-black p-1.5">${s.class4 || '-'}</td>
-                            <td class="border-r border-black p-1.5">${s.class5 || '-'}</td>
-                            <td class="p-1.5">${s.class6 || '-'}</td>
+                            <td class="p-1 border-r border-black">${s.class1 || '-'}</td>
+                            <td class="p-1 border-r border-black">${s.class2 || '-'}</td>
+                            <td class="p-1 border-r border-black">${s.class3 || '-'}</td>
+                            <td class="p-1 border-r border-black">${s.class4 || '-'}</td>
+                            <td class="p-1 border-r border-black">${s.class5 || '-'}</td>
+                            <td class="p-1">${s.class6 || '-'}</td>
                         </tr>
                     </table>
-                    <table class="w-full text-xs">
-                        <tr><td class="w-48 py-1">Tanggal Masuk Sekolah</td><td class="w-4">:</td><td>${s.entryDate || '-'}</td></tr>
-                        <tr><td class="py-1">Tanggal Meninggalkan Sekolah</td><td>:</td><td>${s.exitDate || '-'}</td></tr>
-                        <tr><td class="py-1">Status / Keterangan Akhir</td><td>:</td><td class="font-bold uppercase">${s.notes || '-'}</td></tr>
+                    <table class="w-full">
+                        <tr><td class="w-56 py-0.5">Tamat Belajar / No. Ijazah</td><td class="w-3">:</td><td>${s.graduationInfo || '-'}</td></tr>
+                        <tr><td class="py-0.5">Tanggal Meninggalkan Sekolah</td><td>:</td><td>${s.exitDate || '-'}</td></tr>
+                        <tr><td class="py-0.5">Status / Keterangan Akhir</td><td>:</td><td class="font-bold uppercase">${s.notes || '-'}</td></tr>
                     </table>
                 </div>
 
-                <div class="mt-8 flex justify-between items-end text-xs">
+                <!-- TANDA TANGAN -->
+                <div class="mt-6 flex justify-between items-end">
                     <div class="border border-black w-24 h-32 flex items-center justify-center text-gray-400">
                         Pasfoto 3x4
                     </div>
@@ -748,11 +910,9 @@
             document.getElementById('indukPrintModal').classList.remove('flex');
         }
 
-        // Filter Abjad
         window.filterByLetter = function(letter) {
             currentLetterFilter = letter;
             document.getElementById('activeLetterLabel').textContent = letter === 'ALL' ? 'Semua Siswa' : `Abjad ${letter}`;
-            
             const buttons = document.querySelectorAll('.letter-btn');
             buttons.forEach(btn => {
                 if((letter === 'ALL' && btn.textContent === 'SEMUA') || btn.textContent === letter) {
@@ -761,7 +921,6 @@
                     btn.className = "letter-btn bg-slate-100 hover:bg-indigo-100 text-slate-700 font-medium px-2.5 py-1 rounded text-xs transition border border-slate-200";
                 }
             });
-
             renderData();
         }
 
@@ -774,7 +933,6 @@
             renderData();
         }
 
-        // Modal Form Handlers
         window.openModal = function(key = null) {
             document.getElementById('studentForm').reset();
             document.getElementById('studentKey').value = '';
@@ -786,24 +944,53 @@
                 document.getElementById('nisn').value = s.nisn || '';
                 document.getElementById('nik').value = s.nik || '';
                 document.getElementById('name').value = s.name || '';
+                document.getElementById('nickname').value = s.nickname || '';
                 document.getElementById('gender').value = s.gender || 'L';
                 document.getElementById('pobDob').value = s.pobDob || '';
                 document.getElementById('religion').value = s.religion || '';
-                document.getElementById('fatherName').value = s.fatherName || '';
-                document.getElementById('motherName').value = s.motherName || '';
-                document.getElementById('parentName').value = s.parentName || '';
-                document.getElementById('phone').value = s.phone || '';
+                document.getElementById('citizenship').value = s.citizenship || 'Indonesia';
+                document.getElementById('childOrder').value = s.childOrder || '';
+                document.getElementById('siblingsCount').value = s.siblingsCount || '';
+                document.getElementById('orphanStatus').value = s.orphanStatus || '';
+                document.getElementById('language').value = s.language || '';
                 document.getElementById('address').value = s.address || '';
+                document.getElementById('livingWith').value = s.livingWith || '';
+                document.getElementById('distance').value = s.distance || '';
+                document.getElementById('transport').value = s.transport || '';
+                document.getElementById('weight').value = s.weight || '';
+                document.getElementById('height').value = s.height || '';
+                document.getElementById('bloodType').value = s.bloodType || '';
+                document.getElementById('medicalHistory').value = s.medicalHistory || '';
+                document.getElementById('disability').value = s.disability || '';
                 document.getElementById('entryDate').value = s.entryDate || '';
-                document.getElementById('exitDate').value = s.exitDate || '';
+                document.getElementById('prevDiploma').value = s.prevDiploma || '';
+                document.getElementById('transferFrom').value = s.transferFrom || '';
+                document.getElementById('fatherName').value = s.fatherName || '';
+                document.getElementById('fatherPobDob').value = s.fatherPobDob || '';
+                document.getElementById('fatherEdu').value = s.fatherEdu || '';
+                document.getElementById('fatherJob').value = s.fatherJob || '';
+                document.getElementById('fatherIncome').value = s.fatherIncome || '';
+                document.getElementById('motherName').value = s.motherName || '';
+                document.getElementById('motherPobDob').value = s.motherPobDob || '';
+                document.getElementById('motherEdu').value = s.motherEdu || '';
+                document.getElementById('motherJob').value = s.motherJob || '';
+                document.getElementById('motherIncome').value = s.motherIncome || '';
+                document.getElementById('parentName').value = s.parentName || '';
+                document.getElementById('guardianDetails').value = s.guardianDetails || '';
+                document.getElementById('phone').value = s.phone || '';
+                document.getElementById('iqTest').value = s.iqTest || '';
+                document.getElementById('achievements').value = s.achievements || '';
+                document.getElementById('scholarship').value = s.scholarship || '';
                 document.getElementById('class1').value = s.class1 || '';
                 document.getElementById('class2').value = s.class2 || '';
                 document.getElementById('class3').value = s.class3 || '';
                 document.getElementById('class4').value = s.class4 || '';
                 document.getElementById('class5').value = s.class5 || '';
                 document.getElementById('class6').value = s.class6 || '';
+                document.getElementById('graduationInfo').value = s.graduationInfo || '';
+                document.getElementById('exitDate').value = s.exitDate || '';
                 document.getElementById('notes').value = s.notes || '';
-                document.getElementById('modalTitle').textContent = 'Edit Data Siswa & Buku Induk';
+                document.getElementById('modalTitle').textContent = 'Edit Data Isian Buku Induk (A s.d J)';
             } else {
                 document.getElementById('modalTitle').textContent = 'Tambah Data Siswa Baru';
             }
@@ -817,7 +1004,6 @@
             document.getElementById('studentModal').classList.remove('flex');
         }
 
-        // CRUD Operations
         window.handleFormSubmit = function(e) {
             e.preventDefault();
             if (currentUserRole !== 'ADMIN') return;
@@ -829,22 +1015,51 @@
                 nisn: document.getElementById('nisn').value.trim(),
                 nik: document.getElementById('nik').value.trim(),
                 name: document.getElementById('name').value.trim().toUpperCase(),
+                nickname: document.getElementById('nickname').value.trim(),
                 gender: document.getElementById('gender').value,
                 pobDob: document.getElementById('pobDob').value.trim(),
                 religion: document.getElementById('religion').value.trim().toUpperCase(),
-                fatherName: document.getElementById('fatherName').value.trim().toUpperCase(),
-                motherName: document.getElementById('motherName').value.trim().toUpperCase(),
-                parentName: document.getElementById('parentName').value.trim().toUpperCase(),
-                phone: document.getElementById('phone').value.trim(),
+                citizenship: document.getElementById('citizenship').value.trim(),
+                childOrder: document.getElementById('childOrder').value.trim(),
+                siblingsCount: document.getElementById('siblingsCount').value.trim(),
+                orphanStatus: document.getElementById('orphanStatus').value.trim(),
+                language: document.getElementById('language').value.trim(),
                 address: document.getElementById('address').value.trim(),
+                livingWith: document.getElementById('livingWith').value.trim(),
+                distance: document.getElementById('distance').value.trim(),
+                transport: document.getElementById('transport').value.trim(),
+                weight: document.getElementById('weight').value.trim(),
+                height: document.getElementById('height').value.trim(),
+                bloodType: document.getElementById('bloodType').value.trim().toUpperCase(),
+                medicalHistory: document.getElementById('medicalHistory').value.trim(),
+                disability: document.getElementById('disability').value.trim(),
                 entryDate: document.getElementById('entryDate').value.trim(),
-                exitDate: document.getElementById('exitDate').value.trim(),
+                prevDiploma: document.getElementById('prevDiploma').value.trim(),
+                transferFrom: document.getElementById('transferFrom').value.trim(),
+                fatherName: document.getElementById('fatherName').value.trim().toUpperCase(),
+                fatherPobDob: document.getElementById('fatherPobDob').value.trim(),
+                fatherEdu: document.getElementById('fatherEdu').value.trim(),
+                fatherJob: document.getElementById('fatherJob').value.trim(),
+                fatherIncome: document.getElementById('fatherIncome').value.trim(),
+                motherName: document.getElementById('motherName').value.trim().toUpperCase(),
+                motherPobDob: document.getElementById('motherPobDob').value.trim(),
+                motherEdu: document.getElementById('motherEdu').value.trim(),
+                motherJob: document.getElementById('motherJob').value.trim(),
+                motherIncome: document.getElementById('motherIncome').value.trim(),
+                parentName: document.getElementById('parentName').value.trim().toUpperCase(),
+                guardianDetails: document.getElementById('guardianDetails').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                iqTest: document.getElementById('iqTest').value.trim(),
+                achievements: document.getElementById('achievements').value.trim(),
+                scholarship: document.getElementById('scholarship').value.trim(),
                 class1: document.getElementById('class1').value.trim(),
                 class2: document.getElementById('class2').value.trim(),
                 class3: document.getElementById('class3').value.trim(),
                 class4: document.getElementById('class4').value.trim(),
                 class5: document.getElementById('class5').value.trim(),
                 class6: document.getElementById('class6').value.trim(),
+                graduationInfo: document.getElementById('graduationInfo').value.trim(),
+                exitDate: document.getElementById('exitDate').value.trim(),
                 notes: document.getElementById('notes').value.trim().toUpperCase()
             };
 
@@ -857,9 +1072,7 @@
             closeModal();
         }
 
-        window.editStudent = function(key) {
-            openModal(key);
-        }
+        window.editStudent = function(key) { openModal(key); }
 
         window.deleteStudent = function(key, studentName) {
             if (currentUserRole !== 'ADMIN') return;
@@ -871,20 +1084,16 @@
         window.deleteAllStudents = function() {
             if (currentUserRole !== 'ADMIN') return;
             const total = Object.keys(studentsData).length;
-            if (total === 0) {
-                alert("Database saat ini sudah kosong.");
-                return;
-            }
+            if (total === 0) { alert("Database saat ini sudah kosong."); return; }
 
             if (confirm(`PERINGATAN: Anda akan menghapus SELURUH (${total}) data siswa dari Cloud Database.\n\nApakah Anda benar-benar yakin?`)) {
-                if (confirm("Konfirmasi sekali lagi: Tindakan ini TIDAK BISA DIBATALKAN. Lanjutkan hapus semua data?")) {
+                if (confirm("Konfirmasi sekali lagi: Tindakan ini TIDAK BISA DIBATALKAN.")) {
                     set(studentsRef, null);
                     alert("Seluruh data siswa berhasil dihapus.");
                 }
             }
         }
 
-        // Excel Import
         window.handleExcelImport = function(e) {
             if (currentUserRole !== 'ADMIN') return;
             const file = e.target.files[0];
@@ -897,7 +1106,6 @@
                     const workbook = XLSX.read(data, { type: 'array' });
                     const firstSheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[firstSheetName];
-                    
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                     let count = 0;
 
@@ -905,113 +1113,60 @@
                         const row = jsonData[i];
                         if (!row || row.length === 0) continue;
 
-                        let name = '', nis = '', gender = 'L', parentName = '';
-                        let entryDate = '', exitDate = '', notes = '';
-                        let class1 = '', class2 = '', class3 = '', class4 = '', class5 = '', class6 = '';
-
+                        let name = '';
                         for (let col = 0; col < row.length; col++) {
                             const val = row[col] ? String(row[col]).trim() : '';
                             if (!val) continue;
-
                             const upperVal = val.toUpperCase();
-                            if (upperVal.includes('NAMA SISWA') || upperVal.includes('NOMOR INDUK') || upperVal.includes('BUKU KLAPER') || upperVal.includes('NO. URUT')) {
-                                name = '';
-                                break;
-                            }
-
-                            if (!name && isNaN(val) && val.length >= 3 && !['L', 'P', 'LULUS', 'AKTIF', 'MUTASI', 'KELAS'].includes(upperVal)) {
-                                name = val;
-                            }
+                            if (upperVal.includes('NAMA SISWA') || upperVal.includes('NOMOR INDUK') || upperVal.includes('BUKU KLAPER')) { name = ''; break; }
+                            if (!name && isNaN(val) && val.length >= 3 && !['L', 'P', 'LULUS', 'AKTIF', 'MUTASI'].includes(upperVal)) { name = val; }
                         }
 
                         if (name) {
-                            nis = row[1] ? String(row[1]).trim() : '';
-                            gender = row[3] ? String(row[3]).trim().toUpperCase() : 'L';
-                            parentName = row[4] ? String(row[4]).trim() : '';
-                            entryDate = row[5] ? String(row[5]).trim() : '';
-                            class1 = row[6] ? String(row[6]).trim() : '';
-                            class2 = row[7] ? String(row[7]).trim() : '';
-                            class3 = row[8] ? String(row[8]).trim() : '';
-                            class4 = row[9] ? String(row[9]).trim() : '';
-                            class5 = row[10] ? String(row[10]).trim() : '';
-                            class6 = row[11] ? String(row[11]).trim() : '';
-                            exitDate = row[12] ? String(row[12]).trim() : '';
-                            notes = row[13] ? String(row[13]).trim() : (row[10] ? String(row[10]).trim() : '');
-
                             push(studentsRef, {
-                                nis: nis,
+                                nis: row[1] ? String(row[1]).trim() : '',
                                 name: name.toUpperCase(),
-                                gender: gender === 'P' ? 'P' : 'L',
-                                parentName: parentName.toUpperCase(),
-                                entryDate: entryDate,
-                                class1: class1,
-                                class2: class2,
-                                class3: class3,
-                                class4: class4,
-                                class5: class5,
-                                class6: class6,
-                                exitDate: exitDate,
-                                notes: notes.toUpperCase()
+                                gender: row[3] ? String(row[3]).trim().toUpperCase() : 'L',
+                                parentName: row[4] ? String(row[4]).trim() : '',
+                                entryDate: row[5] ? String(row[5]).trim() : '',
+                                class1: row[6] ? String(row[6]).trim() : '',
+                                class2: row[7] ? String(row[7]).trim() : '',
+                                class3: row[8] ? String(row[8]).trim() : '',
+                                class4: row[9] ? String(row[9]).trim() : '',
+                                class5: row[10] ? String(row[10]).trim() : '',
+                                class6: row[11] ? String(row[11]).trim() : '',
+                                exitDate: row[12] ? String(row[12]).trim() : '',
+                                notes: row[13] ? String(row[13]).trim().toUpperCase() : 'AKTIF'
                             });
                             count++;
                         }
                     }
-
-                    if (count > 0) {
-                        alert(`Berhasil mengimpor ${count} data siswa ke Cloud Database!`);
-                    } else {
-                        alert('Tidak ada data siswa yang terbaca dari berkas ini.');
-                    }
-                } catch (err) {
-                    console.error("Import Error:", err);
-                    alert("Gagal membaca berkas Excel.");
-                }
+                    if (count > 0) alert(`Berhasil mengimpor ${count} data siswa!`);
+                } catch (err) { alert("Gagal membaca berkas Excel."); }
                 e.target.value = '';
             };
             reader.readAsArrayBuffer(file);
         }
 
-        // Excel Export
         window.exportToExcel = function() {
             let studentArray = Object.keys(studentsData).map(key => studentsData[key]);
             studentArray.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
             const exportData = [
-                ["BUKU KLAPER & INDUK SISWA SDN 186 CIPADUNG"],
+                ["BUKU INDUK & KLAPER SISWA SDN 186 CIPADUNG"],
                 [""],
-                ["No. Urut", "Nomor Induk (NIS)", "NISN", "NIK", "Nama Siswa", "L/P", "TTL", "Agama", "Nama Ayah", "Nama Ibu", "Nama Wali", "No HP", "Alamat", "Tanggal Masuk", "Kls 1", "Kls 2", "Kls 3", "Kls 4", "Kls 5", "Kls 6", "Tanggal Meninggalkan", "Keterangan"],
+                ["No", "NIS", "NISN", "NIK", "Nama Lengkap", "Panggilan", "L/P", "TTL", "Agama", "Alamat", "Ayah", "Ibu", "Wali", "No Telp", "Tgl Masuk", "Kls 1", "Kls 2", "Kls 3", "Kls 4", "Kls 5", "Kls 6", "Tgl Keluar", "Status"]
             ];
 
             studentArray.forEach((s, i) => {
                 exportData.push([
-                    i + 1,
-                    s.nis || '',
-                    s.nisn || '',
-                    s.nik || '',
-                    s.name || '',
-                    s.gender || '',
-                    s.pobDob || '',
-                    s.religion || '',
-                    s.fatherName || '',
-                    s.motherName || '',
-                    s.parentName || '',
-                    s.phone || '',
-                    s.address || '',
-                    s.entryDate || '',
-                    s.class1 || '',
-                    s.class2 || '',
-                    s.class3 || '',
-                    s.class4 || '',
-                    s.class5 || '',
-                    s.class6 || '',
-                    s.exitDate || '',
-                    s.notes || ''
+                    i + 1, s.nis||'', s.nisn||'', s.nik||'', s.name||'', s.nickname||'', s.gender||'', s.pobDob||'', s.religion||'', s.address||'', s.fatherName||'', s.motherName||'', s.parentName||'', s.phone||'', s.entryDate||'', s.class1||'', s.class2||'', s.class3||'', s.class4||'', s.class5||'', s.class6||'', s.exitDate||'', s.notes||''
                 ]);
             });
 
             const ws = XLSX.utils.aoa_to_sheet(exportData);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Buku Induk & Klaper");
+            XLSX.utils.book_append_sheet(wb, ws, "Buku Induk");
             XLSX.writeFile(wb, `Buku_Induk_SDN_186_CIPADUNG_${new Date().toISOString().slice(0,10)}.xlsx`);
         }
 
