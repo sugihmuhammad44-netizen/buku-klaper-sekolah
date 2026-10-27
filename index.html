@@ -24,12 +24,35 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
+    <!-- Modal Login -->
+    <div id="loginModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 no-print">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all">
+            <div class="text-center mb-6">
+                <img src="logo.png" alt="Logo Sekolah" class="h-16 w-16 mx-auto mb-3 object-contain">
+                <h2 class="text-xl font-bold text-slate-800 uppercase">BUKU KLAPER ONLINE</h2>
+                <p class="text-xs text-slate-500">SDN 186 CIPADUNG - KOTA BANDUNG</p>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Email Pengguna</label>
+                    <input type="email" id="loginEmail" required placeholder="admin@sdn186.sch.id" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Kata Sandi (Password)</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <div id="loginError" class="hidden text-xs text-red-600 font-semibold bg-red-50 p-2 rounded border border-red-200"></div>
+                <button type="submit" id="loginBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm shadow transition">Masuk Layanan</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Header Section -->
     <header class="bg-indigo-900 text-white shadow-lg no-print">
         <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <!-- Brand & Logo Container -->
             <div class="flex items-center space-x-4">
-                <!-- Logo Sekolah -->
                 <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-16 w-16 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight uppercase">BUKU KLAPER SDN 186 CIPADUNG</h1>
@@ -37,22 +60,27 @@
                 </div>
             </div>
             
-            <div class="flex flex-wrap gap-2">
-                <button onclick="openModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
-                    <i class="fa-solid fa-user-plus"></i> Tambah Siswa
-                </button>
-                <button onclick="document.getElementById('excelFileInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
-                    <i class="fa-solid fa-file-excel"></i> Impor Excel
-                </button>
-                <input type="file" id="excelFileInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelImport(event)">
-                <button onclick="exportToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
-                    <i class="fa-solid fa-file-export"></i> Ekspor Excel
-                </button>
-                <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-800 text-white px-3.5 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
+            <div class="flex flex-wrap gap-2 items-center">
+                <div id="adminActions" class="hidden flex flex-wrap gap-2">
+                    <button onclick="openModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
+                        <i class="fa-solid fa-user-plus"></i> Tambah Siswa
+                    </button>
+                    <button onclick="document.getElementById('excelFileInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
+                        <i class="fa-solid fa-file-excel"></i> Impor Excel
+                    </button>
+                    <input type="file" id="excelFileInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelImport(event)">
+                    <button onclick="exportToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
+                        <i class="fa-solid fa-file-export"></i> Ekspor Excel
+                    </button>
+                    <button onclick="deleteAllStudents()" class="bg-rose-700 hover:bg-rose-800 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm" title="Kosongkan Seluruh Data">
+                        <i class="fa-solid fa-trash-can"></i> Hapus Semua
+                    </button>
+                </div>
+                <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-800 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
                     <i class="fa-solid fa-print"></i> Cetak
                 </button>
-                <button onclick="deleteAllStudents()" class="bg-rose-700 hover:bg-rose-800 text-white px-3.5 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm" title="Kosongkan Seluruh Data">
-                    <i class="fa-solid fa-trash-can"></i> Hapus Semua
+                <button onclick="handleLogout()" class="bg-slate-800 hover:bg-red-700 text-slate-200 border border-slate-700 px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm" title="Keluar Akun">
+                    <i class="fa-solid fa-right-from-bracket"></i> Keluar
                 </button>
             </div>
         </div>
@@ -61,14 +89,15 @@
     <!-- Main Container -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
         
-        <!-- Status Sync Banner -->
-        <div class="no-print mb-4 flex items-center justify-between bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200 text-xs sm:text-sm">
+        <!-- Status Sync & User Banner -->
+        <div class="no-print mb-4 flex flex-col sm:flex-row items-center justify-between bg-white px-4 py-2.5 rounded-lg shadow-sm border border-slate-200 text-xs sm:text-sm gap-2">
             <div class="flex items-center gap-2">
                 <span id="syncIndicator" class="h-3 w-3 rounded-full bg-amber-500 animate-pulse"></span>
                 <span id="syncText" class="text-slate-600 font-medium">Menghubungkan ke Cloud Database...</span>
             </div>
-            <div class="text-slate-500">
-                Total Data: <span id="totalStudentsCount" class="font-bold text-indigo-900">0</span> Siswa
+            <div class="flex items-center gap-4 text-slate-600">
+                <span>Pengguna: <strong id="currentUserLabel" class="text-indigo-900">-</strong> (<span id="userRoleBadge" class="font-bold text-emerald-600">-</span>)</span>
+                <span>Total Data: <span id="totalStudentsCount" class="font-bold text-indigo-900">0</span> Siswa</span>
             </div>
         </div>
 
@@ -129,7 +158,7 @@
                             <th colspan="6" class="py-2 px-3 text-center border-r border-indigo-900 bg-indigo-900">Tahun Pelajaran (Kelas)</th>
                             <th class="py-3 px-3 text-center border-r border-indigo-900 whitespace-nowrap">Tgl Meninggalkan</th>
                             <th class="py-3 px-3 text-center border-r border-indigo-900 whitespace-nowrap">Ket / Catatan</th>
-                            <th class="py-3 px-3 text-center no-print w-24">Aksi</th>
+                            <th class="py-3 px-3 text-center no-print action-column w-24">Aksi</th>
                         </tr>
                         <tr class="bg-indigo-900 text-white text-xs border-b border-indigo-800">
                             <th class="border-r border-indigo-800"></th>
@@ -146,7 +175,7 @@
                             <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 6</th>
                             <th class="border-r border-indigo-800"></th>
                             <th class="border-r border-indigo-800"></th>
-                            <th class="no-print"></th>
+                            <th class="no-print action-column"></th>
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="divide-y divide-slate-200">
@@ -256,15 +285,18 @@
     <!-- Firebase SDK Modular (v10) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, onValue, push, set, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Ganti URL ini dengan Realtime Database URL milik Anda dari Firebase Console
+        // Konfigurasi Firebase Anda (Sesuaikan databaseURL jika menggunakan server sendiri)
         const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForAuthUIOnly",
             databaseURL: "https://buku-klaper-sdn186-default-rtdb.asia-southeast1.firebasedatabase.app"
         };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getDatabase(app);
         const studentsRef = ref(db, 'students');
 
@@ -272,22 +304,70 @@
         let studentsData = {};
         let currentLetterFilter = 'ALL';
         let currentSearchQuery = '';
+        let currentUserRole = 'VIEWER'; // 'ADMIN' or 'VIEWER'
 
-        // Realtime Data Listener
-        onValue(studentsRef, (snapshot) => {
-            const data = snapshot.val();
-            studentsData = data || {};
-            
-            // Update Sync Status Indicator
-            document.getElementById('syncIndicator').className = "h-3 w-3 rounded-full bg-emerald-500";
-            document.getElementById('syncText').textContent = "Terhubung ke Cloud (Realtime)";
-            
-            renderData();
-        }, (error) => {
-            console.error("Firebase Sync Error:", error);
-            document.getElementById('syncIndicator').className = "h-3 w-3 rounded-full bg-red-500";
-            document.getElementById('syncText').textContent = "Gagal terhubung ke Cloud Database";
+        // Check Auth State
+        onAuthStateChanged(auth, (user) => {
+            const loginModal = document.getElementById('loginModal');
+            if (user) {
+                loginModal.classList.add('hidden');
+                document.getElementById('currentUserLabel').textContent = user.email;
+
+                // Tentukan Role sederhana berdasarkan email
+                if (user.email.includes('admin')) {
+                    currentUserRole = 'ADMIN';
+                    document.getElementById('userRoleBadge').textContent = 'Admin / Operator';
+                    document.getElementById('adminActions').classList.remove('hidden');
+                } else {
+                    currentUserRole = 'VIEWER';
+                    document.getElementById('userRoleBadge').textContent = 'Guru / Viewer';
+                    document.getElementById('adminActions').classList.add('hidden');
+                }
+                
+                // Realtime Data Listener setelah Login
+                listenToData();
+            } else {
+                loginModal.classList.remove('hidden');
+            }
         });
+
+        // Handle Login
+        window.handleLogin = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            try {
+                errorDiv.classList.add('hidden');
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                errorDiv.textContent = "Gagal Masuk: Email atau Kata Sandi Salah.";
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        // Handle Logout
+        window.handleLogout = function() {
+            signOut(auth);
+        }
+
+        // Realtime Listener Data
+        function listenToData() {
+            onValue(studentsRef, (snapshot) => {
+                const data = snapshot.val();
+                studentsData = data || {};
+                
+                document.getElementById('syncIndicator').className = "h-3 w-3 rounded-full bg-emerald-500";
+                document.getElementById('syncText').textContent = "Terhubung ke Cloud Database";
+                
+                renderData();
+            }, (error) => {
+                console.error("Firebase Sync Error:", error);
+                document.getElementById('syncIndicator').className = "h-3 w-3 rounded-full bg-red-500";
+                document.getElementById('syncText').textContent = "Gagal terhubung ke Cloud Database";
+            });
+        }
 
         // Initialize Alphabet Buttons
         window.initAlphabetButtons = function() {
@@ -307,21 +387,27 @@
             const emptyState = document.getElementById('emptyState');
             const statusFilter = document.getElementById('filterStatus').value;
 
-            // Convert Object to Array
+            // Sembunyikan/Tampilkan Kolom Aksi berdasarkan Role
+            const actionColumns = document.querySelectorAll('.action-column');
+            actionColumns.forEach(col => {
+                if (currentUserRole === 'ADMIN') {
+                    col.classList.remove('hidden');
+                } else {
+                    col.classList.add('hidden');
+                }
+            });
+
             let studentArray = Object.keys(studentsData).map(key => ({
                 key: key,
                 ...studentsData[key]
             }));
 
-            // Sort Alphabetically by Name
             studentArray.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
-            // Apply Alphabet Filter
             if (currentLetterFilter !== 'ALL') {
                 studentArray = studentArray.filter(s => (s.name || '').trim().toUpperCase().startsWith(currentLetterFilter));
             }
 
-            // Apply Search Query Filter
             if (currentSearchQuery.trim() !== '') {
                 const q = currentSearchQuery.toLowerCase();
                 studentArray = studentArray.filter(s => 
@@ -331,12 +417,10 @@
                 );
             }
 
-            // Apply Status Filter
             if (statusFilter !== 'ALL') {
                 studentArray = studentArray.filter(s => (s.notes || '').toUpperCase().includes(statusFilter));
             }
 
-            // Update Total Count
             document.getElementById('totalStudentsCount').textContent = studentArray.length;
 
             if (studentArray.length === 0) {
@@ -347,7 +431,6 @@
                 emptyState.classList.add('hidden');
             }
 
-            // Render Rows
             tbody.innerHTML = studentArray.map((student, index) => `
                 <tr class="hover:bg-slate-50 transition border-b border-slate-200">
                     <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-500 font-medium">${index + 1}</td>
@@ -369,12 +452,12 @@
                             (student.notes || '').includes('AKTIF') ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-700'
                         }">${student.notes || '-'}</span>
                     </td>
-                    <td class="py-2.5 px-3 text-center no-print">
+                    <td class="py-2.5 px-3 text-center no-print action-column ${currentUserRole === 'ADMIN' ? '' : 'hidden'}">
                         <div class="flex justify-center gap-2">
-                            <button onclick="editStudent('${student.key}')" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 rounded text-xs font-medium transition flex items-center gap-1" title="Edit Data">
+                            <button onclick="editStudent('${student.key}')" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 rounded text-xs font-medium transition flex items-center gap-1">
                                 <i class="fa-solid fa-pen-to-square"></i> Edit
                             </button>
-                            <button onclick="deleteStudent('${student.key}', '${student.name}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded text-xs font-medium transition flex items-center gap-1" title="Hapus Siswa">
+                            <button onclick="deleteStudent('${student.key}', '${student.name}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded text-xs font-medium transition flex items-center gap-1">
                                 <i class="fa-solid fa-trash"></i> Hapus
                             </button>
                         </div>
@@ -388,7 +471,6 @@
             currentLetterFilter = letter;
             document.getElementById('activeLetterLabel').textContent = letter === 'ALL' ? 'Semua Siswa' : `Abjad ${letter}`;
             
-            // Highlight Button
             const buttons = document.querySelectorAll('.letter-btn');
             buttons.forEach(btn => {
                 if((letter === 'ALL' && btn.textContent === 'SEMUA') || btn.textContent === letter) {
@@ -449,6 +531,8 @@
         // CRUD Firebase Operations
         window.handleFormSubmit = function(e) {
             e.preventDefault();
+            if (currentUserRole !== 'ADMIN') return;
+
             const key = document.getElementById('studentKey').value;
             
             const studentPayload = {
@@ -482,13 +566,15 @@
 
         // Hapus 1 Siswa
         window.deleteStudent = function(key, studentName) {
+            if (currentUserRole !== 'ADMIN') return;
             if(confirm(`Apakah Anda yakin ingin menghapus data siswa "${studentName}" dari Cloud Database?`)) {
                 remove(ref(db, `students/${key}`));
             }
         }
 
-        // Hapus Semua Siswa (Kosongkan Database)
+        // Hapus Semua Siswa
         window.deleteAllStudents = function() {
+            if (currentUserRole !== 'ADMIN') return;
             const total = Object.keys(studentsData).length;
             if (total === 0) {
                 alert("Database saat ini sudah kosong.");
@@ -505,6 +591,7 @@
 
         // Excel Import
         window.handleExcelImport = function(e) {
+            if (currentUserRole !== 'ADMIN') return;
             const file = e.target.files[0];
             if (!file) return;
 
