@@ -288,10 +288,15 @@
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, onValue, push, set, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Konfigurasi Firebase Anda (Sesuaikan databaseURL jika menggunakan server sendiri)
+        // Konfigurasi Asli Firebase Proyek Anda
         const firebaseConfig = {
-            apiKey: "AIzaSyDummyKeyForAuthUIOnly",
-            databaseURL: "https://buku-klaper-sdn186-default-rtdb.asia-southeast1.firebasedatabase.app"
+            apiKey: "AIzaSyAKj0x9Wx537RE_45qstOIpalZX6BuRmPQ",
+            authDomain: "buku-klaper-sdn186.firebaseapp.com",
+            databaseURL: "https://buku-klaper-sdn186-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "buku-klaper-sdn186",
+            storageBucket: "buku-klaper-sdn186.firebasestorage.app",
+            messagingSenderId: "572744086650",
+            appId: "1:572744086650:web:aee583fa3a11cbaf5377c3"
         };
 
         // Initialize Firebase
@@ -342,6 +347,7 @@
                 errorDiv.classList.add('hidden');
                 await signInWithEmailAndPassword(auth, email, password);
             } catch (error) {
+                console.error("Auth Error:", error);
                 errorDiv.textContent = "Gagal Masuk: Email atau Kata Sandi Salah.";
                 errorDiv.classList.remove('hidden');
             }
