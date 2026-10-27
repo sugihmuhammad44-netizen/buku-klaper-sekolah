@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BUKU KLAPER SDN 186 CIPADUNG</title>
+    <title>BUKU KLAPER & INDUK SISWA - SDN 186 CIPADUNG</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome CDN -->
@@ -19,6 +19,7 @@
             table { border-collapse: collapse; width: 100%; font-size: 9pt; }
             th, td { border: 1px solid #000 !important; padding: 4px 5px !important; }
             #printHeader { display: block !important; margin-bottom: 20px; text-align: center; }
+            .page-break { page-break-after: always; }
         }
     </style>
 </head>
@@ -29,7 +30,7 @@
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all">
             <div class="text-center mb-6">
                 <img src="logo.png" alt="Logo Sekolah" class="h-16 w-16 mx-auto mb-3 object-contain">
-                <h2 class="text-xl font-bold text-slate-800 uppercase">BUKU KLAPER ONLINE</h2>
+                <h2 class="text-xl font-bold text-slate-800 uppercase">PORTAL ARSIP SISWA</h2>
                 <p class="text-xs text-slate-500">SDN 186 CIPADUNG - KOTA BANDUNG</p>
             </div>
 
@@ -50,13 +51,13 @@
 
     <!-- Header Section -->
     <header class="bg-indigo-900 text-white shadow-lg no-print">
-        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <!-- Brand & Logo Container -->
             <div class="flex items-center space-x-4">
-                <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-16 w-16 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
+                <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-14 w-14 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
                 <div>
-                    <h1 class="text-2xl font-bold tracking-tight uppercase">BUKU KLAPER SDN 186 CIPADUNG</h1>
-                    <p class="text-indigo-200 text-sm">Arsip & Pendaftaran Data Siswa Sekolah (Realtime Cloud)</p>
+                    <h1 class="text-xl font-bold tracking-tight uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h1>
+                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper & Buku Induk Siswa Cloud</p>
                 </div>
             </div>
             
@@ -84,10 +85,22 @@
                 </button>
             </div>
         </div>
+
+        <!-- Menu Tab Navigation -->
+        <div class="bg-indigo-950 border-t border-indigo-800 px-4 sm:px-8">
+            <div class="max-w-7xl mx-auto flex gap-4">
+                <button id="tabKlaperBtn" onclick="switchTab('klaper')" class="py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition">
+                    <i class="fa-solid fa-book"></i> Buku Klaper (Daftar Abjad)
+                </button>
+                <button id="tabIndukBtn" onclick="switchTab('induk')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition">
+                    <i class="fa-solid fa-address-card"></i> Buku Induk Siswa (Biodata Lengkap)
+                </button>
+            </div>
+        </div>
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
         
         <!-- Status Sync & User Banner -->
         <div class="no-print mb-4 flex flex-col sm:flex-row items-center justify-between bg-white px-4 py-2.5 rounded-lg shadow-sm border border-slate-200 text-xs sm:text-sm gap-2">
@@ -101,184 +114,277 @@
             </div>
         </div>
 
-        <!-- Abjad A-Z Filter Buttons -->
-        <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print">
-            <div class="flex items-center justify-between mb-3">
-                <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-filter"></i> Indeks Abjad Nama Siswa
-                </h2>
-                <span id="activeLetterLabel" class="text-xs bg-indigo-100 text-indigo-800 font-bold px-2.5 py-1 rounded-full">Semua Siswa</span>
+        <!-- VIEW 1: BUKU KLAPER (DAFTAR ABJAD) -->
+        <div id="viewKlaper">
+            <!-- Abjad A-Z Filter Buttons -->
+            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-filter"></i> Indeks Abjad Nama Siswa
+                    </h2>
+                    <span id="activeLetterLabel" class="text-xs bg-indigo-100 text-indigo-800 font-bold px-2.5 py-1 rounded-full">Semua Siswa</span>
+                </div>
+                <div id="alphabetButtons" class="flex flex-wrap gap-1.5 justify-start">
+                    <!-- Abjad Buttons injected by JS -->
+                </div>
             </div>
-            <div id="alphabetButtons" class="flex flex-wrap gap-1.5 justify-start">
-                <!-- Abjad Buttons injected by JS -->
-            </div>
-        </div>
 
-        <!-- Search Bar & Controls -->
-        <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
-            <div class="relative w-full md:w-96">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="searchInput" placeholder="Cari Nama, NIS, atau Nama Orang Tua..." oninput="handleSearch()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm">
+            <!-- Search Bar & Controls -->
+            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div class="relative w-full md:w-96">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="searchInput" placeholder="Cari Nama, NIS, NISN, atau Orang Tua..." oninput="handleSearch()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm">
+                </div>
+                <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                    <label for="filterStatus" class="text-sm font-medium text-slate-600 whitespace-nowrap">Status:</label>
+                    <select id="filterStatus" onchange="applyFilters()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="ALL">Semua Status</option>
+                        <option value="AKTIF">AKTIF</option>
+                        <option value="LULUS">LULUS</option>
+                        <option value="MUTASI">MUTASI / PINDAH</option>
+                    </select>
+                </div>
             </div>
-            <div class="flex items-center gap-3 w-full md:w-auto justify-end">
-                <label for="filterStatus" class="text-sm font-medium text-slate-600 whitespace-nowrap">Status:</label>
-                <select id="filterStatus" onchange="applyFilters()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    <option value="ALL">Semua Status</option>
-                    <option value="AKTIF">AKTIF</option>
-                    <option value="LULUS">LULUS</option>
-                    <option value="MUTASI">MUTASI / PINDAH</option>
-                </select>
-            </div>
-        </div>
 
-        <!-- Print Header with Logo -->
-        <div id="printHeader" class="hidden print-only mb-6 text-center border-b-2 border-black pb-4">
-            <div class="flex items-center justify-center space-x-4">
-                <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-20 w-20 object-contain">
-                <div>
-                    <h1 class="text-xl font-bold uppercase tracking-wider">BUKU KLAPER SISWA SEKOLAH</h1>
-                    <h2 class="text-lg font-semibold uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h2>
-                    <p class="text-xs text-slate-600 mt-1">Dokumen Resmi Arsip Indeks Abjad Data Siswa</p>
+            <!-- Print Header for Klaper -->
+            <div id="printHeader" class="hidden print-only mb-6 text-center border-b-2 border-black pb-4">
+                <div class="flex items-center justify-center space-x-4">
+                    <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-20 w-20 object-contain">
+                    <div>
+                        <h1 class="text-xl font-bold uppercase tracking-wider">BUKU KLAPER SISWA SEKOLAH</h1>
+                        <h2 class="text-lg font-semibold uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h2>
+                        <p class="text-xs text-slate-600 mt-1">Dokumen Resmi Arsip Indeks Abjad Data Siswa</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Klaper Data Table -->
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse" id="klaperTable">
+                        <thead>
+                            <tr class="bg-indigo-950 text-white border-b border-indigo-900">
+                                <th class="py-3 px-3 text-center border-r border-indigo-900 w-10">No</th>
+                                <th class="py-3 px-3 text-center border-r border-indigo-900 whitespace-nowrap">Nomor Induk</th>
+                                <th class="py-3 px-4 border-r border-indigo-900 min-w-[180px]">Nama Siswa</th>
+                                <th class="py-3 px-2 text-center border-r border-indigo-900 w-10">L/P</th>
+                                <th class="py-3 px-4 border-r border-indigo-900 min-w-[160px]">Nama Orang Tua / Wali</th>
+                                <th class="py-3 px-3 text-center border-r border-indigo-900 whitespace-nowrap">Tgl Masuk</th>
+                                <th colspan="6" class="py-2 px-3 text-center border-r border-indigo-900 bg-indigo-900">Tahun Pelajaran (Kelas)</th>
+                                <th class="py-3 px-3 text-center border-r border-indigo-900 whitespace-nowrap">Tgl Meninggalkan</th>
+                                <th class="py-3 px-3 text-center border-r border-indigo-900 whitespace-nowrap">Ket / Catatan</th>
+                                <th class="py-3 px-3 text-center no-print action-column w-24">Aksi</th>
+                            </tr>
+                            <tr class="bg-indigo-900 text-white text-xs border-b border-indigo-800">
+                                <th class="border-r border-indigo-800"></th>
+                                <th class="border-r border-indigo-800"></th>
+                                <th class="border-r border-indigo-800"></th>
+                                <th class="border-r border-indigo-800"></th>
+                                <th class="border-r border-indigo-800"></th>
+                                <th class="border-r border-indigo-800"></th>
+                                <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 1</th>
+                                <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 2</th>
+                                <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 3</th>
+                                <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 4</th>
+                                <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 5</th>
+                                <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 6</th>
+                                <th class="border-r border-indigo-800"></th>
+                                <th class="border-r border-indigo-800"></th>
+                                <th class="no-print action-column"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-slate-200">
+                            <!-- Rows rendered via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="emptyState" class="hidden py-12 text-center">
+                    <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
+                    <p class="text-slate-500 font-medium">Belum ada data siswa yang cocok.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Data Table -->
-        <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm border-collapse" id="klaperTable">
-                    <thead>
-                        <tr class="bg-indigo-950 text-white border-b border-indigo-900">
-                            <th class="py-3 px-3 text-center border-r border-indigo-900 w-10">No</th>
-                            <th class="py-3 px-3 text-center border-r border-indigo-900 whitespace-nowrap">Nomor Induk</th>
-                            <th class="py-3 px-4 border-r border-indigo-900 min-w-[180px]">Nama Siswa</th>
-                            <th class="py-3 px-2 text-center border-r border-indigo-900 w-10">L/P</th>
-                            <th class="py-3 px-4 border-r border-indigo-900 min-w-[160px]">Nama Orang Tua / Wali</th>
-                            <th class="py-3 px-3 text-center border-r border-indigo-900 whitespace-nowrap">Tgl Masuk</th>
-                            <th colspan="6" class="py-2 px-3 text-center border-r border-indigo-900 bg-indigo-900">Tahun Pelajaran (Kelas)</th>
-                            <th class="py-3 px-3 text-center border-r border-indigo-900 whitespace-nowrap">Tgl Meninggalkan</th>
-                            <th class="py-3 px-3 text-center border-r border-indigo-900 whitespace-nowrap">Ket / Catatan</th>
-                            <th class="py-3 px-3 text-center no-print action-column w-24">Aksi</th>
-                        </tr>
-                        <tr class="bg-indigo-900 text-white text-xs border-b border-indigo-800">
-                            <th class="border-r border-indigo-800"></th>
-                            <th class="border-r border-indigo-800"></th>
-                            <th class="border-r border-indigo-800"></th>
-                            <th class="border-r border-indigo-800"></th>
-                            <th class="border-r border-indigo-800"></th>
-                            <th class="border-r border-indigo-800"></th>
-                            <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 1</th>
-                            <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 2</th>
-                            <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 3</th>
-                            <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 4</th>
-                            <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 5</th>
-                            <th class="py-1 px-1.5 text-center border-r border-indigo-800 min-w-[50px]">Kls 6</th>
-                            <th class="border-r border-indigo-800"></th>
-                            <th class="border-r border-indigo-800"></th>
-                            <th class="no-print action-column"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody" class="divide-y divide-slate-200">
-                        <!-- Rows rendered via JavaScript -->
-                    </tbody>
-                </table>
+        <!-- VIEW 2: BUKU INDUK SISWA (GRID CARDS BIODATA) -->
+        <div id="viewInduk" class="hidden">
+            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div class="relative w-full md:w-96">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="indukSearchInput" placeholder="Cari Nama, NIS, NISN, atau NIK..." oninput="handleIndukSearch()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm">
+                </div>
+                <div class="text-xs text-slate-500">
+                    Klik tombol <strong>"Lihat Lembar Buku Induk"</strong> untuk melihat & mencetak biodata lengkap per siswa.
+                </div>
             </div>
 
-            <!-- Empty State -->
-            <div id="emptyState" class="hidden py-12 text-center">
-                <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
-                <p class="text-slate-500 font-medium">Belum ada data siswa yang cocok.</p>
+            <!-- Grid Cards Buku Induk -->
+            <div id="indukGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Injected via JS -->
             </div>
         </div>
+
     </main>
 
-    <!-- Modal Form (Create / Edit) -->
+    <!-- Modal Form (Tambah / Edit Biodata Siswa & Buku Induk) -->
     <div id="studentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 my-8 transform transition-all">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 my-8 transform transition-all">
             <div class="flex justify-between items-center border-b pb-4 mb-4">
-                <h3 id="modalTitle" class="text-xl font-bold text-slate-800">Tambah Data Siswa</h3>
+                <h3 id="modalTitle" class="text-xl font-bold text-slate-800">Tambah Data Siswa & Buku Induk</h3>
                 <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             
-            <form id="studentForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+            <form id="studentForm" onsubmit="handleFormSubmit(event)" class="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
                 <input type="hidden" id="studentKey">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nomor Induk / NIS *</label>
-                        <input type="text" id="nis" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                <!-- BAGIAN 1: IDENTITAS UTAMA -->
+                <div class="bg-indigo-50/50 p-3.5 rounded-xl border border-indigo-100">
+                    <h4 class="text-xs font-bold text-indigo-900 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-id-card"></i> 1. Identitas Utama Siswa
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nomor Induk / NIS *</label>
+                            <input type="text" id="nis" required class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">NISN (Nomor Induk Siswa Nasional)</label>
+                            <input type="text" id="nisn" placeholder="0012345678" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">NIK Siswa</label>
+                            <input type="text" id="nik" placeholder="3273000000000000" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                        <div class="sm:col-span-2">
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nama Lengkap Siswa *</label>
+                            <input type="text" id="name" required class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Jenis Kelamin *</label>
+                            <select id="gender" required class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <option value="L">Laki-laki (L)</option>
+                                <option value="P">Perempuan (P)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tempat & Tanggal Lahir</label>
+                            <input type="text" id="pobDob" placeholder="Bandung, 12 Mei 2012" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Agama</label>
+                            <input type="text" id="religion" placeholder="ISLAM" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BAGIAN 2: ORANG TUA & ALAMAT -->
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-users"></i> 2. Data Orang Tua & Alamat
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nama Ayah Kandung</label>
+                            <input type="text" id="fatherName" placeholder="NAMA AYAH" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nama Ibu Kandung</label>
+                            <input type="text" id="motherName" placeholder="NAMA IBU" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nama Orang Tua / Wali (Tampilan Ringkas) *</label>
+                            <input type="text" id="parentName" required placeholder="NAMA ORANG TUA/WALI" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nomor Kontak / WhatsApp</label>
+                            <input type="text" id="phone" placeholder="081234567890" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Jenis Kelamin *</label>
-                        <select id="gender" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                            <option value="L">Laki-laki (L)</option>
-                            <option value="P">Perempuan (P)</option>
-                        </select>
+                        <label class="block text-[11px] font-semibold text-slate-600 mb-1">Alamat Tempat Tinggal Lengkap</label>
+                        <textarea id="address" rows="2" placeholder="Jl. Cipadung No. 186, RT 01 / RW 02, Cipadung, Cibiru, Kota Bandung" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap Siswa *</label>
-                    <input type="text" id="name" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Orang Tua / Wali *</label>
-                    <input type="text" id="parentName" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- BAGIAN 3: TANGGAL SEKOLAH & RIWAYAT KELAS -->
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap"></i> 3. Riwayat Sekolah & Kelas (1 s.d 6)
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Masuk Sekolah</label>
+                            <input type="text" id="entryDate" placeholder="15 Juli 2019" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Meninggalkan Sekolah</label>
+                            <input type="text" id="exitDate" placeholder="15 Juni 2025" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-3">
+                        <div>
+                            <label class="block text-[10px] font-medium text-slate-500">Kls 1</label>
+                            <input type="text" id="class1" placeholder="I-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-medium text-slate-500">Kls 2</label>
+                            <input type="text" id="class2" placeholder="II-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-medium text-slate-500">Kls 3</label>
+                            <input type="text" id="class3" placeholder="III-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-medium text-slate-500">Kls 4</label>
+                            <input type="text" id="class4" placeholder="IV-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-medium text-slate-500">Kls 5</label>
+                            <input type="text" id="class5" placeholder="V-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-medium text-slate-500">Kls 6</label>
+                            <input type="text" id="class6" placeholder="VI-A" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                    </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Masuk Sekolah</label>
-                        <input type="text" id="entryDate" placeholder="Contoh: 15 Juli 2019" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Meninggalkan</label>
-                        <input type="text" id="exitDate" placeholder="Contoh: 15 Juni 2025" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <label class="block text-[11px] font-semibold text-slate-600 mb-1">Status / Keterangan</label>
+                        <input type="text" id="notes" placeholder="AKTIF / LULUS / MUTASI" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
                     </div>
                 </div>
 
-                <!-- Kelas / Tahun Pelajaran (1 s.d. 6) -->
-                <div class="border-t border-b py-3 my-2">
-                    <p class="text-xs font-bold text-indigo-900 mb-2 uppercase">Riwayat Kelas (Tahun Pelajaran)</p>
-                    <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-500">Kls 1</label>
-                            <input type="text" id="class1" placeholder="I-A" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-500">Kls 2</label>
-                            <input type="text" id="class2" placeholder="II-A" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-500">Kls 3</label>
-                            <input type="text" id="class3" placeholder="III-A" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-500">Kls 4</label>
-                            <input type="text" id="class4" placeholder="IV-A" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-500">Kls 5</label>
-                            <input type="text" id="class5" placeholder="V-A" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-500">Kls 6</label>
-                            <input type="text" id="class6" placeholder="VI-A" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Keterangan / Status</label>
-                    <input type="text" id="notes" placeholder="LULUS / AKTIF / MUTASI" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none uppercase">
-                </div>
-
-                <div class="flex justify-end gap-3 pt-4 border-t">
+                <div class="flex justify-end gap-3 pt-3 border-t">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-100 transition">Batal</button>
                     <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow transition">Simpan Data</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA -->
+    <div id="indukPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8">
+            <div class="flex justify-between items-center border-b pb-3 mb-4 no-print">
+                <h3 class="text-lg font-bold text-slate-800">Pratinjau Lembar Buku Induk Siswa</h3>
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-print"></i> Cetak Lembar Ini
+                    </button>
+                    <button onclick="closeIndukPrintModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">Tutup</button>
+                </div>
+            </div>
+
+            <!-- LEMBAR INDUK RESMI UNTUK DICETAK -->
+            <div id="indukSheetContent" class="p-4 bg-white text-black font-serif text-sm">
+                <!-- Content injected via JS -->
+            </div>
         </div>
     </div>
 
@@ -299,27 +405,25 @@
             appId: "1:572744086650:web:aee583fa3a11cbaf5377c3"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
         const studentsRef = ref(db, 'students');
 
-        // Global State Variables
         let studentsData = {};
         let currentLetterFilter = 'ALL';
         let currentSearchQuery = '';
-        let currentUserRole = 'VIEWER'; // 'ADMIN' or 'VIEWER'
+        let currentIndukQuery = '';
+        let currentUserRole = 'VIEWER';
+        let currentActiveTab = 'klaper';
 
-        // Check Auth State
         onAuthStateChanged(auth, (user) => {
             const loginModal = document.getElementById('loginModal');
             if (user) {
                 loginModal.classList.add('hidden');
                 document.getElementById('currentUserLabel').textContent = user.email;
 
-                // Tentukan Role sederhana berdasarkan email
-                if (user.email.includes('admin')) {
+                if (user.email.toLowerCase().includes('admin')) {
                     currentUserRole = 'ADMIN';
                     document.getElementById('userRoleBadge').textContent = 'Admin / Operator';
                     document.getElementById('adminActions').classList.remove('hidden');
@@ -329,17 +433,15 @@
                     document.getElementById('adminActions').classList.add('hidden');
                 }
                 
-                // Realtime Data Listener setelah Login
                 listenToData();
             } else {
                 loginModal.classList.remove('hidden');
             }
         });
 
-        // Handle Login
         window.handleLogin = async function(e) {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             const errorDiv = document.getElementById('loginError');
 
@@ -353,12 +455,10 @@
             }
         }
 
-        // Handle Logout
         window.handleLogout = function() {
             signOut(auth);
         }
 
-        // Realtime Listener Data
         function listenToData() {
             onValue(studentsRef, (snapshot) => {
                 const data = snapshot.val();
@@ -368,6 +468,7 @@
                 document.getElementById('syncText').textContent = "Terhubung ke Cloud Database";
                 
                 renderData();
+                renderIndukGrid();
             }, (error) => {
                 console.error("Firebase Sync Error:", error);
                 document.getElementById('syncIndicator').className = "h-3 w-3 rounded-full bg-red-500";
@@ -375,7 +476,28 @@
             });
         }
 
-        // Initialize Alphabet Buttons
+        // TAB SWITCHING LOGIC
+        window.switchTab = function(tabName) {
+            currentActiveTab = tabName;
+            const viewKlaper = document.getElementById('viewKlaper');
+            const viewInduk = document.getElementById('viewInduk');
+            const btnKlaper = document.getElementById('tabKlaperBtn');
+            const btnInduk = document.getElementById('tabIndukBtn');
+
+            if (tabName === 'klaper') {
+                viewKlaper.classList.remove('hidden');
+                viewInduk.classList.add('hidden');
+                btnKlaper.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition";
+                btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition";
+            } else {
+                viewKlaper.classList.add('hidden');
+                viewInduk.classList.remove('hidden');
+                btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition";
+                btnKlaper.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition";
+                renderIndukGrid();
+            }
+        }
+
         window.initAlphabetButtons = function() {
             const container = document.getElementById('alphabetButtons');
             let html = `<button onclick="filterByLetter('ALL')" class="letter-btn bg-indigo-600 text-white font-bold px-3 py-1 rounded text-xs transition">SEMUA</button>`;
@@ -387,13 +509,12 @@
             container.innerHTML = html;
         }
 
-        // Render Table Data
+        // Render Klaper Table Data
         window.renderData = function() {
             const tbody = document.getElementById('tableBody');
             const emptyState = document.getElementById('emptyState');
             const statusFilter = document.getElementById('filterStatus').value;
 
-            // Sembunyikan/Tampilkan Kolom Aksi berdasarkan Role
             const actionColumns = document.querySelectorAll('.action-column');
             actionColumns.forEach(col => {
                 if (currentUserRole === 'ADMIN') {
@@ -419,6 +540,7 @@
                 studentArray = studentArray.filter(s => 
                     (s.name || '').toLowerCase().includes(q) ||
                     (s.nis || '').toLowerCase().includes(q) ||
+                    (s.nisn || '').toLowerCase().includes(q) ||
                     (s.parentName || '').toLowerCase().includes(q)
                 );
             }
@@ -472,6 +594,160 @@
             `).join('');
         }
 
+        // Render Cards Buku Induk Siswa
+        window.renderIndukGrid = function() {
+            const grid = document.getElementById('indukGrid');
+            let studentArray = Object.keys(studentsData).map(key => ({
+                key: key,
+                ...studentsData[key]
+            }));
+
+            studentArray.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            if (currentIndukQuery.trim() !== '') {
+                const q = currentIndukQuery.toLowerCase();
+                studentArray = studentArray.filter(s => 
+                    (s.name || '').toLowerCase().includes(q) ||
+                    (s.nis || '').toLowerCase().includes(q) ||
+                    (s.nisn || '').toLowerCase().includes(q) ||
+                    (s.nik || '').toLowerCase().includes(q) ||
+                    (s.parentName || '').toLowerCase().includes(q)
+                );
+            }
+
+            if (studentArray.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400"><i class="fa-solid fa-id-card text-4xl mb-2"></i><p>Tidak ada lembar Buku Induk siswa yang cocok.</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = studentArray.map(s => `
+                <div class="bg-white rounded-xl shadow-md border border-slate-200 p-5 flex flex-col justify-between hover:shadow-lg transition">
+                    <div>
+                        <div class="flex justify-between items-start mb-3 border-b pb-2">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">NIS: ${s.nis || '-'}</span>
+                                <h3 class="text-base font-bold text-slate-900 mt-1 uppercase">${s.name || '-'}</h3>
+                            </div>
+                            <span class="text-xs font-bold ${s.gender === 'L' ? 'text-blue-600 bg-blue-50' : 'text-pink-600 bg-pink-50'} px-2 py-0.5 rounded">${s.gender || '-'}</span>
+                        </div>
+                        
+                        <div class="space-y-1.5 text-xs text-slate-600 mb-4">
+                            <p><strong class="text-slate-800">NISN:</strong> ${s.nisn || '-'}</p>
+                            <p><strong class="text-slate-800">TTL:</strong> ${s.pobDob || '-'}</p>
+                            <p><strong class="text-slate-800">Orang Tua / Wali:</strong> ${s.parentName || '-'}</p>
+                            <p><strong class="text-slate-800">Kontak:</strong> ${s.phone || '-'}</p>
+                            <p class="truncate"><strong class="text-slate-800">Alamat:</strong> ${s.address || '-'}</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t flex gap-2">
+                        <button onclick="viewIndukSheet('${s.key}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-file-lines"></i> Lihat Lembar Buku Induk
+                        </button>
+                        ${currentUserRole === 'ADMIN' ? `
+                            <button onclick="editStudent('${s.key}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg text-xs transition" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.handleIndukSearch = function() {
+            currentIndukQuery = document.getElementById('indukSearchInput').value;
+            renderIndukGrid();
+        }
+
+        // TAMPILKAN LEMBAR BUKU INDUK SISWA LENGKAP
+        window.viewIndukSheet = function(key) {
+            const s = studentsData[key];
+            if (!s) return;
+
+            const html = `
+                <div class="text-center border-b-2 border-black pb-4 mb-4">
+                    <div class="flex items-center justify-center space-x-4 mb-2">
+                        <img src="logo.png" alt="Logo Sekolah" class="h-16 w-16 object-contain">
+                        <div>
+                            <h2 class="text-lg font-bold uppercase">LEMBAR BUKU INDUK SISWA</h2>
+                            <h3 class="text-base font-semibold uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h3>
+                            <p class="text-xs">Alamat: Jl. Cipadung, Cibiru, Kota Bandung, Jawa Barat</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="font-bold underline uppercase text-sm mb-2">A. IDENTITAS PESERTA DIDIK</h4>
+                    <table class="w-full text-xs">
+                        <tr><td class="w-48 py-1">1. Nama Lengkap</td><td class="w-4">:</td><td class="font-bold uppercase">${s.name || '-'}</td></tr>
+                        <tr><td class="py-1">2. Nomor Induk Siswa (NIS)</td><td>:</td><td class="font-mono">${s.nis || '-'}</td></tr>
+                        <tr><td class="py-1">3. NISN</td><td>:</td><td class="font-mono">${s.nisn || '-'}</td></tr>
+                        <tr><td class="py-1">4. NIK Siswa</td><td>:</td><td class="font-mono">${s.nik || '-'}</td></tr>
+                        <tr><td class="py-1">5. Jenis Kelamin</td><td>:</td><td>${s.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</td></tr>
+                        <tr><td class="py-1">6. Tempat, Tanggal Lahir</td><td>:</td><td>${s.pobDob || '-'}</td></tr>
+                        <tr><td class="py-1">7. Agama</td><td>:</td><td class="uppercase">${s.religion || '-'}</td></tr>
+                        <tr><td class="py-1">8. Alamat Tempat Tinggal</td><td>:</td><td>${s.address || '-'}</td></tr>
+                        <tr><td class="py-1">9. Nomor Telepon / HP</td><td>:</td><td>${s.phone || '-'}</td></tr>
+                    </table>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="font-bold underline uppercase text-sm mb-2">B. DATA ORANG TUA / WALI</h4>
+                    <table class="w-full text-xs">
+                        <tr><td class="w-48 py-1">1. Nama Ayah Kandung</td><td class="w-4">:</td><td class="uppercase">${s.fatherName || '-'}</td></tr>
+                        <tr><td class="py-1">2. Nama Ibu Kandung</td><td>:</td><td class="uppercase">${s.motherName || '-'}</td></tr>
+                        <tr><td class="py-1">3. Nama Wali</td><td>:</td><td class="uppercase">${s.parentName || '-'}</td></tr>
+                    </table>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="font-bold underline uppercase text-sm mb-2">C. RIWAYAT KELAS & KELULUSAN</h4>
+                    <table class="w-full text-xs border border-black text-center mb-2">
+                        <tr class="bg-gray-100 font-bold border-b border-black">
+                            <td class="border-r border-black p-1">Kelas 1</td>
+                            <td class="border-r border-black p-1">Kelas 2</td>
+                            <td class="border-r border-black p-1">Kelas 3</td>
+                            <td class="border-r border-black p-1">Kelas 4</td>
+                            <td class="border-r border-black p-1">Kelas 5</td>
+                            <td class="p-1">Kelas 6</td>
+                        </tr>
+                        <tr>
+                            <td class="border-r border-black p-1.5">${s.class1 || '-'}</td>
+                            <td class="border-r border-black p-1.5">${s.class2 || '-'}</td>
+                            <td class="border-r border-black p-1.5">${s.class3 || '-'}</td>
+                            <td class="border-r border-black p-1.5">${s.class4 || '-'}</td>
+                            <td class="border-r border-black p-1.5">${s.class5 || '-'}</td>
+                            <td class="p-1.5">${s.class6 || '-'}</td>
+                        </tr>
+                    </table>
+                    <table class="w-full text-xs">
+                        <tr><td class="w-48 py-1">Tanggal Masuk Sekolah</td><td class="w-4">:</td><td>${s.entryDate || '-'}</td></tr>
+                        <tr><td class="py-1">Tanggal Meninggalkan Sekolah</td><td>:</td><td>${s.exitDate || '-'}</td></tr>
+                        <tr><td class="py-1">Status / Keterangan Akhir</td><td>:</td><td class="font-bold uppercase">${s.notes || '-'}</td></tr>
+                    </table>
+                </div>
+
+                <div class="mt-8 flex justify-between items-end text-xs">
+                    <div class="border border-black w-24 h-32 flex items-center justify-center text-gray-400">
+                        Pasfoto 3x4
+                    </div>
+                    <div class="text-center">
+                        <p>Bandung, ............................................</p>
+                        <p class="mb-12">Kepala Sekolah SDN 186 Cipadung</p>
+                        <p class="font-bold underline">____________________________________</p>
+                        <p>NIP. .................................................</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('indukSheetContent').innerHTML = html;
+            document.getElementById('indukPrintModal').classList.remove('hidden');
+            document.getElementById('indukPrintModal').classList.add('flex');
+        }
+
+        window.closeIndukPrintModal = function() {
+            document.getElementById('indukPrintModal').classList.add('hidden');
+            document.getElementById('indukPrintModal').classList.remove('flex');
+        }
+
         // Filter Abjad
         window.filterByLetter = function(letter) {
             currentLetterFilter = letter;
@@ -489,7 +765,6 @@
             renderData();
         }
 
-        // Search
         window.handleSearch = function() {
             currentSearchQuery = document.getElementById('searchInput').value;
             renderData();
@@ -499,7 +774,7 @@
             renderData();
         }
 
-        // Modal Handlers
+        // Modal Form Handlers
         window.openModal = function(key = null) {
             document.getElementById('studentForm').reset();
             document.getElementById('studentKey').value = '';
@@ -508,9 +783,17 @@
                 const s = studentsData[key];
                 document.getElementById('studentKey').value = key;
                 document.getElementById('nis').value = s.nis || '';
+                document.getElementById('nisn').value = s.nisn || '';
+                document.getElementById('nik').value = s.nik || '';
                 document.getElementById('name').value = s.name || '';
                 document.getElementById('gender').value = s.gender || 'L';
+                document.getElementById('pobDob').value = s.pobDob || '';
+                document.getElementById('religion').value = s.religion || '';
+                document.getElementById('fatherName').value = s.fatherName || '';
+                document.getElementById('motherName').value = s.motherName || '';
                 document.getElementById('parentName').value = s.parentName || '';
+                document.getElementById('phone').value = s.phone || '';
+                document.getElementById('address').value = s.address || '';
                 document.getElementById('entryDate').value = s.entryDate || '';
                 document.getElementById('exitDate').value = s.exitDate || '';
                 document.getElementById('class1').value = s.class1 || '';
@@ -520,9 +803,9 @@
                 document.getElementById('class5').value = s.class5 || '';
                 document.getElementById('class6').value = s.class6 || '';
                 document.getElementById('notes').value = s.notes || '';
-                document.getElementById('modalTitle').textContent = 'Edit Data Siswa';
+                document.getElementById('modalTitle').textContent = 'Edit Data Siswa & Buku Induk';
             } else {
-                document.getElementById('modalTitle').textContent = 'Tambah Siswa Baru';
+                document.getElementById('modalTitle').textContent = 'Tambah Data Siswa Baru';
             }
 
             document.getElementById('studentModal').classList.remove('hidden');
@@ -534,7 +817,7 @@
             document.getElementById('studentModal').classList.remove('flex');
         }
 
-        // CRUD Firebase Operations
+        // CRUD Operations
         window.handleFormSubmit = function(e) {
             e.preventDefault();
             if (currentUserRole !== 'ADMIN') return;
@@ -543,9 +826,17 @@
             
             const studentPayload = {
                 nis: document.getElementById('nis').value.trim(),
+                nisn: document.getElementById('nisn').value.trim(),
+                nik: document.getElementById('nik').value.trim(),
                 name: document.getElementById('name').value.trim().toUpperCase(),
                 gender: document.getElementById('gender').value,
+                pobDob: document.getElementById('pobDob').value.trim(),
+                religion: document.getElementById('religion').value.trim().toUpperCase(),
+                fatherName: document.getElementById('fatherName').value.trim().toUpperCase(),
+                motherName: document.getElementById('motherName').value.trim().toUpperCase(),
                 parentName: document.getElementById('parentName').value.trim().toUpperCase(),
+                phone: document.getElementById('phone').value.trim(),
+                address: document.getElementById('address').value.trim(),
                 entryDate: document.getElementById('entryDate').value.trim(),
                 exitDate: document.getElementById('exitDate').value.trim(),
                 class1: document.getElementById('class1').value.trim(),
@@ -570,7 +861,6 @@
             openModal(key);
         }
 
-        // Hapus 1 Siswa
         window.deleteStudent = function(key, studentName) {
             if (currentUserRole !== 'ADMIN') return;
             if(confirm(`Apakah Anda yakin ingin menghapus data siswa "${studentName}" dari Cloud Database?`)) {
@@ -578,7 +868,6 @@
             }
         }
 
-        // Hapus Semua Siswa
         window.deleteAllStudents = function() {
             if (currentUserRole !== 'ADMIN') return;
             const total = Object.keys(studentsData).length;
@@ -671,7 +960,7 @@
                     if (count > 0) {
                         alert(`Berhasil mengimpor ${count} data siswa ke Cloud Database!`);
                     } else {
-                        alert('Tidak ada data siswa yang terbaca dari berkas ini. Pastikan berkas memiliki daftar nama siswa.');
+                        alert('Tidak ada data siswa yang terbaca dari berkas ini.');
                     }
                 } catch (err) {
                     console.error("Import Error:", err);
@@ -688,19 +977,26 @@
             studentArray.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
             const exportData = [
-                ["BUKU KLAPER SDN 186 CIPADUNG"],
+                ["BUKU KLAPER & INDUK SISWA SDN 186 CIPADUNG"],
                 [""],
-                ["No. Urut", "Nomor Induk", "Nama Siswa", "L/P", "Nama Orang Tua / Wali", "Tanggal Masuk Sekolah", "TH PEL (Kls 1)", "TH PEL (Kls 2)", "TH PEL (Kls 3)", "TH PEL (Kls 4)", "TH PEL (Kls 5)", "TH PEL (Kls 6)", "Tanggal Meninggalkan Sekolah", "Keterangan / Catatan"],
-                ["", "", "", "", "", "", "KELAS 1", "KELAS 2", "KELAS 3", "KELAS 4", "KELAS 5", "KELAS 6", "", ""]
+                ["No. Urut", "Nomor Induk (NIS)", "NISN", "NIK", "Nama Siswa", "L/P", "TTL", "Agama", "Nama Ayah", "Nama Ibu", "Nama Wali", "No HP", "Alamat", "Tanggal Masuk", "Kls 1", "Kls 2", "Kls 3", "Kls 4", "Kls 5", "Kls 6", "Tanggal Meninggalkan", "Keterangan"],
             ];
 
             studentArray.forEach((s, i) => {
                 exportData.push([
                     i + 1,
                     s.nis || '',
+                    s.nisn || '',
+                    s.nik || '',
                     s.name || '',
                     s.gender || '',
+                    s.pobDob || '',
+                    s.religion || '',
+                    s.fatherName || '',
+                    s.motherName || '',
                     s.parentName || '',
+                    s.phone || '',
+                    s.address || '',
                     s.entryDate || '',
                     s.class1 || '',
                     s.class2 || '',
@@ -715,11 +1011,10 @@
 
             const ws = XLSX.utils.aoa_to_sheet(exportData);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Buku Klaper");
-            XLSX.writeFile(wb, `Buku_Klaper_SDN_186_CIPADUNG_${new Date().toISOString().slice(0,10)}.xlsx`);
+            XLSX.utils.book_append_sheet(wb, ws, "Buku Induk & Klaper");
+            XLSX.writeFile(wb, `Buku_Induk_SDN_186_CIPADUNG_${new Date().toISOString().slice(0,10)}.xlsx`);
         }
 
-        // Run On Load
         initAlphabetButtons();
     </script>
 </body>
