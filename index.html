@@ -62,26 +62,13 @@
             </div>
             
             <div class="flex flex-wrap gap-2 items-center">
-                <div id="adminActions" class="hidden flex flex-wrap gap-2">
-                    <button onclick="openModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
-                        <i class="fa-solid fa-user-plus"></i> Tambah Siswa
-                    </button>
-                    <button onclick="downloadTemplateExcel()" class="bg-teal-600 hover:bg-teal-700 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm" title="Unduh Format Isian Excel">
-                        <i class="fa-solid fa-file-arrow-down"></i> Template Excel
-                    </button>
-                    <button onclick="document.getElementById('excelFileInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
-                        <i class="fa-solid fa-file-excel"></i> Impor Excel
-                    </button>
-                    <input type="file" id="excelFileInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelImport(event)">
-                    <button onclick="exportToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
-                        <i class="fa-solid fa-file-export"></i> Ekspor Excel
-                    </button>
-                    <button onclick="deleteAllStudents()" class="bg-rose-700 hover:bg-rose-800 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm" title="Kosongkan Seluruh Data">
-                        <i class="fa-solid fa-trash-can"></i> Hapus Semua
+                <div id="adminHeaderActions" class="hidden flex gap-2">
+                    <button onclick="openModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
+                        <i class="fa-solid fa-user-plus"></i> Tambah Siswa Manual
                     </button>
                 </div>
                 <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-800 text-white px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm">
-                    <i class="fa-solid fa-print"></i> Cetak
+                    <i class="fa-solid fa-print"></i> Cetak Tampilan
                 </button>
                 <button onclick="handleLogout()" class="bg-slate-800 hover:bg-red-700 text-slate-200 border border-slate-700 px-3 py-2 rounded-lg font-medium shadow flex items-center gap-2 transition text-sm" title="Keluar Akun">
                     <i class="fa-solid fa-right-from-bracket"></i> Keluar
@@ -117,8 +104,32 @@
             </div>
         </div>
 
+        <!-- FILE INPUT EXCEL TERSEMBUNYI -->
+        <input type="file" id="excelFileInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelImport(event)">
+
         <!-- VIEW 1: BUKU KLAPER -->
         <div id="viewKlaper">
+            <!-- PANEL TOOLBAR ACTION BUKU KLAPER -->
+            <div class="admin-only-action hidden bg-white p-3.5 rounded-xl shadow-md border border-slate-200 mb-4 no-print flex flex-wrap gap-2 items-center justify-between">
+                <div class="text-xs font-bold text-slate-600 uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-screwdriver-wrench text-indigo-600"></i> Alat Pengelolaan Buku Klaper
+                </div>
+                <div class="flex flex-wrap gap-2 items-center">
+                    <button onclick="downloadTemplateExcel()" class="bg-teal-600 hover:bg-teal-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-arrow-down"></i> Download Template Excel
+                    </button>
+                    <button onclick="triggerExcelImport()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-excel"></i> Impor Data Excel
+                    </button>
+                    <button onclick="exportToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-export"></i> Ekspor Excel
+                    </button>
+                    <button onclick="deleteAllStudents()" class="bg-rose-700 hover:bg-rose-800 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-trash-can"></i> Hapus Semua Data
+                    </button>
+                </div>
+            </div>
+
             <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print">
                 <div class="flex items-center justify-between mb-3">
                     <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-2">
@@ -202,6 +213,27 @@
 
         <!-- VIEW 2: BUKU INDUK SISWA -->
         <div id="viewInduk" class="hidden">
+            <!-- PANEL TOOLBAR ACTION BUKU INDUK -->
+            <div class="admin-only-action hidden bg-white p-3.5 rounded-xl shadow-md border border-slate-200 mb-4 no-print flex flex-wrap gap-2 items-center justify-between">
+                <div class="text-xs font-bold text-slate-600 uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-address-card text-indigo-600"></i> Alat Pengelolaan Buku Induk
+                </div>
+                <div class="flex flex-wrap gap-2 items-center">
+                    <button onclick="downloadTemplateExcel()" class="bg-teal-600 hover:bg-teal-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-arrow-down"></i> Download Template Excel
+                    </button>
+                    <button onclick="triggerExcelImport()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-excel"></i> Impor Data Excel
+                    </button>
+                    <button onclick="exportToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-export"></i> Ekspor Excel
+                    </button>
+                    <button onclick="deleteAllStudents()" class="bg-rose-700 hover:bg-rose-800 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-trash-can"></i> Hapus Semua Data
+                    </button>
+                </div>
+            </div>
+
             <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
                 <div class="relative w-full md:w-96">
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
@@ -542,11 +574,15 @@
                 if (user.email.toLowerCase().includes('admin')) {
                     currentUserRole = 'ADMIN';
                     document.getElementById('userRoleBadge').textContent = 'Admin / Operator';
-                    document.getElementById('adminActions').classList.remove('hidden');
+                    document.getElementById('adminHeaderActions').classList.remove('hidden');
+                    
+                    document.querySelectorAll('.admin-only-action').forEach(el => el.classList.remove('hidden'));
                 } else {
                     currentUserRole = 'VIEWER';
                     document.getElementById('userRoleBadge').textContent = 'Guru / Viewer';
-                    document.getElementById('adminActions').classList.add('hidden');
+                    document.getElementById('adminHeaderActions').classList.add('hidden');
+                    
+                    document.querySelectorAll('.admin-only-action').forEach(el => el.classList.add('hidden'));
                 }
                 listenToData();
             } else {
@@ -921,6 +957,10 @@
             renderData();
         }
 
+        window.triggerExcelImport = function() {
+            document.getElementById('excelFileInput').click();
+        }
+
         window.openModal = function(key = null) {
             document.getElementById('studentForm').reset();
             document.getElementById('studentKey').value = '';
@@ -1086,7 +1126,7 @@
         window.downloadTemplateExcel = function() {
             const templateData = [
                 ["TEMPLATE ISIAN DATA SISWA BUKU KLAPER & BUKU INDUK SDN 186 CIPADUNG"],
-                ["Petunjuk: Isilah data siswa di bawah ini sesuai kolom yang tersedia, lalu gunakan tombol 'Impor Excel' untuk mengunggah ke aplikasi."],
+                ["Petunjuk: Isilah data siswa di bawah ini sesuai kolom yang tersedia, lalu gunakan tombol 'Impor Data Excel' untuk mengunggah."],
                 [
                     "NIS *", "NISN", "NIK", "Nama Lengkap Siswa *", "Nama Panggilan", "JK (L/P) *", 
                     "Tempat Tanggal Lahir", "Agama", "Kewarganegaraan", "Anak Ke-", "Jumlah Saudara", "Status Yatim/Piatu", 
@@ -1146,7 +1186,6 @@
 
                         let nis = '', name = '', gender = 'L', parentName = '';
                         
-                        // Deteksi baris yang berisi data siswa
                         for (let col = 0; col < row.length; col++) {
                             const val = row[col] ? String(row[col]).trim() : '';
                             if (!val) continue;
@@ -1157,7 +1196,6 @@
                             }
                         }
 
-                        // Mengambil kolom jika ditemukan nama siswa (Kolom Indeks 3 untuk Nama)
                         if (row[3] && isNaN(row[3]) && String(row[3]).trim().length >= 2 && !String(row[3]).toUpperCase().includes('NAMA')) {
                             nis = row[0] ? String(row[0]).trim() : '';
                             name = String(row[3]).trim().toUpperCase();
@@ -1220,7 +1258,7 @@
                         }
                     }
                     if (count > 0) alert(`Berhasil mengimpor ${count} data siswa secara otomatis!`);
-                    else alert("Format data Excel tidak terbaca. Silakan gunakan tombol 'Template Excel' untuk mengunduh format yang benar.");
+                    else alert("Format data Excel tidak terbaca. Silakan gunakan tombol 'Download Template Excel' untuk mengunduh format yang benar.");
                 } catch (err) { alert("Gagal membaca berkas Excel."); }
                 e.target.value = '';
             };
