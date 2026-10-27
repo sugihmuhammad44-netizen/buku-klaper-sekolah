@@ -16,9 +16,10 @@
             .no-print { display: none !important; }
             .print-only { display: block !important; }
             body { background: white; color: black; font-family: 'Times New Roman', Times, serif; }
-            table { border-collapse: collapse; width: 100%; font-size: 10pt; }
-            th, td { border: 1px solid #000 !important; padding: 3px 5px !important; }
-            #printHeader { display: block !important; margin-bottom: 15px; text-align: center; }
+            table { border-collapse: collapse; width: 100%; font-size: 8.5pt; }
+            th, td { border: 1px solid #000 !important; padding: 2px 4px !important; }
+            #printHeader { display: block !important; margin-bottom: 10px; text-align: center; }
+            #indukSheetContent { border: none !important; box-shadow: none !important; padding: 0 !important; }
             .page-break { page-break-after: always; }
         }
     </style>
@@ -479,22 +480,29 @@
         </div>
     </div>
 
-    <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA MS WORD FORMAT -->
-    <div id="indukPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8">
-            <div class="flex justify-between items-center border-b pb-3 mb-4 no-print">
-                <h3 class="text-lg font-bold text-slate-800">Pratinjau Lembar Buku Induk Siswa (MS Word Format)</h3>
+    <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA PERBAIKAN SCROLL & HEADER STICKY -->
+    <div id="indukPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-2 sm:p-4 no-print">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col my-auto overflow-hidden">
+            <!-- HEADER MODAL FIXED (TIDAK IKUT SCROLL) -->
+            <div class="flex justify-between items-center px-6 py-3.5 bg-slate-800 text-white shrink-0 border-b border-slate-700 no-print">
+                <h3 class="text-sm sm:text-base font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-file-lines text-yellow-400"></i> Pratinjau Lembar Buku Induk Siswa
+                </h3>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow transition flex items-center gap-1.5">
+                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow transition flex items-center gap-1.5">
                         <i class="fa-solid fa-print"></i> Cetak Lembar Ini
                     </button>
-                    <button onclick="closeIndukPrintModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">Tutup</button>
+                    <button onclick="closeIndukPrintModal()" class="bg-slate-600 hover:bg-slate-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                        <i class="fa-solid fa-xmark"></i> Tutup
+                    </button>
                 </div>
             </div>
 
-            <!-- TAMPILAN LEMBAR BUKU INDUK SESUAI FILE MS WORD -->
-            <div id="indukSheetContent" class="p-6 bg-white text-black font-serif text-xs leading-relaxed border border-slate-300 shadow-inner">
-                <!-- Content injected via JS -->
+            <!-- AREA KONTEN BISA DI-SCROLL -->
+            <div class="p-4 sm:p-8 overflow-y-auto flex-grow bg-slate-100">
+                <div id="indukSheetContent" class="p-6 bg-white text-black font-serif text-[11px] leading-snug border border-slate-300 shadow-md max-w-3xl mx-auto">
+                    <!-- Content injected via JS -->
+                </div>
             </div>
         </div>
     </div>
@@ -755,145 +763,127 @@
             renderIndukGrid();
         }
 
-        // TAMPILAN CETAK LENGKAP BUKU INDUK A S.D J (SAMA PERSIS MS WORD)
+        // TAMPILAN CETAK LENGKAP A S.D J KETAT & RINGKAS
         window.viewIndukSheet = function(key) {
             const s = studentsData[key];
             if (!s) return;
 
             const html = `
-                <div class="text-center font-bold text-sm uppercase mb-4 pb-2 border-b-2 border-black">
+                <div class="text-center font-bold text-xs uppercase mb-3 pb-1 border-b-2 border-black">
                     <div class="flex items-center justify-center space-x-3 mb-1">
-                        <img src="logo.png" alt="Logo" class="h-14 w-14 object-contain">
+                        <img src="logo.png" alt="Logo" class="h-10 w-10 object-contain">
                         <div>
-                            <h2 class="text-base">LEMBAR BUKU INDUK PESERTA DIDIK</h2>
-                            <h3 class="text-sm font-normal">SDN 186 CIPADUNG - KOTA BANDUNG</h3>
+                            <h2 class="text-sm">LEMBAR BUKU INDUK PESERTA DIDIK</h2>
+                            <h3 class="text-xs font-normal">SDN 186 CIPADUNG - KOTA BANDUNG</h3>
                         </div>
                     </div>
-                    <p class="text-xs font-normal mt-2">Nomor Induk / NISN : ${s.nis || '..........'} / ${s.nisn || '..........'}</p>
+                    <p class="text-[11px] font-normal">Nomor Induk / NISN : ${s.nis || '..........'} / ${s.nisn || '..........'}</p>
                 </div>
 
-                <!-- A. KETERANGAN PRIBADI PESERTA DIDIK -->
-                <div class="mb-3">
-                    <h4 class="font-bold uppercase mb-1">A. KETERANGAN PRIBADI PESERTA DIDIK</h4>
+                <!-- A. KETERANGAN PRIBADI -->
+                <div class="mb-2">
+                    <h4 class="font-bold uppercase mb-0.5">A. KETERANGAN PRIBADI PESERTA DIDIK</h4>
                     <table class="w-full">
-                        <tr><td class="w-56 py-0.5">1. Nama Lengkap</td><td class="w-3">:</td><td class="font-bold uppercase">${s.name || '-'}</td></tr>
+                        <tr><td class="w-48 py-0.5">1. Nama Lengkap</td><td class="w-3">:</td><td class="font-bold uppercase">${s.name || '-'}</td></tr>
                         <tr><td class="py-0.5">2. Nama Panggilan</td><td>:</td><td>${s.nickname || '-'}</td></tr>
                         <tr><td class="py-0.5">3. Jenis Kelamin</td><td>:</td><td>${s.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</td></tr>
                         <tr><td class="py-0.5">4. Tempat dan tanggal lahir</td><td>:</td><td>${s.pobDob || '-'}</td></tr>
                         <tr><td class="py-0.5">5. Agama</td><td>:</td><td class="uppercase">${s.religion || '-'}</td></tr>
                         <tr><td class="py-0.5">6. Kewarganegaraan</td><td>:</td><td>${s.citizenship || 'Indonesia'}</td></tr>
-                        <tr><td class="py-0.5">7. Anak ke</td><td>:</td><td>${s.childOrder || '-'}</td></tr>
-                        <tr><td class="py-0.5">8. Jumlah saudara</td><td>:</td><td>${s.siblingsCount || '-'}</td></tr>
-                        <tr><td class="py-0.5">9. Anak yatim/piatu/yatim piatu</td><td>:</td><td>${s.orphanStatus || '-'}</td></tr>
-                        <tr><td class="py-0.5">10. Bahasa sehari-hari dirumah</td><td>:</td><td>${s.language || '-'}</td></tr>
+                        <tr><td class="py-0.5">7. Anak ke / Saudara</td><td>:</td><td>Anak ke-${s.childOrder || '-'} dari ${s.siblingsCount || '-'} bersaudara</td></tr>
+                        <tr><td class="py-0.5">8. Yatim/Piatu / Bahasa</td><td>:</td><td>${s.orphanStatus || '-'} / ${s.language || '-'}</td></tr>
                     </table>
                 </div>
 
-                <!-- B. KETERANGAN TEMPAT TINGGAL -->
-                <div class="mb-3">
-                    <h4 class="font-bold uppercase mb-1">B. KETERANGAN TEMPAT TINGGAL PESERTA DIDIK</h4>
+                <!-- B. TEMPAT TINGGAL -->
+                <div class="mb-2">
+                    <h4 class="font-bold uppercase mb-0.5">B. KETERANGAN TEMPAT TINGGAL PESERTA DIDIK</h4>
                     <table class="w-full">
-                        <tr><td class="w-56 py-0.5">11. Alamat Peserta Didik</td><td class="w-3">:</td><td>${s.address || '-'}</td></tr>
-                        <tr><td class="py-0.5">12. Selama bersekolah tinggal dengan</td><td>:</td><td>${s.livingWith || '-'}</td></tr>
-                        <tr><td class="py-0.5">13. Jarak dari tempat tinggal ke sekolah</td><td>:</td><td>${s.distance || '-'}</td></tr>
-                        <tr><td class="py-0.5">14. Ke sekolah dengan kendaraan / jalan kaki</td><td>:</td><td>${s.transport || '-'}</td></tr>
+                        <tr><td class="w-48 py-0.5">9. Alamat Peserta Didik</td><td class="w-3">:</td><td>${s.address || '-'}</td></tr>
+                        <tr><td class="py-0.5">10. Tinggal dengan / Telp</td><td>:</td><td>${s.livingWith || '-'}</td></tr>
+                        <tr><td class="py-0.5">11. Jarak / Transportasi</td><td>:</td><td>${s.distance || '-'} / ${s.transport || '-'}</td></tr>
                     </table>
                 </div>
 
-                <!-- C. KETERANGAN JASMANI DAN KESEHATAN -->
-                <div class="mb-3">
-                    <h4 class="font-bold uppercase mb-1">C. KETERANGAN JASMANI DAN KESEHATAN PESERTA DIDIK</h4>
-                    <table class="w-full mb-1">
-                        <tr><td class="w-56 py-0.5">15. Berat badan waktu diterima/keluar</td><td class="w-3">:</td><td>${s.weight || '-'}</td></tr>
-                        <tr><td class="py-0.5">16. Tinggi badan waktu diterima/keluar</td><td>:</td><td>${s.height || '-'}</td></tr>
-                        <tr><td class="py-0.5">17. Golongan darah</td><td>:</td><td class="uppercase">${s.bloodType || '-'}</td></tr>
-                        <tr><td class="py-0.5">18. Penyakit pernah diderita</td><td>:</td><td>${s.medicalHistory || '-'}</td></tr>
-                        <tr><td class="py-0.5">19. Kelainan jasmaniah / lainnya</td><td>:</td><td>${s.disability || '-'}</td></tr>
-                    </table>
-                </div>
-
-                <!-- D. KETERANGAN TENTANG PENDIDIKAN SEBELUMNYA -->
-                <div class="mb-3">
-                    <h4 class="font-bold uppercase mb-1">D. KETERANGAN TENTANG PENDIDIKAN SEBELUMNYA</h4>
+                <!-- C. JASMANI DAN KESEHATAN -->
+                <div class="mb-2">
+                    <h4 class="font-bold uppercase mb-0.5">C. KETERANGAN JASMANI DAN KESEHATAN PESERTA DIDIK</h4>
                     <table class="w-full">
-                        <tr><td class="w-56 py-0.5">20. Diterima di sekolah ini tanggal / asal sekolah</td><td class="w-3">:</td><td>${s.entryDate || '-'}</td></tr>
-                        <tr><td class="py-0.5">    Tanggal dan No. Ijazah Sebelumnya</td><td>:</td><td>${s.prevDiploma || '-'}</td></tr>
-                        <tr><td class="py-0.5">21. Diterima sebagai siswa pindahan</td><td>:</td><td>${s.transferFrom || '-'}</td></tr>
+                        <tr><td class="w-48 py-0.5">12. Berat / Tinggi Badan</td><td class="w-3">:</td><td>${s.weight || '-'} / ${s.height || '-'}</td></tr>
+                        <tr><td class="py-0.5">13. Golongan Darah / Kelainan</td><td>:</td><td class="uppercase">${s.bloodType || '-'} / ${s.disability || '-'}</td></tr>
+                        <tr><td class="py-0.5">14. Penyakit Pernah Diderita</td><td>:</td><td>${s.medicalHistory || '-'}</td></tr>
                     </table>
                 </div>
 
-                <!-- E. KETERANGAN ORANG TUA KANDUNG -->
-                <div class="mb-3">
-                    <h4 class="font-bold uppercase mb-1">E. KETERANGAN TENTANG ORANG TUA KANDUNG</h4>
+                <!-- D. PENDIDIKAN SEBELUMNYA -->
+                <div class="mb-2">
+                    <h4 class="font-bold uppercase mb-0.5">D. KETERANGAN TENTANG PENDIDIKAN SEBELUMNYA</h4>
+                    <table class="w-full">
+                        <tr><td class="w-48 py-0.5">15. Diterima Tgl / Asal Sekolah</td><td class="w-3">:</td><td>${s.entryDate || '-'}</td></tr>
+                        <tr><td class="py-0.5">    No. Ijazah / Pindahan Dari</td><td>:</td><td>${s.prevDiploma || '-'} / ${s.transferFrom || '-'}</td></tr>
+                    </table>
+                </div>
+
+                <!-- E. ORANG TUA KANDUNG -->
+                <div class="mb-2">
+                    <h4 class="font-bold uppercase mb-0.5">E. KETERANGAN TENTANG ORANG TUA KANDUNG</h4>
                     <table class="w-full text-center border border-black mb-1">
                         <tr class="bg-gray-100 font-bold border-b border-black">
-                            <td class="p-1 border-r border-black w-40">Data Orang Tua Kandung</td>
-                            <td class="p-1 border-r border-black">Ayah</td>
-                            <td class="p-1">Ibu</td>
+                            <td class="p-0.5 border-r border-black w-36">Uraian Data</td>
+                            <td class="p-0.5 border-r border-black">Ayah</td>
+                            <td class="p-0.5">Ibu</td>
                         </tr>
-                        <tr class="border-b border-black"><td class="p-1 border-r border-black text-left font-semibold">Nama</td><td class="p-1 border-r border-black uppercase">${s.fatherName || '-'}</td><td class="p-1 uppercase">${s.motherName || '-'}</td></tr>
-                        <tr class="border-b border-black"><td class="p-1 border-r border-black text-left font-semibold">Tempat & Tanggal Lahir</td><td class="p-1 border-r border-black">${s.fatherPobDob || '-'}</td><td class="p-1">${s.motherPobDob || '-'}</td></tr>
-                        <tr class="border-b border-black"><td class="p-1 border-r border-black text-left font-semibold">Pendidikan Terakhir</td><td class="p-1 border-r border-black">${s.fatherEdu || '-'}</td><td class="p-1">${s.motherEdu || '-'}</td></tr>
-                        <tr class="border-b border-black"><td class="p-1 border-r border-black text-left font-semibold">Pekerjaan</td><td class="p-1 border-r border-black">${s.fatherJob || '-'}</td><td class="p-1">${s.motherJob || '-'}</td></tr>
-                        <tr><td class="p-1 border-r border-black text-left font-semibold">Penghasilan / Bulan</td><td class="p-1 border-r border-black">${s.fatherIncome || '-'}</td><td class="p-1">${s.motherIncome || '-'}</td></tr>
+                        <tr class="border-b border-black"><td class="p-0.5 border-r border-black text-left font-semibold">Nama</td><td class="p-0.5 border-r border-black uppercase">${s.fatherName || '-'}</td><td class="p-0.5 uppercase">${s.motherName || '-'}</td></tr>
+                        <tr class="border-b border-black"><td class="p-0.5 border-r border-black text-left font-semibold">TTL</td><td class="p-0.5 border-r border-black">${s.fatherPobDob || '-'}</td><td class="p-0.5">${s.motherPobDob || '-'}</td></tr>
+                        <tr class="border-b border-black"><td class="p-0.5 border-r border-black text-left font-semibold">Pendidikan / Pekerjaan</td><td class="p-0.5 border-r border-black">${s.fatherEdu || '-'} / ${s.fatherJob || '-'}</td><td class="p-0.5">${s.motherEdu || '-'} / ${s.motherJob || '-'}</td></tr>
+                        <tr><td class="p-0.5 border-r border-black text-left font-semibold">Penghasilan / Bulan</td><td class="p-0.5 border-r border-black">${s.fatherIncome || '-'}</td><td class="p-0.5">${s.motherIncome || '-'}</td></tr>
                     </table>
                 </div>
 
-                <!-- F. WALI -->
-                <div class="mb-3">
-                    <h4 class="font-bold uppercase mb-1">F. KETERANGAN TENTANG WALI</h4>
+                <!-- F & G. WALI, INTELEGENSI & PRESTASI -->
+                <div class="mb-2">
+                    <h4 class="font-bold uppercase mb-0.5">F & G. WALI, INTELEGENSI DAN PRESTASI</h4>
                     <table class="w-full">
-                        <tr><td class="w-56 py-0.5">23. Nama Wali / Hubungan</td><td class="w-3">:</td><td class="uppercase">${s.parentName || '-'} (${s.guardianDetails || '-'})</td></tr>
-                        <tr><td class="py-0.5">    No. Telepon Wali</td><td>:</td><td>${s.phone || '-'}</td></tr>
-                    </table>
-                </div>
-
-                <!-- G. INTELEGENSI, KEPRIBADIAN DAN PRESTASI -->
-                <div class="mb-3">
-                    <h4 class="font-bold uppercase mb-1">G. KETERANGAN INTELEGENSI, KEPRIBADIAN DAN PRESTASI</h4>
-                    <table class="w-full">
-                        <tr><td class="w-56 py-0.5">24. Intelegensi (IQ) / Tanggal Tes</td><td class="w-3">:</td><td>${s.iqTest || '-'}</td></tr>
-                        <tr><td class="py-0.5">26. Prestasi Yang Pernah Dicapai</td><td>:</td><td>${s.achievements || '-'}</td></tr>
-                        <tr><td class="py-0.5">27. Penerimaan Beasiswa</td><td>:</td><td>${s.scholarship || '-'}</td></tr>
+                        <tr><td class="w-48 py-0.5">16. Wali / No. Telepon</td><td class="w-3">:</td><td class="uppercase">${s.parentName || '-'} (${s.guardianDetails || '-'}) / ${s.phone || '-'}</td></tr>
+                        <tr><td class="py-0.5">17. Tes IQ / Prestasi / Beasiswa</td><td>:</td><td>${s.iqTest || '-'} / ${s.achievements || '-'} / ${s.scholarship || '-'}</td></tr>
                     </table>
                 </div>
 
                 <!-- H & I. KEHADIRAN & MENINGGALKAN SEKOLAH -->
-                <div class="mb-3">
-                    <h4 class="font-bold uppercase mb-1">H & I. RIWAYAT KELAS & KELULUSAN</h4>
+                <div class="mb-2">
+                    <h4 class="font-bold uppercase mb-0.5">H & I. RIWAYAT KELAS & KELULUSAN</h4>
                     <table class="w-full text-center border border-black mb-1">
                         <tr class="bg-gray-100 font-bold border-b border-black">
-                            <td class="p-1 border-r border-black">Kls 1</td>
-                            <td class="p-1 border-r border-black">Kls 2</td>
-                            <td class="p-1 border-r border-black">Kls 3</td>
-                            <td class="p-1 border-r border-black">Kls 4</td>
-                            <td class="p-1 border-r border-black">Kls 5</td>
-                            <td class="p-1">Kls 6</td>
+                            <td class="p-0.5 border-r border-black">Kls 1</td>
+                            <td class="p-0.5 border-r border-black">Kls 2</td>
+                            <td class="p-0.5 border-r border-black">Kls 3</td>
+                            <td class="p-0.5 border-r border-black">Kls 4</td>
+                            <td class="p-0.5 border-r border-black">Kls 5</td>
+                            <td class="p-0.5">Kls 6</td>
                         </tr>
                         <tr>
-                            <td class="p-1 border-r border-black">${s.class1 || '-'}</td>
-                            <td class="p-1 border-r border-black">${s.class2 || '-'}</td>
-                            <td class="p-1 border-r border-black">${s.class3 || '-'}</td>
-                            <td class="p-1 border-r border-black">${s.class4 || '-'}</td>
-                            <td class="p-1 border-r border-black">${s.class5 || '-'}</td>
-                            <td class="p-1">${s.class6 || '-'}</td>
+                            <td class="p-0.5 border-r border-black">${s.class1 || '-'}</td>
+                            <td class="p-0.5 border-r border-black">${s.class2 || '-'}</td>
+                            <td class="p-0.5 border-r border-black">${s.class3 || '-'}</td>
+                            <td class="p-0.5 border-r border-black">${s.class4 || '-'}</td>
+                            <td class="p-0.5 border-r border-black">${s.class5 || '-'}</td>
+                            <td class="p-0.5">${s.class6 || '-'}</td>
                         </tr>
                     </table>
                     <table class="w-full">
-                        <tr><td class="w-56 py-0.5">Tamat Belajar / No. Ijazah</td><td class="w-3">:</td><td>${s.graduationInfo || '-'}</td></tr>
-                        <tr><td class="py-0.5">Tanggal Meninggalkan Sekolah</td><td>:</td><td>${s.exitDate || '-'}</td></tr>
-                        <tr><td class="py-0.5">Status / Keterangan Akhir</td><td>:</td><td class="font-bold uppercase">${s.notes || '-'}</td></tr>
+                        <tr><td class="w-48 py-0.5">Tamata Belajar / Tgl Keluar</td><td class="w-3">:</td><td>${s.graduationInfo || '-'} / ${s.exitDate || '-'}</td></tr>
+                        <tr><td class="py-0.5">Status Akhir</td><td>:</td><td class="font-bold uppercase">${s.notes || '-'}</td></tr>
                     </table>
                 </div>
 
                 <!-- TANDA TANGAN -->
-                <div class="mt-6 flex justify-between items-end">
-                    <div class="border border-black w-24 h-32 flex items-center justify-center text-gray-400">
-                        Pasfoto 3x4
+                <div class="mt-4 flex justify-between items-end">
+                    <div class="border border-black w-20 h-24 flex items-center justify-center text-gray-400 text-[10px]">
+                        Foto 3x4
                     </div>
-                    <div class="text-center">
+                    <div class="text-center text-[10px]">
                         <p>Bandung, ............................................</p>
-                        <p class="mb-12">Kepala Sekolah SDN 186 Cipadung</p>
+                        <p class="mb-8">Kepala Sekolah SDN 186 Cipadung</p>
                         <p class="font-bold underline">____________________________________</p>
                         <p>NIP. .................................................</p>
                     </div>
