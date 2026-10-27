@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BUKU KLAPER & INDUK SISWA - SDN 186 CIPADUNG</title>
+    <title>BUKU KLAPER, INDUK & NOMOR SURAT - SDN 186 CIPADUNG</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome CDN -->
@@ -19,7 +19,7 @@
             table { border-collapse: collapse; width: 100%; font-size: 8.5pt; }
             th, td { border: 1px solid #000 !important; padding: 2px 4px !important; }
             #printHeader { display: block !important; margin-bottom: 10px; text-align: center; }
-            #indukSheetContent { border: none !important; box-shadow: none !important; padding: 0 !important; }
+            #indukSheetContent, #suratReceiptContent { border: none !important; box-shadow: none !important; padding: 0 !important; }
             .page-break { page-break-after: always; }
         }
     </style>
@@ -31,7 +31,7 @@
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all">
             <div class="text-center mb-6">
                 <img src="logo.png" alt="Logo Sekolah" class="h-16 w-16 mx-auto mb-3 object-contain">
-                <h2 class="text-xl font-bold text-slate-800 uppercase">PORTAL ARSIP SISWA</h2>
+                <h2 class="text-xl font-bold text-slate-800 uppercase">PORTAL ARSIP SISWA & SURAT</h2>
                 <p class="text-xs text-slate-500">SDN 186 CIPADUNG - KOTA BANDUNG</p>
             </div>
 
@@ -57,7 +57,7 @@
                 <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-14 w-14 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
                 <div>
                     <h1 class="text-xl font-bold tracking-tight uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h1>
-                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper & Buku Induk Siswa Cloud</p>
+                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper, Buku Induk Siswa & Administrasi Nomor Surat Cloud</p>
                 </div>
             </div>
             
@@ -78,12 +78,15 @@
 
         <!-- Menu Tab Navigation -->
         <div class="bg-indigo-950 border-t border-indigo-800 px-4 sm:px-8">
-            <div class="max-w-7xl mx-auto flex gap-4">
-                <button id="tabKlaperBtn" onclick="switchTab('klaper')" class="py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition">
+            <div class="max-w-7xl mx-auto flex gap-2 sm:gap-4 overflow-x-auto">
+                <button id="tabKlaperBtn" onclick="switchTab('klaper')" class="py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap">
                     <i class="fa-solid fa-book"></i> Buku Klaper (Daftar Abjad)
                 </button>
-                <button id="tabIndukBtn" onclick="switchTab('induk')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition">
+                <button id="tabIndukBtn" onclick="switchTab('induk')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
                     <i class="fa-solid fa-address-card"></i> Buku Induk Siswa (Format MS Word)
+                </button>
+                <button id="tabSuratBtn" onclick="switchTab('surat')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
+                    <i class="fa-solid fa-envelope-open-text"></i> Nomor Surat
                 </button>
             </div>
         </div>
@@ -100,7 +103,8 @@
             </div>
             <div class="flex items-center gap-4 text-slate-600">
                 <span>Pengguna: <strong id="currentUserLabel" class="text-indigo-900">-</strong> (<span id="userRoleBadge" class="font-bold text-emerald-600">-</span>)</span>
-                <span>Total Data: <span id="totalStudentsCount" class="font-bold text-indigo-900">0</span> Siswa</span>
+                <span>Total Siswa: <span id="totalStudentsCount" class="font-bold text-indigo-900">0</span></span>
+                <span>Total Surat: <span id="totalSuratCount" class="font-bold text-indigo-900">0</span></span>
             </div>
         </div>
 
@@ -109,7 +113,6 @@
 
         <!-- VIEW 1: BUKU KLAPER -->
         <div id="viewKlaper">
-            <!-- PANEL TOOLBAR ACTION BUKU KLAPER -->
             <div class="admin-only-action hidden bg-white p-3.5 rounded-xl shadow-md border border-slate-200 mb-4 no-print flex flex-wrap gap-2 items-center justify-between">
                 <div class="text-xs font-bold text-slate-600 uppercase flex items-center gap-2">
                     <i class="fa-solid fa-screwdriver-wrench text-indigo-600"></i> Alat Pengelolaan Buku Klaper
@@ -213,7 +216,6 @@
 
         <!-- VIEW 2: BUKU INDUK SISWA -->
         <div id="viewInduk" class="hidden">
-            <!-- PANEL TOOLBAR ACTION BUKU INDUK -->
             <div class="admin-only-action hidden bg-white p-3.5 rounded-xl shadow-md border border-slate-200 mb-4 no-print flex flex-wrap gap-2 items-center justify-between">
                 <div class="text-xs font-bold text-slate-600 uppercase flex items-center gap-2">
                     <i class="fa-solid fa-address-card text-indigo-600"></i> Alat Pengelolaan Buku Induk
@@ -245,6 +247,48 @@
             </div>
 
             <div id="indukGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- VIEW 3: MANAJEMEN NOMOR SURAT -->
+        <div id="viewSurat" class="hidden">
+            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col sm:flex-row gap-4 justify-between items-center">
+                <div class="relative w-full sm:w-96">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="suratSearchInput" placeholder="Cari Nomor Surat, Hal, Perihal, atau Penerima..." oninput="renderSuratTable()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm">
+                </div>
+                <div class="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
+                    <button onclick="openSuratModal()" class="admin-only-action hidden bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-circle-plus"></i> Buat Nomor Surat Baru
+                    </button>
+                    <button onclick="exportSuratToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-export"></i> Ekspor Agenda Surat (Excel)
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse" id="suratTable">
+                        <thead>
+                            <tr class="bg-indigo-950 text-white border-b border-indigo-900">
+                                <th class="py-3 px-3 text-center border-r border-indigo-900 w-12">No</th>
+                                <th class="py-3 px-3 text-center border-r border-indigo-900 whitespace-nowrap">Tanggal Surat</th>
+                                <th class="py-3 px-4 border-r border-indigo-900 min-w-[220px]">Nomor Surat Resmi</th>
+                                <th class="py-3 px-4 border-r border-indigo-900 min-w-[180px]">Jenis / Klasifikasi</th>
+                                <th class="py-3 px-4 border-r border-indigo-900 min-w-[200px]">Perihal / Hal</th>
+                                <th class="py-3 px-4 border-r border-indigo-900 min-w-[180px]">Ditujukan / Penerima</th>
+                                <th class="py-3 px-3 border-r border-indigo-900 min-w-[130px]">Penandatangan</th>
+                                <th class="py-3 px-3 text-center no-print action-column w-32">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="suratTableBody" class="divide-y divide-slate-200 text-xs"></tbody>
+                    </table>
+                </div>
+                <div id="suratEmptyState" class="hidden py-12 text-center">
+                    <i class="fa-solid fa-envelope-open text-4xl text-slate-300 mb-3"></i>
+                    <p class="text-slate-500 font-medium">Belum ada rekam penomoran surat.</p>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -515,7 +559,123 @@
         </div>
     </div>
 
-    <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA PERBAIKAN SCROLL & HEADER STICKY -->
+    <!-- MODAL input NOMOR SURAT BARU -->
+    <div id="suratModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 my-8 transform transition-all">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 id="suratModalTitle" class="text-lg font-bold text-slate-800">Penomoran Surat Keluar Baru</h3>
+                <button onclick="closeSuratModal()" class="text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <form id="suratForm" onsubmit="handleSuratSubmit(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="suratKey">
+
+                <div class="bg-indigo-50/70 p-3.5 rounded-xl border border-indigo-100 mb-3">
+                    <label class="block font-bold text-slate-700 mb-1">FORMAT NOMOR SURAT (TERPRATINJAU OTOMATIS):</label>
+                    <div id="suratPreview" class="text-sm font-mono font-bold text-indigo-900 bg-white px-3 py-2 rounded-lg border border-indigo-200 tracking-wider text-center">
+                        -
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold mb-1">Kode Instansi / Klasifikasi *</label>
+                        <input type="text" id="suratKodeInstansi" value="421.2" oninput="updateSuratPreview()" required class="w-full border rounded px-2.5 py-1.5 font-mono focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Nomor Urut Surat *</label>
+                        <input type="number" id="suratUrut" min="1" oninput="updateSuratPreview()" required class="w-full border rounded px-2.5 py-1.5 font-mono focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold mb-1">Jenis / Singkatan Surat *</label>
+                        <select id="suratJenis" onchange="updateSuratPreview()" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 font-semibold">
+                            <option value="SKS">SKS - Surat Keterangan Siswa</option>
+                            <option value="SP">SP - Surat Panggilan Orang Tua</option>
+                            <option value="SKKB">SKKB - Surat Ket. Kelakuan Baik</option>
+                            <option value="UOT">UOT - Undangan Orang Tua</option>
+                            <option value="ST">ST - Surat Tugas</option>
+                            <option value="SU">SU - Surat Undangan</option>
+                            <option value="SK">SK - Surat Keputusan</option>
+                            <option value="CUSTOM">-- Lainnya (Ketik Manual) --</option>
+                        </select>
+                    </div>
+                    <div id="suratJenisCustomContainer" class="hidden">
+                        <label class="block font-semibold mb-1">Singkatan Jenis kustom</label>
+                        <input type="text" id="suratJenisCustom" placeholder="misal: SKP" oninput="updateSuratPreview()" class="w-full border rounded px-2.5 py-1.5 uppercase font-mono">
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Tanggal Surat *</label>
+                        <input type="date" id="suratTanggal" onchange="updateSuratPreview()" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-1">Perihal / Hal *</label>
+                    <input type="text" id="suratPerihal" placeholder="Surat Keterangan Masih Aktif Sekolah" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block font-semibold">Ditujukan / Penerima Surat *</label>
+                        <button type="button" onclick="openPickerSiswaModal()" class="text-[11px] text-indigo-600 font-bold hover:underline flex items-center gap-1">
+                            <i class="fa-solid fa-users text-xs"></i> Pilih Dari Master Siswa
+                        </button>
+                    </div>
+                    <input type="text" id="suratPenerima" placeholder="Nama Orang Tua / Instansi / Nama Siswa" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 uppercase">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold mb-1">Penandatangan *</label>
+                        <input type="text" id="suratPenandatangan" value="Kepala Sekolah" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Catatan / Keterangan Tambahan</label>
+                        <input type="text" id="suratKeterangan" placeholder="Keperluan daftar ulang, KIP, dll." class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t">
+                    <button type="button" onclick="closeSuratModal()" class="px-4 py-2 border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-100 transition">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow transition">Simpan & Terbitkan Nomor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PILIH SISWA CEPAT UNTUK SURAT -->
+    <div id="pickerSiswaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-5 my-auto flex flex-col max-h-[80vh]">
+            <div class="flex justify-between items-center border-b pb-2 mb-3">
+                <h3 class="font-bold text-slate-800 text-sm">Pilih Siswa dari Cloud Database</h3>
+                <button onclick="closePickerSiswaModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <input type="text" id="pickerSearch" placeholder="Cari nama siswa..." oninput="renderPickerSiswaList()" class="w-full border rounded px-3 py-1.5 text-xs mb-3">
+            <div id="pickerSiswaList" class="overflow-y-auto space-y-1.5 text-xs flex-grow pr-1"></div>
+        </div>
+    </div>
+
+    <!-- MODAL CETAK RESI NOMOR SURAT -->
+    <div id="suratReceiptModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 my-auto">
+            <div class="flex justify-between items-center border-b pb-3 mb-4 no-print">
+                <h3 class="text-base font-bold text-slate-800">Pratinjau Resi / Bukti Agenda Surat</h3>
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-print"></i> Cetak Bukti
+                    </button>
+                    <button onclick="closeSuratReceiptModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">Tutup</button>
+                </div>
+            </div>
+
+            <div id="suratReceiptContent" class="p-6 bg-white text-black font-serif text-xs leading-relaxed border border-slate-300 shadow-inner"></div>
+        </div>
+    </div>
+
+    <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA -->
     <div id="indukPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-2 sm:p-4 no-print">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col my-auto overflow-hidden">
             <div class="flex justify-between items-center px-6 py-3.5 bg-slate-800 text-white shrink-0 border-b border-slate-700 no-print">
@@ -558,8 +718,10 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
         const studentsRef = ref(db, 'students');
+        const suratRef = ref(db, 'surat_keluar');
 
         let studentsData = {};
+        let suratData = {};
         let currentLetterFilter = 'ALL';
         let currentSearchQuery = '';
         let currentIndukQuery = '';
@@ -585,6 +747,7 @@
                     document.querySelectorAll('.admin-only-action').forEach(el => el.classList.add('hidden'));
                 }
                 listenToData();
+                listenToSuratData();
             } else {
                 loginModal.classList.remove('hidden');
             }
@@ -626,26 +789,349 @@
             });
         }
 
+        function listenToSuratData() {
+            onValue(suratRef, (snapshot) => {
+                suratData = snapshot.val() || {};
+                renderSuratTable();
+            });
+        }
+
         window.switchTab = function(tabName) {
             const viewKlaper = document.getElementById('viewKlaper');
             const viewInduk = document.getElementById('viewInduk');
+            const viewSurat = document.getElementById('viewSurat');
+
             const btnKlaper = document.getElementById('tabKlaperBtn');
             const btnInduk = document.getElementById('tabIndukBtn');
+            const btnSurat = document.getElementById('tabSuratBtn');
+
+            viewKlaper.classList.add('hidden');
+            viewInduk.classList.add('hidden');
+            viewSurat.classList.add('hidden');
+
+            btnKlaper.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
+            btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
+            btnSurat.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
 
             if (tabName === 'klaper') {
                 viewKlaper.classList.remove('hidden');
-                viewInduk.classList.add('hidden');
-                btnKlaper.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition";
-                btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition";
-            } else {
-                viewKlaper.classList.add('hidden');
+                btnKlaper.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
+            } else if (tabName === 'induk') {
                 viewInduk.classList.remove('hidden');
-                btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition";
-                btnKlaper.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition";
+                btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
                 renderIndukGrid();
+            } else if (tabName === 'surat') {
+                viewSurat.classList.remove('hidden');
+                btnSurat.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
+                renderSuratTable();
             }
         }
 
+        /* --- LOGIK NOMOR SURAT --- */
+        window.getRomawiBulan = function(monthNum) {
+            const romawi = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+            return romawi[monthNum] || "I";
+        }
+
+        window.formatFullNomorSurat = function(kodeInstansi, urut, jenis, tanggalStr) {
+            const dateObj = tanggalStr ? new Date(tanggalStr) : new Date();
+            const monthRomawi = getRomawiBulan(dateObj.getMonth());
+            const year = dateObj.getFullYear();
+            const formattedUrut = String(urut).padStart(3, '0');
+            
+            return `${kodeInstansi}/${formattedUrut}/SDN186/${jenis}/${monthRomawi}/${year}`;
+        }
+
+        window.updateSuratPreview = function() {
+            const kode = document.getElementById('suratKodeInstansi').value.trim() || '421.2';
+            const urut = document.getElementById('suratUrut').value || '1';
+            let jenis = document.getElementById('suratJenis').value;
+            const tgl = document.getElementById('suratTanggal').value;
+
+            const customContainer = document.getElementById('suratJenisCustomContainer');
+            if (jenis === 'CUSTOM') {
+                customContainer.classList.remove('hidden');
+                jenis = document.getElementById('suratJenisCustom').value.trim().toUpperCase() || 'SURAT';
+            } else {
+                customContainer.classList.add('hidden');
+            }
+
+            const previewText = formatFullNomorSurat(kode, urut, jenis, tgl);
+            document.getElementById('suratPreview').textContent = previewText;
+        }
+
+        window.openSuratModal = function(key = null) {
+            document.getElementById('suratForm').reset();
+            document.getElementById('suratKey').value = '';
+            
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('suratTanggal').value = today;
+
+            if (key && suratData[key]) {
+                const s = suratData[key];
+                document.getElementById('suratKey').value = key;
+                document.getElementById('suratKodeInstansi').value = s.kodeInstansi || '421.2';
+                document.getElementById('suratUrut').value = s.urut || '1';
+                
+                if (['SKS', 'SP', 'SKKB', 'UOT', 'ST', 'SU', 'SK'].includes(s.jenis)) {
+                    document.getElementById('suratJenis').value = s.jenis;
+                } else {
+                    document.getElementById('suratJenis').value = 'CUSTOM';
+                    document.getElementById('suratJenisCustom').value = s.jenis || '';
+                }
+                
+                document.getElementById('suratTanggal').value = s.tanggal || today;
+                document.getElementById('suratPerihal').value = s.perihal || '';
+                document.getElementById('suratPenerima').value = s.penerima || '';
+                document.getElementById('suratPenandatangan').value = s.penandatangan || 'Kepala Sekolah';
+                document.getElementById('suratKeterangan').value = s.keterangan || '';
+                document.getElementById('suratModalTitle').textContent = 'Edit Record Nomor Surat';
+            } else {
+                // Cari nomor urut terbesar otomatis
+                let maxUrut = 0;
+                Object.values(suratData).forEach(item => {
+                    const num = parseInt(item.urut, 10);
+                    if (!isNaN(num) && num > maxUrut) maxUrut = num;
+                });
+                document.getElementById('suratUrut').value = maxUrut + 1;
+                document.getElementById('suratModalTitle').textContent = 'Penomoran Surat Keluar Baru';
+            }
+
+            updateSuratPreview();
+            document.getElementById('suratModal').classList.remove('hidden');
+            document.getElementById('suratModal').classList.add('flex');
+        }
+
+        window.closeSuratModal = function() {
+            document.getElementById('suratModal').classList.add('hidden');
+            document.getElementById('suratModal').classList.remove('flex');
+        }
+
+        window.handleSuratSubmit = function(e) {
+            e.preventDefault();
+            if (currentUserRole !== 'ADMIN') return;
+
+            const key = document.getElementById('suratKey').value;
+            const kodeInstansi = document.getElementById('suratKodeInstansi').value.trim() || '421.2';
+            const urut = document.getElementById('suratUrut').value;
+            let jenis = document.getElementById('suratJenis').value;
+            if (jenis === 'CUSTOM') {
+                jenis = document.getElementById('suratJenisCustom').value.trim().toUpperCase() || 'SURAT';
+            }
+
+            const tanggal = document.getElementById('suratTanggal').value;
+            const nomorResmi = formatFullNomorSurat(kodeInstansi, urut, jenis, tanggal);
+
+            const payload = {
+                kodeInstansi: kodeInstansi,
+                urut: urut,
+                jenis: jenis,
+                tanggal: tanggal,
+                nomorResmi: nomorResmi,
+                perihal: document.getElementById('suratPerihal').value.trim(),
+                penerima: document.getElementById('suratPenerima').value.trim().toUpperCase(),
+                penandatangan: document.getElementById('suratPenandatangan').value.trim(),
+                keterangan: document.getElementById('suratKeterangan').value.trim(),
+                createdAt: new Date().toISOString()
+            };
+
+            if (key) {
+                update(ref(db, `surat_keluar/${key}`), payload);
+            } else {
+                push(suratRef, payload);
+            }
+
+            closeSuratModal();
+        }
+
+        window.renderSuratTable = function() {
+            const tbody = document.getElementById('suratTableBody');
+            const emptyState = document.getElementById('suratEmptyState');
+            const searchQuery = (document.getElementById('suratSearchInput')?.value || '').toLowerCase();
+
+            let suratArray = Object.keys(suratData).map(key => ({
+                key: key,
+                ...suratData[key]
+            }));
+
+            // Urutkan nomor surat terbaru diatas
+            suratArray.sort((a, b) => (parseInt(b.urut, 10) || 0) - (parseInt(a.urut, 10) || 0));
+
+            if (searchQuery.trim() !== '') {
+                suratArray = suratArray.filter(s => 
+                    (s.nomorResmi || '').toLowerCase().includes(searchQuery) ||
+                    (s.perihal || '').toLowerCase().includes(searchQuery) ||
+                    (s.penerima || '').toLowerCase().includes(searchQuery) ||
+                    (s.jenis || '').toLowerCase().includes(searchQuery)
+                );
+            }
+
+            document.getElementById('totalSuratCount').textContent = Object.keys(suratData).length;
+
+            if (suratArray.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            tbody.innerHTML = suratArray.map((item, index) => `
+                <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-500 font-medium">${index + 1}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 whitespace-nowrap">${item.tanggal || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200 font-mono font-bold text-indigo-900 bg-indigo-50/40">${item.nomorResmi || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200"><span class="px-2 py-0.5 rounded bg-slate-100 border text-slate-700 font-semibold">${item.jenis || '-'}</span></td>
+                    <td class="py-2.5 px-4 border-r border-slate-200 font-medium text-slate-800">${item.perihal || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200 text-slate-700 font-semibold uppercase">${item.penerima || '-'}</td>
+                    <td class="py-2.5 px-3 border-r border-slate-200 text-slate-600">${item.penandatangan || '-'}</td>
+                    <td class="py-2.5 px-3 text-center no-print action-column">
+                        <div class="flex justify-center gap-1.5">
+                            <button onclick="copyToClipboard('${item.nomorResmi}')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded text-xs transition" title="Salin Nomor Surat">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                            <button onclick="viewSuratReceipt('${item.key}')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded text-xs transition" title="Cetak Bukti Resi Surat">
+                                <i class="fa-solid fa-print"></i>
+                            </button>
+                            ${currentUserRole === 'ADMIN' ? `
+                                <button onclick="openSuratModal('${item.key}')" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 rounded text-xs transition" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="deleteSurat('${item.key}', '${item.nomorResmi}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded text-xs transition" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.copyToClipboard = function(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`Nomor Surat tersalin: ${text}`);
+            });
+        }
+
+        window.deleteSurat = function(key, nomor) {
+            if (currentUserRole !== 'ADMIN') return;
+            if (confirm(`Hapus rekam nomor surat "${nomor}"?`)) {
+                remove(ref(db, `surat_keluar/${key}`));
+            }
+        }
+
+        window.viewSuratReceipt = function(key) {
+            const s = suratData[key];
+            if (!s) return;
+
+            const html = `
+                <div class="text-center font-bold text-xs uppercase mb-4 pb-2 border-b-2 border-black">
+                    <div class="flex items-center justify-center space-x-3 mb-1">
+                        <img src="logo.png" alt="Logo" class="h-10 w-10 object-contain">
+                        <div>
+                            <h2 class="text-sm">BUKTI REGISTRASI NOMOR SURAT KELUAR</h2>
+                            <h3 class="text-xs font-normal">SDN 186 CIPADUNG - KOTA BANDUNG</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 border border-dashed border-slate-400 bg-slate-50 mb-4 rounded">
+                    <p class="text-[10px] text-slate-500 uppercase tracking-wider mb-1">NOMOR SURAT TERBIT:</p>
+                    <p class="text-base font-mono font-bold text-indigo-900">${s.nomorResmi || '-'}</p>
+                </div>
+
+                <table class="w-full text-xs mb-4">
+                    <tr><td class="w-40 py-1 font-semibold">Tanggal Register</td><td class="w-3">:</td><td>${s.tanggal || '-'}</td></tr>
+                    <tr><td class="py-1 font-semibold">Klasifikasi / Jenis</td><td>:</td><td>${s.jenis || '-'} (Kode: ${s.kodeInstansi || '421.2'})</td></tr>
+                    <tr><td class="py-1 font-semibold">Perihal / Hal</td><td>:</td><td>${s.perihal || '-'}</td></tr>
+                    <tr><td class="py-1 font-semibold">Ditujukan Kepada</td><td>:</td><td class="font-bold uppercase">${s.penerima || '-'}</td></tr>
+                    <tr><td class="py-1 font-semibold">Penandatangan</td><td>:</td><td>${s.penandatangan || '-'}</td></tr>
+                    <tr><td class="py-1 font-semibold">Catatan / Keperluan</td><td>:</td><td>${s.keterangan || '-'}</td></tr>
+                </table>
+
+                <div class="mt-6 flex justify-between items-end text-[10px]">
+                    <div>
+                        <p class="text-slate-500">Sistem Arsip Cloud SDN 186 Cipadung</p>
+                        <p class="text-slate-400">Dicetak pada: ${new Date().toLocaleString('id-ID')}</p>
+                    </div>
+                    <div class="text-center">
+                        <p>Petunjuk Tata Usaha,</p>
+                        <p class="mt-10 underline font-bold"> Petugas TU / Operator</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('suratReceiptContent').innerHTML = html;
+            document.getElementById('suratReceiptModal').classList.remove('hidden');
+            document.getElementById('suratReceiptModal').classList.add('flex');
+        }
+
+        window.closeSuratReceiptModal = function() {
+            document.getElementById('suratReceiptModal').classList.add('hidden');
+            document.getElementById('suratReceiptModal').classList.remove('flex');
+        }
+
+        /* --- MODAL SISWA PICKER UNTUK FORM SURAT --- */
+        window.openPickerSiswaModal = function() {
+            renderPickerSiswaList();
+            document.getElementById('pickerSiswaModal').classList.remove('hidden');
+            document.getElementById('pickerSiswaModal').classList.add('flex');
+        }
+
+        window.closePickerSiswaModal = function() {
+            document.getElementById('pickerSiswaModal').classList.add('hidden');
+            document.getElementById('pickerSiswaModal').classList.remove('flex');
+        }
+
+        window.renderPickerSiswaList = function() {
+            const container = document.getElementById('pickerSiswaList');
+            const query = (document.getElementById('pickerSearch')?.value || '').toLowerCase();
+
+            let list = Object.values(studentsData);
+            if (query) {
+                list = list.filter(s => (s.name || '').toLowerCase().includes(query) || (s.nis || '').includes(query));
+            }
+
+            if (list.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 text-center py-4">Siswa tidak ditemukan.</p>`;
+                return;
+            }
+
+            container.innerHTML = list.slice(0, 30).map(s => `
+                <div onclick="selectSiswaForSurat('${s.name}')" class="p-2 bg-slate-50 hover:bg-indigo-50 border rounded cursor-pointer transition flex justify-between items-center">
+                    <div>
+                        <p class="font-bold text-slate-800 uppercase">${s.name}</p>
+                        <p class="text-[10px] text-slate-500">NIS: ${s.nis || '-'} | Orang Tua: ${s.parentName || '-'}</p>
+                    </div>
+                    <i class="fa-solid fa-circle-check text-indigo-600"></i>
+                </div>
+            `).join('');
+        }
+
+        window.selectSiswaForSurat = function(namaSiswa) {
+            document.getElementById('suratPenerima').value = namaSiswa.toUpperCase();
+            closePickerSiswaModal();
+        }
+
+        window.exportSuratToExcel = function() {
+            let suratArray = Object.values(suratData);
+            suratArray.sort((a, b) => (parseInt(a.urut, 10) || 0) - (parseInt(b.urut, 10) || 0));
+
+            const exportData = [
+                ["AGENDA SURAT KELUAR SDN 186 CIPADUNG"],
+                [""],
+                ["No Urut", "Tanggal Surat", "Nomor Surat Resmi", "Kode", "Jenis", "Perihal", "Penerima", "Penandatangan", "Keterangan"]
+            ];
+
+            suratArray.forEach(s => {
+                exportData.push([
+                    s.urut || '', s.tanggal || '', s.nomorResmi || '', s.kodeInstansi || '', s.jenis || '', s.perihal || '', s.penerima || '', s.penandatangan || '', s.keterangan || ''
+                ]);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(exportData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Surat_Keluar");
+            XLSX.writeFile(wb, `Agenda_Surat_Keluar_SDN186_${new Date().toISOString().slice(0,10)}.xlsx`);
+        }
+
+        /* --- FUNGSI BUKU KLAPER & INDUK --- */
         window.initAlphabetButtons = function() {
             const container = document.getElementById('alphabetButtons');
             let html = `<button onclick="filterByLetter('ALL')" class="letter-btn bg-indigo-600 text-white font-bold px-3 py-1 rounded text-xs transition">SEMUA</button>`;
@@ -814,7 +1300,6 @@
                     <p class="text-[11px] font-normal">Nomor Induk / NISN : ${s.nis || '..........'} / ${s.nisn || '..........'}</p>
                 </div>
 
-                <!-- A. KETERANGAN PRIBADI -->
                 <div class="mb-2">
                     <h4 class="font-bold uppercase mb-0.5">A. KETERANGAN PRIBADI PESERTA DIDIK</h4>
                     <table class="w-full">
@@ -829,7 +1314,6 @@
                     </table>
                 </div>
 
-                <!-- B. TEMPAT TINGGAL -->
                 <div class="mb-2">
                     <h4 class="font-bold uppercase mb-0.5">B. KETERANGAN TEMPAT TINGGAL PESERTA DIDIK</h4>
                     <table class="w-full">
@@ -839,7 +1323,6 @@
                     </table>
                 </div>
 
-                <!-- C. JASMANI DAN KESEHATAN -->
                 <div class="mb-2">
                     <h4 class="font-bold uppercase mb-0.5">C. KETERANGAN JASMANI DAN KESEHATAN PESERTA DIDIK</h4>
                     <table class="w-full">
@@ -849,7 +1332,6 @@
                     </table>
                 </div>
 
-                <!-- D. PENDIDIKAN SEBELUMNYA -->
                 <div class="mb-2">
                     <h4 class="font-bold uppercase mb-0.5">D. KETERANGAN TENTANG PENDIDIKAN SEBELUMNYA</h4>
                     <table class="w-full">
@@ -858,7 +1340,6 @@
                     </table>
                 </div>
 
-                <!-- E. ORANG TUA KANDUNG -->
                 <div class="mb-2">
                     <h4 class="font-bold uppercase mb-0.5">E. KETERANGAN TENTANG ORANG TUA KANDUNG</h4>
                     <table class="w-full text-center border border-black mb-1">
@@ -874,7 +1355,6 @@
                     </table>
                 </div>
 
-                <!-- F & G. WALI, INTELEGENSI & PRESTASI -->
                 <div class="mb-2">
                     <h4 class="font-bold uppercase mb-0.5">F & G. WALI, INTELEGENSI DAN PRESTASI</h4>
                     <table class="w-full">
@@ -883,7 +1363,6 @@
                     </table>
                 </div>
 
-                <!-- H & I. KEHADIRAN & MENINGGALKAN SEKOLAH -->
                 <div class="mb-2">
                     <h4 class="font-bold uppercase mb-0.5">H & I. RIWAYAT KELAS & KELULUSAN</h4>
                     <table class="w-full text-center border border-black mb-1">
@@ -910,7 +1389,6 @@
                     </table>
                 </div>
 
-                <!-- TANDA TANGAN -->
                 <div class="mt-4 flex justify-between items-end">
                     <div class="border border-black w-20 h-24 flex items-center justify-center text-gray-400 text-[10px]">
                         Foto 3x4
@@ -1122,7 +1600,6 @@
             }
         }
 
-        // UNDUH TEMPLATE EXCEL KOSONG DENGAN FORMAT LENGKAP
         window.downloadTemplateExcel = function() {
             const templateData = [
                 ["TEMPLATE ISIAN DATA SISWA BUKU KLAPER & BUKU INDUK SDN 186 CIPADUNG"],
@@ -1146,16 +1623,6 @@
                     "SITI AMINAH", "Bandung, 15 Mar 1985", "SMP", "Ibu Rumah Tangga", "-", "BUDIMAN", 
                     "Ayah Kandung", "081234567890", "-", "Juara 1 Lomba Mewarnai", "PIP 2021", "I-A", "II-A", 
                     "III-A", "IV-A", "V-A", "VI-A", "DN-01/D-SD/2025/001", "15 Juni 2025", "LULUS"
-                ],
-                [
-                    "192001002", "0123456790", "3273010101120002", "SITI NURHALIZA", "Siti", "P", 
-                    "Bandung, 20 Agustus 2012", "ISLAM", "Indonesia", "2", "3", "-", 
-                    "Indonesia", "Jl. Cibiru Raya No. 45", "Orang Tua", "500 m", "Motor", "28 kg", 
-                    "130 cm", "A", "-", "-", "15 Juli 2019", "TK-00124", 
-                    "-", "RUDI HERMAWAN", "Bandung, 05 Feb 1978", "S1", "PNS", "Rp 5.000.000", 
-                    "NINA MARLINA", "Bandung, 12 Des 1982", "S1", "Guru", "Rp 3.000.000", "RUDI HERMAWAN", 
-                    "Ayah Kandung", "089876543210", "-", "-", "-", "I-B", "II-B", 
-                    "III-B", "IV-B", "V-B", "VI-B", "-", "-", "AKTIF"
                 ]
             ];
 
