@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BUKU KLAPER, INDUK & NOMOR SURAT - SDN 186 CIPADUNG</title>
+    <title>BUKU KLAPER, INDUK, MUTASI & NOMOR SURAT - SDN 186 CIPADUNG</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome CDN -->
@@ -57,7 +57,7 @@
                 <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-14 w-14 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
                 <div>
                     <h1 class="text-xl font-bold tracking-tight uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h1>
-                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper, Buku Induk Siswa & Administrasi Nomor Surat Cloud</p>
+                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper, Buku Induk Siswa, Mutasi & Administrasi Nomor Surat Cloud</p>
                 </div>
             </div>
             
@@ -84,6 +84,9 @@
                 </button>
                 <button id="tabIndukBtn" onclick="switchTab('induk')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
                     <i class="fa-solid fa-address-card"></i> Buku Induk Siswa (Format MS Word)
+                </button>
+                <button id="tabMutasiBtn" onclick="switchTab('mutasi')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
+                    <i class="fa-solid fa-right-left"></i> Mutasi Siswa (Masuk / Keluar)
                 </button>
                 <button id="tabSuratBtn" onclick="switchTab('surat')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
                     <i class="fa-solid fa-envelope-open-text"></i> Nomor Surat
@@ -276,6 +279,87 @@
                     <span id="indukInfoText" class="text-slate-600 font-medium">Menampilkan 0 - 0 dari 0 Kartu</span>
                 </div>
                 <div id="indukPageButtons" class="flex items-center gap-1"></div>
+            </div>
+        </div>
+
+        <!-- VIEW 4: MUTASI SISWA (BARU) -->
+        <div id="viewMutasi" class="hidden">
+            <!-- RINGKASAN STATISTIK MUTASI -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 no-print">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Total Siswa Mutasi</p>
+                        <h3 id="statTotalMutasi" class="text-2xl font-bold text-indigo-900 mt-1">0</h3>
+                    </div>
+                    <div class="h-10 w-10 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-right-left"></i>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Siswa Pindahan (Masuk)</p>
+                        <h3 id="statMutasiMasuk" class="text-2xl font-bold text-emerald-600 mt-1">0</h3>
+                    </div>
+                    <div class="h-10 w-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Siswa Pindah (Keluar)</p>
+                        <h3 id="statMutasiKeluar" class="text-2xl font-bold text-rose-600 mt-1">0</h3>
+                    </div>
+                    <div class="h-10 w-10 bg-rose-50 text-rose-600 rounded-lg flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-user-minus"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                    <div class="relative w-full sm:w-72">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="mutasiSearchInput" placeholder="Cari Siswa Mutasi..." oninput="renderMutasiTable()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm">
+                    </div>
+                    <select id="mutasiFilterType" onchange="renderMutasiTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                        <option value="ALL">Semua Jenis Mutasi</option>
+                        <option value="MASUK">Pindahan (Masuk)</option>
+                        <option value="KELUAR">Pindah (Keluar)</option>
+                    </select>
+                </div>
+                <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
+                    <button onclick="openModalMutasi('MASUK')" class="admin-only-action hidden bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i> Input Mutasi Masuk
+                    </button>
+                    <button onclick="openModalMutasi('KELUAR')" class="admin-only-action hidden bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-minus"></i> Input Mutasi Keluar
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse" id="mutasiTable">
+                        <thead>
+                            <tr class="bg-indigo-950 text-white border-b border-indigo-900 text-xs">
+                                <th class="py-3 px-3 text-center border-r border-indigo-900 w-10">No</th>
+                                <th class="py-3 px-3 text-center border-r border-indigo-900 w-28">Jenis Mutasi</th>
+                                <th class="py-3 px-3 text-center border-r border-indigo-900 w-24">NIS</th>
+                                <th class="py-3 px-4 border-r border-indigo-900 min-w-[180px]">Nama Lengkap Siswa</th>
+                                <th class="py-3 px-2 text-center border-r border-indigo-900 w-12">L/P</th>
+                                <th class="py-3 px-3 text-center border-r border-indigo-900 w-28">Tanggal Mutasi</th>
+                                <th class="py-3 px-4 border-r border-indigo-900 min-w-[200px]">Asal / Tujuan Mutasi</th>
+                                <th class="py-3 px-4 border-r border-indigo-900 min-w-[160px]">Orang Tua / Wali</th>
+                                <th class="py-3 px-3 text-center no-print action-column w-28">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mutasiTableBody" class="divide-y divide-slate-200 text-xs"></tbody>
+                    </table>
+                </div>
+                <div id="mutasiEmptyState" class="hidden py-12 text-center">
+                    <i class="fa-solid fa-right-left text-4xl text-slate-300 mb-3"></i>
+                    <p class="text-slate-500 font-medium">Belum ada riwayat mutasi siswa.</p>
+                </div>
             </div>
         </div>
 
@@ -856,6 +940,7 @@
                 document.getElementById('syncText').textContent = "Terhubung ke Cloud Database";
                 renderData();
                 renderIndukGrid();
+                renderMutasiTable();
             }, (error) => {
                 document.getElementById('syncIndicator').className = "h-3 w-3 rounded-full bg-red-500";
                 document.getElementById('syncText').textContent = "Gagal terhubung ke Cloud Database";
@@ -881,18 +966,22 @@
         window.switchTab = function(tabName) {
             const viewKlaper = document.getElementById('viewKlaper');
             const viewInduk = document.getElementById('viewInduk');
+            const viewMutasi = document.getElementById('viewMutasi');
             const viewSurat = document.getElementById('viewSurat');
 
             const btnKlaper = document.getElementById('tabKlaperBtn');
             const btnInduk = document.getElementById('tabIndukBtn');
+            const btnMutasi = document.getElementById('tabMutasiBtn');
             const btnSurat = document.getElementById('tabSuratBtn');
 
             viewKlaper.classList.add('hidden');
             viewInduk.classList.add('hidden');
+            viewMutasi.classList.add('hidden');
             viewSurat.classList.add('hidden');
 
             btnKlaper.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
             btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
+            btnMutasi.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
             btnSurat.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
 
             if (tabName === 'klaper') {
@@ -902,6 +991,10 @@
                 viewInduk.classList.remove('hidden');
                 btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
                 renderIndukGrid();
+            } else if (tabName === 'mutasi') {
+                viewMutasi.classList.remove('hidden');
+                btnMutasi.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
+                renderMutasiTable();
             } else if (tabName === 'surat') {
                 viewSurat.classList.remove('hidden');
                 btnSurat.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
@@ -983,6 +1076,7 @@
                     <td class="py-2.5 px-3 text-center border-r border-slate-200 whitespace-nowrap">
                         <span class="px-2 py-0.5 rounded text-xs font-bold ${
                             (student.notes || '').includes('LULUS') ? 'bg-emerald-100 text-emerald-800' :
+                            (student.notes || '').includes('MUTASI') ? 'bg-amber-100 text-amber-800' :
                             (student.notes || '').includes('AKTIF') ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-700'
                         }">${student.notes || '-'}</span>
                     </td>
@@ -1167,6 +1261,103 @@
             currentIndukQuery = document.getElementById('indukSearchInput').value;
             indukCurrentPage = 1;
             renderIndukGrid();
+        }
+
+        // LOGIKA & TABEL KHUSUS MUTASI SISWA
+        window.renderMutasiTable = function() {
+            const tbody = document.getElementById('mutasiTableBody');
+            const emptyState = document.getElementById('mutasiEmptyState');
+            const searchVal = (document.getElementById('mutasiSearchInput')?.value || '').toLowerCase();
+            const filterType = document.getElementById('mutasiFilterType')?.value || 'ALL';
+
+            let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
+
+            // Siswa Mutasi adalah yang berpindahan dari sekolah lain ATAU status catatannya memuat "MUTASI" / "PINDAH"
+            list = list.filter(s => {
+                const isTransfer = (s.transferFrom && s.transferFrom.trim() !== '' && s.transferFrom.trim() !== '-');
+                const isMutasiNotes = (s.notes || '').toUpperCase().includes('MUTASI') || (s.notes || '').toUpperCase().includes('PINDAH');
+                return isTransfer || isMutasiNotes;
+            });
+
+            let countMasuk = 0;
+            let countKeluar = 0;
+
+            list.forEach(s => {
+                const isKeluar = (s.notes || '').toUpperCase().includes('MUTASI') || (s.notes || '').toUpperCase().includes('PINDAH');
+                if (isKeluar) countKeluar++;
+                else countMasuk++;
+            });
+
+            document.getElementById('statTotalMutasi').textContent = list.length;
+            document.getElementById('statMutasiMasuk').textContent = countMasuk;
+            document.getElementById('statMutasiKeluar').textContent = countKeluar;
+
+            if (filterType === 'MASUK') {
+                list = list.filter(s => !(s.notes || '').toUpperCase().includes('MUTASI') && !(s.notes || '').toUpperCase().includes('PINDAH'));
+            } else if (filterType === 'KELUAR') {
+                list = list.filter(s => (s.notes || '').toUpperCase().includes('MUTASI') || (s.notes || '').toUpperCase().includes('PINDAH'));
+            }
+
+            if (searchVal) {
+                list = list.filter(s => 
+                    (s.name || '').toLowerCase().includes(searchVal) ||
+                    (s.nis || '').toLowerCase().includes(searchVal) ||
+                    (s.transferFrom || '').toLowerCase().includes(searchVal) ||
+                    (s.parentName || '').toLowerCase().includes(searchVal)
+                );
+            }
+
+            if (list.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            tbody.innerHTML = list.map((s, idx) => {
+                const isKeluar = (s.notes || '').toUpperCase().includes('MUTASI') || (s.notes || '').toUpperCase().includes('PINDAH');
+                const badgeClass = isKeluar ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800';
+                const labelMutasi = isKeluar ? 'PINDAH KELUAR' : 'PINDAHAN MASUK';
+                const tglMutasi = isKeluar ? (s.exitDate || '-') : (s.entryDate || '-');
+                const asalTujuan = isKeluar ? `Tujuan / Alasan: ${s.notes}` : `Asal Sekolah: ${s.transferFrom || '-'}`;
+
+                return `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                        <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-500 font-medium">${idx + 1}</td>
+                        <td class="py-2.5 px-3 text-center border-r border-slate-200">
+                            <span class="px-2 py-0.5 rounded font-bold ${badgeClass}">${labelMutasi}</span>
+                        </td>
+                        <td class="py-2.5 px-3 text-center border-r border-slate-200 font-mono">${s.nis || '-'}</td>
+                        <td class="py-2.5 px-4 border-r border-slate-200 font-bold text-slate-900 uppercase">${s.name || '-'}</td>
+                        <td class="py-2.5 px-2 text-center border-r border-slate-200 font-bold ${s.gender === 'L' ? 'text-blue-600' : 'text-pink-600'}">${s.gender || '-'}</td>
+                        <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-600">${tglMutasi}</td>
+                        <td class="py-2.5 px-4 border-r border-slate-200 text-slate-700">${asalTujuan}</td>
+                        <td class="py-2.5 px-4 border-r border-slate-200 text-slate-700 uppercase">${s.parentName || '-'}</td>
+                        <td class="py-2.5 px-3 text-center no-print action-column">
+                            <div class="flex justify-center gap-1.5">
+                                <button onclick="viewIndukSheet('${s.key}')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded text-xs transition" title="Cetak Lembar Buku Induk">
+                                    <i class="fa-solid fa-print"></i>
+                                </button>
+                                ${currentUserRole === 'ADMIN' ? `
+                                    <button onclick="editStudent('${s.key}')" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 rounded text-xs transition" title="Edit Data Mutasi"><i class="fa-solid fa-pen-to-square"></i></button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        window.openModalMutasi = function(tipe) {
+            openModal();
+            if (tipe === 'MASUK') {
+                document.getElementById('notes').value = 'AKTIF (MUTASI MASUK)';
+                document.getElementById('modalTitle').textContent = 'Form Input Siswa Pindahan (Mutasi Masuk)';
+            } else if (tipe === 'KELUAR') {
+                document.getElementById('notes').value = 'MUTASI KELUAR (PINDAH SEKOLAH)';
+                document.getElementById('modalTitle').textContent = 'Form Input Siswa Pindah (Mutasi Keluar)';
+            }
         }
 
         window.getRomawiBulan = function(monthNum) {
