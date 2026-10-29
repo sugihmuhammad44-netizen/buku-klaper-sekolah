@@ -57,7 +57,7 @@
                 <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-14 w-14 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
                 <div>
                     <h1 class="text-xl font-bold tracking-tight uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h1>
-                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper, Buku Induk Siswa, Mutasi & Administrasi Nomor Surat Cloud</p>
+                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper, Buku Induk Siswa, Mutasi & Administrasi Nomor  Cloud</p>
                 </div>
             </div>
             
@@ -136,14 +136,23 @@
                 </div>
             </div>
 
-            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print">
-                <div class="flex items-center justify-between mb-3">
+            <!-- INDEKS ABJAD & TAHUN MASUK -->
+            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print space-y-3">
+                <div class="flex items-center justify-between">
                     <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-2">
                         <i class="fa-solid fa-filter"></i> Indeks Abjad Nama Siswa
                     </h2>
                     <span id="activeLetterLabel" class="text-xs bg-indigo-100 text-indigo-800 font-bold px-2.5 py-1 rounded-full">Semua Siswa</span>
                 </div>
                 <div id="alphabetButtons" class="flex flex-wrap gap-1.5 justify-start"></div>
+
+                <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                    <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-days text-indigo-600"></i> Indeks Tahun Masuk Siswa
+                    </h2>
+                    <span id="activeYearLabel" class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full">Semua Tahun</span>
+                </div>
+                <div id="yearButtons" class="flex flex-wrap gap-1.5 justify-start"></div>
             </div>
 
             <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
@@ -151,14 +160,22 @@
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" id="searchInput" placeholder="Cari Nama, NIS, NISN, atau Orang Tua..." oninput="handleSearch()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm">
                 </div>
-                <div class="flex items-center gap-3 w-full md:w-auto justify-end">
-                    <label for="filterStatus" class="text-sm font-medium text-slate-600 whitespace-nowrap">Status:</label>
-                    <select id="filterStatus" onchange="applyFilters()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        <option value="ALL">Semua Status</option>
-                        <option value="AKTIF">AKTIF</option>
-                        <option value="LULUS">LULUS</option>
-                        <option value="MUTASI">MUTASI / PINDAH</option>
-                    </select>
+                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
+                    <div class="flex items-center gap-2">
+                        <label for="filterYearSelect" class="text-xs font-medium text-slate-600 whitespace-nowrap">Tahun Masuk:</label>
+                        <select id="filterYearSelect" onchange="onYearSelectChange()" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                            <option value="ALL">Semua Tahun</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label for="filterStatus" class="text-xs font-medium text-slate-600 whitespace-nowrap">Status:</label>
+                        <select id="filterStatus" onchange="applyFilters()" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                            <option value="ALL">Semua Status</option>
+                            <option value="AKTIF">AKTIF</option>
+                            <option value="LULUS">LULUS</option>
+                            <option value="MUTASI">MUTASI / PINDAH</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -168,7 +185,7 @@
                     <div>
                         <h1 class="text-xl font-bold uppercase tracking-wider">BUKU KLAPER SISWA SEKOLAH</h1>
                         <h2 class="text-lg font-semibold uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h2>
-                        <p class="text-xs text-slate-600 mt-1">Dokumen Resmi Arsip Indeks Abjad Data Siswa</p>
+                        <p class="text-xs text-slate-600 mt-1">Dokumen Resmi Arsip Indeks Abjad & Tahun Masuk Data Siswa</p>
                     </div>
                 </div>
             </div>
@@ -259,8 +276,11 @@
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" id="indukSearchInput" placeholder="Cari Nama, NIS, NISN, atau NIK..." oninput="handleIndukSearch()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm">
                 </div>
-                <div class="text-xs text-slate-500">
-                    Klik <strong>"Cetak Lembar Buku Induk"</strong> untuk melihat & mencetak isian format lengkap (A s.d J).
+                <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                    <label for="indukYearFilterSelect" class="text-xs font-medium text-slate-600 whitespace-nowrap">Tahun Masuk:</label>
+                    <select id="indukYearFilterSelect" onchange="renderIndukGrid()" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                        <option value="ALL">Semua Tahun</option>
+                    </select>
                 </div>
             </div>
 
@@ -282,7 +302,7 @@
             </div>
         </div>
 
-        <!-- VIEW 4: MUTASI SISWA (BARU) -->
+        <!-- VIEW 4: MUTASI SISWA -->
         <div id="viewMutasi" class="hidden">
             <!-- RINGKASAN STATISTIK MUTASI -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 no-print">
@@ -716,9 +736,9 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-semibold mb-1">Kode Klasifikasi Arsip Surat *</label>
-                        <input type="text" id="suratKodeInstansi" list="klasifikasiDatalist" value="PK.03.02.01" oninput="onKodeKlasifikasiChange()" placeholder="Ketik Kode / Nama Klasifikasi (contoh: PK.03.02.01)" required class="w-full border rounded px-2.5 py-1.5 font-mono focus:ring-2 focus:ring-indigo-500 uppercase">
+                        <input type="text" id="suratKodeInstansi" list="klasifikasiDatalist" value="PK.03.02.01" oninput="onKodeKlasifikasiChange()" placeholder="Ketik Kode / Nama Klasifikasi" required class="w-full border rounded px-2.5 py-1.5 font-mono focus:ring-2 focus:ring-indigo-500 uppercase">
                         <p id="suratKlasifikasiLabel" class="text-[11px] font-medium text-emerald-700 mt-1">
-                            <i class="fa-solid fa-circle-info"></i> Sekolah Dasar (Kurikulum, Bahan Ajar dan Pelatihan) bisa digunakan untuk mutasi siswa
+                            <i class="fa-solid fa-circle-info"></i> Sekolah Dasar (Kurikulum, Bahan Ajar dan Pelatihan)
                         </p>
                     </div>
                     <div>
@@ -869,7 +889,7 @@
         const suratRef = ref(db, 'surat_keluar');
 
         const KLASIFIKASI_SURAT_LIST = [
-            {"kode": "HM", "nama": "Hubungan Masyarakat"}, {"kode": "HK", "nama": "Hukum"}, {"kode": "KP", "nama": "Kepegawaian"}, {"kode": "RT", "nama": "Kerumahtanggaan"}, {"kode": "TU", "nama": "Ketatausahaan"}, {"kode": "KU", "nama": "Keuangan"}, {"kode": "TL", "nama": "Organisasi dan Tata Laksana"}, {"kode": "PP", "nama": "Penelitian, Pengkajian, dan Pengembangan"}, {"kode": "PW", "nama": "Pengawasan"}, {"kode": "AR", "nama": "Kearsipan"}, {"kode": "LH", "nama": "Lingkungan Hidup"}, {"kode": "PA", "nama": "Pemberdayaan Perempuan dan Perlindungan Anak"}, {"kode": "PD", "nama": "Pemerintahan Daerah"}, {"kode": "PO", "nama": "Pemuda dan Olahraga"}, {"kode": "PB", "nama": "Penanggulangan Bencana"}, {"kode": "PK", "nama": "Pendidikan dan Kebudayaan"}, {"kode": "PN", "nama": "Perencanaan dan Pembangunan"}, {"kode": "HB", "nama": "Perhubungan"}, {"kode": "PS", "nama": "Perpustakaan"}, {"kode": "HM.01", "nama": "Penerangan dan Publikasi"}, {"kode": "HM.03", "nama": "Hubungan Antar Lembaga"}, {"kode": "HM.03.04", "nama": "Organisasi Kemasyarakatan"}, {"kode": "HM.03.05", "nama": "Perguruan Tinggi/Sekolah"}, {"kode": "HM.04.01", "nama": "Upacara/Acara Kedinasan"}, {"kode": "HM.04.02", "nama": "Kunjungan"}, {"kode": "HM.04.03", "nama": "Agenda Pimpinan"}, {"kode": "HK.01", "nama": "Program Pembentukan Peraturan Daerah"}, {"kode": "HK.01.01", "nama": "Perencanaan Program Pembentukan Peraturan Daerah"}, {"kode": "HK.01.02", "nama": "Evaluasi Program Pembentukan Peraturan Daerah"}, {"kode": "HK.02", "nama": "Produk Hukum"}, {"kode": "HK.02.01", "nama": "Proses Penyusunan Peraturan Daerah"}, {"kode": "HK.02.02", "nama": "Proses Penyusunan Peraturan Wali Kota"}, {"kode": "HK.02.03", "nama": "Proses Penyusunan Keputusan Wali Kota"}, {"kode": "HK.03", "nama": "Perjanjian Kerja Sama"}, {"kode": "HK.03.01", "nama": "Kerja Sama Dalam Negeri"}, {"kode": "HK.03.02", "nama": "Kerja Sama Luar Negeri"}, {"kode": "HK.04", "nama": "Bantuan Hukum"}, {"kode": "HK.04.01", "nama": "Bantuan Hukum Kasus Perdata"}, {"kode": "HK.04.02", "nama": "Bantuan Hukum Kasus Pidana"}, {"kode": "HK.06", "nama": "Sosialisasi Hukum"}, {"kode": "HK.07", "nama": "Dokumentasi Hukum"}, {"kode": "HK.07.01", "nama": "Kegiatan Pengembangan Dokumentasi Hukum"}, {"kode": "HK.07.02", "nama": "Data Base Dokumentasi Hukum"}, {"kode": "HK.09", "nama": "Penegakan Hukum"}, {"kode": "HK.09.01", "nama": "Kegiatan Penegakan Peraturan Daerah dan Peraturan Kepala Daerah"}, {"kode": "HK.10.02", "nama": "Pembinaan PPNS"}, {"kode": "KP.01", "nama": "Persediaan Pegawai"}, {"kode": "KP.02", "nama": "Formasi Pegawai"}, {"kode": "KP.02.01", "nama": "Usulan Unit Kerja"}, {"kode": "KP.02.02", "nama": "Usulan Formasi"}, {"kode": "KP.02.03", "nama": "Persetujuan/Penetapan Formasi"}, {"kode": "KP.02.04", "nama": "Penetapan Formasi Khusus"}, {"kode": "KP.03", "nama": "Pengadaan Formasi"}, {"kode": "KP.04", "nama": "Ujian Kenaikan Pangkat/Jabatan"}, {"kode": "KP.03.01", "nama": "Penerimaan"}, {"kode": "KP.03.02", "nama": "Pengangkatan CPNS dan PNS"}, {"kode": "KP.03.03", "nama": "Prajabatan"}, {"kode": "KP.04.01", "nama": "Ujian Penyesuaian Ijazah"}, {"kode": "KP.04.02", "nama": "Ujian Dinas"}, {"kode": "KP.05", "nama": "Ujian Kompetensi"}, {"kode": "KP.05.01", "nama": "Assessment Test Pegawai"}, {"kode": "KP.05.02", "nama": "Talent Mapping/Pemetaan Pegawai"}, {"kode": "KP.06", "nama": "Mutasi"}, {"kode": "KP.06.01", "nama": "Kenaikan Pangkat/Golongan"}, {"kode": "KP.06.02", "nama": "Kenaikan Gaji Berkala"}, {"kode": "KP.06.03", "nama": "Penyesuaian Masa Kerja"}, {"kode": "KP.06.04", "nama": "Penyesuaian Tunjangan Keluarga"}, {"kode": "KP.06.05", "nama": "Penyesuaian Kelas Jabatan"}, {"kode": "KP.06.06", "nama": "Alih Tugas"}, {"kode": "KP.07", "nama": "Pengangkatan dan Pemberhentian Jabatan"}, {"kode": "KP.07.01", "nama": "Pengangkatan Jabatan"}, {"kode": "KP.07.02", "nama": "Pemberhentian Jabatan Struktural"}, {"kode": "KP.08", "nama": "Pendelegasian Wewenang"}, {"kode": "KP.08.01", "nama": "Penjabat (Pj)"}, {"kode": "KP.08.02", "nama": "Pelaksana Tugas (Plt)"}, {"kode": "KP.08.03", "nama": "Pelaksana Harian (Plh)"}, {"kode": "KP.09", "nama": "Pendidikan dan Pelatihan Pegawai"}, {"kode": "KP.09.04", "nama": "Pendidikan dan Pelatihan Penjenjangan"}, {"kode": "KP.09.05", "nama": "Kursus/Diklat Fungsional"}, {"kode": "KP.09.06", "nama": "Kurus/Diklat Teknis"}, {"kode": "KP.09.07", "nama": "Orientasi CPNS"}, {"kode": "KP.10", "nama": "Administrasi Pegawai"}, {"kode": "KP.10.01", "nama": "Data/Keterangan Pegawai"}, {"kode": "KP.10.02", "nama": "Kartu Pegawai"}, {"kode": "KP.10.03", "nama": "Karis/Karsu"}, {"kode": "KP.10.04", "nama": "Kartu Taspen"}, {"kode": "KP.10.05", "nama": "Kartu Jaminan Kesehatan"}, {"kode": "KP.10.06", "nama": "Tanda Jasa"}, {"kode": "KP.10.07", "nama": "Keterangan Penerimaan Pembiayaan Penghasilan Pegawai (KP4)"}, {"kode": "KP.10.08", "nama": "Laporan Harta Kekayaan Penyelenggara Negara (LHKPN)"}, {"kode": "KP.10.09", "nama": "Tunjangan Kinerja dan Uang Makan"}, {"kode": "KP.11", "nama": "Cuti Pegawai"}, {"kode": "KP.11.01", "nama": "Cuti Tahunan"}, {"kode": "KP.11.02", "nama": "Cuti Besar"}, {"kode": "KP.11.03", "nama": "Cuti Sakit"}, {"kode": "KP.11.04", "nama": "Cuti Bersalin"}, {"kode": "KP.11.05", "nama": "Cuti Karena Alasan Penting"}, {"kode": "KP.11.06", "nama": "Cuti di Luar Tanggungan Negara"}, {"kode": "KP.12", "nama": "Pembinaan Pegawai"}, {"kode": "KP.12.01", "nama": "Penilaian Prestasi Kerja"}, {"kode": "KP.12.02", "nama": "Sasaran Kerja Pegawai"}, {"kode": "KP.12.03", "nama": "Pembinaan Mental"}, {"kode": "KP.12.04", "nama": "Hukuman Disiplin"}, {"kode": "KP.13", "nama": "Pembinaan Jabatan Fungsional"}, {"kode": "KP.13.01", "nama": "Pengangkatan Jabatan Fungsional Tertentu"}, {"kode": "KP.13.02", "nama": "Kenaikan Jenjang Jabatan"}, {"kode": "KP.13.03", "nama": "Pemindahan Jabatan Fungsional Tertentu"}, {"kode": "KP.13.04", "nama": "Pengangkatan Jabatan Fungsional Umum"}, {"kode": "KP.13.05", "nama": "Pemindahan Jabatan Fungsional Umum"}, {"kode": "KP.13.06", "nama": "Pemberhentian"}, {"kode": "KP.14", "nama": "Kesejahteraan"}, {"kode": "KP.14.01", "nama": "Kesehatan"}, {"kode": "KP.14.03", "nama": "Bantuan Sosial"}, {"kode": "KP.15", "nama": "Pemberhentian Pegawai"}, {"kode": "KP.16", "nama": "Pemberhentian dan Penetapan Pensiun Pegawai/Janda /Duda/PNS yang Tewas"}, {"kode": "KP.17", "nama": "Perselisihan/Sengketa Pegawai"}, {"kode": "KP.18", "nama": "Organisasi Non Kedinasan"}, {"kode": "KP.18.03", "nama": "Koperasi"}, {"kode": "RT.01", "nama": "Perjalanan Dinas Pimpinan"}, {"kode": "RT.02", "nama": "Rapat Pimpinan"}, {"kode": "RT.02.01", "nama": "Sarana dan Prasarana"}, {"kode": "RT.02.02", "nama": "Jamuan Rapat"}, {"kode": "RT.03.01", "nama": "Pemeliharaan Gedung"}, {"kode": "RT.03.02", "nama": "Perlengkapan Kantor"}, {"kode": "RT.03.03", "nama": "Air, Listrik dan Telekomunikasi"}, {"kode": "RT.03.04", "nama": "Keamanan Kantor"}, {"kode": "RT.03.05", "nama": "Kebersihan Kantor"}, {"kode": "RT.03.06", "nama": "Jamuan Tamu"}, {"kode": "RT.05", "nama": "Fasilitas Pimpinan"}, {"kode": "RT.05.01", "nama": "Kendaraan Dinas"}, {"kode": "RT.05.02", "nama": "Pengawalan dan Pengamanan"}, {"kode": "TU.01", "nama": "Persuratan"}, {"kode": "TU.01.01", "nama": "Pengurusan Surat Masuk"}, {"kode": "TU.01.02", "nama": "Pengurusan Surat Keluar"}, {"kode": "TU.01.03", "nama": "Korepondensi Internal"}, {"kode": "KT.01", "nama": "Perencanaan Tenaga Kerja"}, {"kode": "TU.03", "nama": "Agenda kegiatan"}, {"kode": "TU.04", "nama": "Rapat/Rakor/Rakernis"}, {"kode": "KU.01", "nama": "Rencana Anggaran Pendapatan dan Belanja Daerah"}, {"kode": "KU.01.01", "nama": "Penyusunan Prioritas Plafon Anggaran"}, {"kode": "KU.01.01.01", "nama": "Kebijakan Umum, Strategi, Prioritas dan Renstra"}, {"kode": "KU.01.01.02", "nama": "Dokumen Rancangan kebijakan Umum Anggaran (KUA)"}, {"kode": "KU.01.01.03", "nama": "KUA beserta Nota Kesepakatannya"}, {"kode": "KU.01.01.04", "nama": "Dokumen Rancangan Prioritas Plafon Anggaran Sementara (PPAS)"}, {"kode": "KU.01.01.05", "nama": "Nota Kesepakatan PPA"}, {"kode": "KU.01.01.06", "nama": "Prioritas Plafon Anggaran"}, {"kode": "KU.01.02", "nama": "Penyusunan Rencana Kerja Anggaran SKPD (RKA-SKPD)"}, {"kode": "KU.01.02.01", "nama": "Dokumen Pedoman Penyusunan RKA-SKPD"}, {"kode": "KU.01.02.02", "nama": "Dokumen RKA-SKPD"}, {"kode": "KU.01.03", "nama": "Penyampaian RAPBD kepada DPRD"}, {"kode": "KU.01.03.01", "nama": "Pengantar Nota Keuangan dan Raperda APBD"}, {"kode": "KU.01.03.08", "nama": "Peraturan Daerah tentang APBD"}, {"kode": "KU.03.01", "nama": "Surat Penyedia Dana (SPP, SPM, dan SP2D)"}, {"kode": "KU.03.10", "nama": "Dokumen Belanja Langsung"}, {"kode": "KU.03.10.01", "nama": "Belanja Pegawai"}, {"kode": "KU.05", "nama": "Dokumen Penatausahaan Keuangan"}, {"kode": "KU.05.01", "nama": "Surat Penyediaan Dana (SPD)"}, {"kode": "KU.05.02", "nama": "Surat Permohonan Pembayaran (SPP)"}, {"kode": "KU.05.03", "nama": "Surat Perintah Membayar (SPM)"}, {"kode": "KU.05.04", "nama": "Surat Perintah Pencairan Dana (SP2D)"}, {"kode": "PB.01", "nama": "Pencegahan dan Kesiapsiagaan Bencana"}, {"kode": "PK.01", "nama": "Kebijakan Bersifat Pengaturan Pendidikan"}, {"kode": "PK.01.01", "nama": "Kebijakan tentang Pendidikan dan Kebudayaan"}, {"kode": "PK.02", "nama": "Kebijakan Bersifat Penerapan Pendidikan"}, {"kode": "PK.03", "nama": "Pembinaan Pendidikan"}, {"kode": "PK.03.01", "nama": "Pendidikan Anak Usia Dini, Non Formal dan Informal"}, {"kode": "PK.03.01.01", "nama": "PAUD (Bahan Ajar, Pelatihan)"}, {"kode": "PK.03.01.04", "nama": "Pendidikan Masyarakat"}, {"kode": "PK.03.02", "nama": "Pendidikan Dasar"}, {"kode": "PK.03.02.01", "nama": "Sekolah Dasar (Kurikulum, Bahan Ajar dan Pelatihan) bisa digunakan untuk mutasi siswa"}, {"kode": "PK.03.02.02", "nama": "Sekolah Dasar (Block Grant)"}, {"kode": "PK.03.02.03", "nama": "Sekolah Dasar (Bimbingan Teknis, Sosialisasi, Lomba, Sayembara, Festival)"}, {"kode": "PK.03.02.04", "nama": "Sekolah Dasar (BOS dan Bantuan Siswa Miskin)"}, {"kode": "PK.03.02.05", "nama": "Sekolah Menengah Pertama"}, {"kode": "AR.01.01.05", "nama": "Sosialisasi Peraturan Daerah"}, {"kode": "AR.03.01.01", "nama": "Pencatatan (Buku Agenda, Kartu Kendali dan Lembar Pengantar)"}, {"kode": "AR.03.05.03", "nama": "Berita Acara"}, {"kode": "AR.03.08.03.02", "nama": "Notulen Rapat"}, {"kode": "PK.05", "nama": "Kurikulum"}, {"kode": "PK.05.01", "nama": "Pembinaan Kurikulum"}, {"kode": "PK.06", "nama": "Perbukuan"}, {"kode": "PK.07", "nama": "Penilaian Pendidikan"}, {"kode": "PK.07.01", "nama": "Penilaian Akademik"}, {"kode": "PK.07.02", "nama": "Penilaian Non Akademik"}, {"kode": "PK.08", "nama": "Pengembangan dan Pembinaan Bahasa"}, {"kode": "PK.09.04", "nama": "Penjaminan Mutu Pendidikan"}, {"kode": "PK.10", "nama": "Teknologi Informasi dan Komunikasi Pendidikan"}, {"kode": "PK.11", "nama": "Data dan Statistik Pendidikan"}, {"kode": "PK.11.01", "nama": "Data Peserta Didik, Pendidik, dan Tenaga Kependidikan"}, {"kode": "PK.13", "nama": "Monitoring dan Evaluasi Pendidikan"}
+            {"kode": "HM", "nama": "Hubungan Masyarakat"}, {"kode": "HK", "nama": "Hukum"}, {"kode": "KP", "nama": "Kepegawaian"}, {"kode": "RT", "nama": "Kerumahtanggaan"}, {"kode": "TU", "nama": "Ketatausahaan"}, {"kode": "KU", "nama": "Keuangan"}, {"kode": "TL", "nama": "Organisasi dan Tata Laksana"}, {"kode": "PP", "nama": "Penelitian, Pengkajian, dan Pengembangan"}, {"kode": "PW", "nama": "Pengawasan"}, {"kode": "AR", "nama": "Kearsipan"}, {"kode": "LH", "nama": "Lingkungan Hidup"}, {"kode": "PA", "nama": "Pemberdayaan Perempuan dan Perlindungan Anak"}, {"kode": "PD", "nama": "Pemerintahan Daerah"}, {"kode": "PO", "nama": "Pemuda dan Olahraga"}, {"kode": "PB", "nama": "Penanggulangan Bencana"}, {"kode": "PK", "nama": "Pendidikan dan Kebudayaan"}, {"kode": "PN", "nama": "Perencanaan dan Pembangunan"}, {"kode": "HB", "nama": "Perhubungan"}, {"kode": "PS", "nama": "Perpustakaan"}, {"kode": "PK.03.02.01", "nama": "Sekolah Dasar (Kurikulum, Bahan Ajar dan Pelatihan)"}
         ];
 
         const TINGKAT_KEAMANAN_MAP = {
@@ -879,6 +899,7 @@
         let studentsData = {};
         let suratData = {};
         let currentLetterFilter = 'ALL';
+        let currentYearFilter = 'ALL';
         let currentSearchQuery = '';
         let currentIndukQuery = '';
         let currentUserRole = 'VIEWER';
@@ -938,6 +959,7 @@
                 studentsData = snapshot.val() || {};
                 document.getElementById('syncIndicator').className = "h-3 w-3 rounded-full bg-emerald-500";
                 document.getElementById('syncText').textContent = "Terhubung ke Cloud Database";
+                updateYearFilterControls();
                 renderData();
                 renderIndukGrid();
                 renderMutasiTable();
@@ -961,6 +983,76 @@
                 html += `<option value="${item.kode}">${item.kode} - ${item.nama}</option>`;
             });
             datalist.innerHTML = html;
+        }
+
+        // FUNGSI EKSTRAKSI TAHUN DARI STRUKTUR MASUK / ENTRY DATE
+        function extractEntryYear(student) {
+            if (!student || !student.entryDate) return 'Lainnya';
+            const text = String(student.entryDate).trim();
+            const match = text.match(/\b(19|20)\d{2}\b/);
+            return match ? match[0] : 'Lainnya';
+        }
+
+        function updateYearFilterControls() {
+            const yearSet = new Set();
+            Object.values(studentsData).forEach(s => {
+                const yr = extractEntryYear(s);
+                if (yr !== 'Lainnya') yearSet.add(yr);
+            });
+
+            const sortedYears = Array.from(yearSet).sort((a, b) => b.localeCompare(a));
+
+            // Render Tombol Cepat Tahun
+            const yearBtnContainer = document.getElementById('yearButtons');
+            let btnHtml = `<button onclick="filterByYear('ALL')" class="year-btn bg-emerald-600 text-white font-bold px-3 py-1 rounded text-xs transition">SEMUA TAHUN</button>`;
+            
+            sortedYears.forEach(yr => {
+                btnHtml += `<button onclick="filterByYear('${yr}')" class="year-btn bg-slate-100 hover:bg-emerald-100 text-slate-700 font-medium px-2.5 py-1 rounded text-xs transition border border-slate-200">${yr}</button>`;
+            });
+            yearBtnContainer.innerHTML = btnHtml;
+
+            // Render Dropdown Tahun Klaper & Induk
+            const klaperSelect = document.getElementById('filterYearSelect');
+            const indukSelect = document.getElementById('indukYearFilterSelect');
+
+            let optHtml = `<option value="ALL">Semua Tahun</option>`;
+            sortedYears.forEach(yr => {
+                optHtml += `<option value="${yr}">Tahun Masuk ${yr}</option>`;
+            });
+            if (sortedYears.length > 0) optHtml += `<option value="Lainnya">Lainnya / Tidak Tercatat</option>`;
+
+            klaperSelect.innerHTML = optHtml;
+            indukSelect.innerHTML = optHtml;
+
+            klaperSelect.value = currentYearFilter;
+            indukSelect.value = currentYearFilter;
+        }
+
+        window.filterByYear = function(year) {
+            currentYearFilter = year;
+            klaperCurrentPage = 1;
+            indukCurrentPage = 1;
+
+            document.getElementById('activeYearLabel').textContent = year === 'ALL' ? 'Semua Tahun' : `Tahun ${year}`;
+            document.getElementById('filterYearSelect').value = year;
+            document.getElementById('indukYearFilterSelect').value = year;
+
+            const buttons = document.querySelectorAll('.year-btn');
+            buttons.forEach(btn => {
+                if ((year === 'ALL' && btn.textContent === 'SEMUA TAHUN') || btn.textContent === year) {
+                    btn.className = "year-btn bg-emerald-600 text-white font-bold px-3 py-1 rounded text-xs transition";
+                } else {
+                    btn.className = "year-btn bg-slate-100 hover:bg-emerald-100 text-slate-700 font-medium px-2.5 py-1 rounded text-xs transition border border-slate-200";
+                }
+            });
+
+            renderData();
+            renderIndukGrid();
+        }
+
+        window.onYearSelectChange = function() {
+            const val = document.getElementById('filterYearSelect').value;
+            filterByYear(val);
         }
 
         window.switchTab = function(tabName) {
@@ -1022,6 +1114,10 @@
 
             if (currentLetterFilter !== 'ALL') {
                 studentArray = studentArray.filter(s => (s.name || '').trim().toUpperCase().startsWith(currentLetterFilter));
+            }
+
+            if (currentYearFilter !== 'ALL') {
+                studentArray = studentArray.filter(s => extractEntryYear(s) === currentYearFilter);
             }
 
             if (currentSearchQuery.trim() !== '') {
@@ -1144,12 +1240,18 @@
 
         window.renderIndukGrid = function() {
             const grid = document.getElementById('indukGrid');
+            const selectedYear = document.getElementById('indukYearFilterSelect')?.value || 'ALL';
+
             let studentArray = Object.keys(studentsData).map(key => ({
                 key: key,
                 ...studentsData[key]
             }));
 
             studentArray.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            if (selectedYear !== 'ALL') {
+                studentArray = studentArray.filter(s => extractEntryYear(s) === selectedYear);
+            }
 
             if (currentIndukQuery.trim() !== '') {
                 const q = currentIndukQuery.toLowerCase();
@@ -1191,6 +1293,7 @@
                         
                         <div class="space-y-1.5 text-xs text-slate-600 mb-4">
                             <p><strong class="text-slate-800">NISN:</strong> ${s.nisn || '-'}</p>
+                            <p><strong class="text-slate-800">Tgl Masuk:</strong> ${s.entryDate || '-'}</p>
                             <p><strong class="text-slate-800">TTL:</strong> ${s.pobDob || '-'}</p>
                             <p><strong class="text-slate-800">Orang Tua / Wali:</strong> ${s.parentName || '-'}</p>
                             <p class="truncate"><strong class="text-slate-800">Alamat:</strong> ${s.address || '-'}</p>
@@ -1263,7 +1366,6 @@
             renderIndukGrid();
         }
 
-        // LOGIKA & TABEL KHUSUS MUTASI SISWA
         window.renderMutasiTable = function() {
             const tbody = document.getElementById('mutasiTableBody');
             const emptyState = document.getElementById('mutasiEmptyState');
@@ -1272,7 +1374,6 @@
 
             let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
 
-            // Siswa Mutasi adalah yang berpindahan dari sekolah lain ATAU status catatannya memuat "MUTASI" / "PINDAH"
             list = list.filter(s => {
                 const isTransfer = (s.transferFrom && s.transferFrom.trim() !== '' && s.transferFrom.trim() !== '-');
                 const isMutasiNotes = (s.notes || '').toUpperCase().includes('MUTASI') || (s.notes || '').toUpperCase().includes('PINDAH');
@@ -1670,7 +1771,6 @@
             closePickerSiswaModal();
         }
 
-        // FUNGSI IMPOR & EXPORT EXCEL NOMOR SURAT
         window.triggerExcelSuratImport = function() {
             document.getElementById('excelSuratFileInput').click();
         }
@@ -1686,10 +1786,6 @@
                 [
                     "1", "2026-02-15", "PK.03.02.01", "B", 
                     "SKS", "Surat Keterangan Mutasi Siswa", "AHMAD SANJAYA", "Kepala Sekolah", "Permohonan Pindah Sekolah"
-                ],
-                [
-                    "2", "2026-02-16", "KP.06.01", "P", 
-                    "ST", "Tugas Workshop Kurikulum", "GURU KELAS IV", "Kepala Sekolah", "Dinas Pendidikan Kota Bandung"
                 ]
             ];
 
@@ -1751,14 +1847,8 @@
                         count++;
                     }
 
-                    if (count > 0) {
-                        alert(`Berhasil mengimpor ${count} data nomor surat ke dalam Cloud Database!`);
-                    } else {
-                        alert("Format data Excel surat tidak terbaca. Silakan gunakan tombol 'Download Template Excel Surat' untuk format yang tepat.");
-                    }
-                } catch (err) {
-                    alert("Gagal membaca berkas Excel.");
-                }
+                    if (count > 0) alert(`Berhasil mengimpor ${count} data nomor surat ke dalam Cloud Database!`);
+                } catch (err) { alert("Gagal membaca berkas Excel."); }
                 e.target.value = '';
             };
             reader.readAsArrayBuffer(file);
@@ -2240,11 +2330,10 @@
                         }
                     }
                     if (count > 0) alert(`Berhasil mengimpor ${count} data siswa secara otomatis!`);
-                    else alert("Format data Excel tidak terbaca. Silakan gunakan tombol 'Download Template Excel' untuk mengunduh format yang benar.");
                 } catch (err) { alert("Gagal membaca berkas Excel."); }
                 e.target.value = '';
             };
-            reader.readAsArrayBuffer(file);
+            reader.readAsBuffer(file);
         }
 
         window.exportToExcel = function() {
@@ -2266,7 +2355,7 @@
                 ]
             ];
 
-            studentArray.forEach((s, i) => {
+            studentArray.forEach((s) => {
                 exportData.push([
                     s.nis||'', s.nisn||'', s.nik||'', s.name||'', s.nickname||'', s.gender||'', 
                     s.pobDob||'', s.religion||'', s.citizenship||'', s.childOrder||'', s.siblingsCount||'', s.orphanStatus||'', 
