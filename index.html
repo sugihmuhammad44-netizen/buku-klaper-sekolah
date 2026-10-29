@@ -113,19 +113,24 @@
 
         <!-- FILE INPUT EXCEL SISWA TERSEMBUNYI -->
         <input type="file" id="excelFileInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelImport(event)">
+        <!-- FILE INPUT EXCEL LEGER NILAI TERSEMBUNYI -->
+        <input type="file" id="excelLegerInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelLegerImport(event)">
 
         <!-- VIEW 1: BUKU KLAPER -->
         <div id="viewKlaper">
             <div class="admin-only-action hidden bg-white p-3.5 rounded-xl shadow-md border border-slate-200 mb-4 no-print flex flex-wrap gap-2 items-center justify-between">
                 <div class="text-xs font-bold text-slate-600 uppercase flex items-center gap-2">
-                    <i class="fa-solid fa-screwdriver-wrench text-indigo-600"></i> Alat Pengelolaan Buku Klaper
+                    <i class="fa-solid fa-screwdriver-wrench text-indigo-600"></i> Alat Pengelolaan Buku Klaper & Leger Nilai
                 </div>
                 <div class="flex flex-wrap gap-2 items-center">
                     <button onclick="downloadTemplateExcel()" class="bg-teal-600 hover:bg-teal-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-arrow-down"></i> Download Template Excel
+                        <i class="fa-solid fa-file-arrow-down"></i> Download Template Excel Siswa
                     </button>
                     <button onclick="triggerExcelImport()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-excel"></i> Impor Data Excel
+                        <i class="fa-solid fa-file-excel"></i> Impor Data Excel Siswa
+                    </button>
+                    <button onclick="triggerExcelLegerImport()" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5" title="Unggah file Leger Kelas (f_leger_KELAS...xlsx) untuk mengisi nilai rapor secara otomatis">
+                        <i class="fa-solid fa-graduation-cap"></i> Impor Nilai Leger Excel
                     </button>
                     <button onclick="exportToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
                         <i class="fa-solid fa-file-export"></i> Ekspor Excel
@@ -190,7 +195,7 @@
                         <h2 class="text-base font-bold tracking-wider uppercase leading-tight">KOTA BANDUNG</h2>
                         <p class="text-[10px] mt-1 font-normal">Alamat : Jl. A.H Nasution KM.13.5 No.71 Kel. Cipadung Kec. Cibiru Bandung</p>
                     </div>
-                    <div class="w-20"></div> <!-- Penyeimbang rata tengah logo -->
+                    <div class="w-20"></div>
                 </div>
                 <div class="text-center mt-3">
                     <h2 class="text-base font-bold uppercase underline tracking-wider">BUKU KLAPER SISWA SEKOLAH</h2>
@@ -269,6 +274,9 @@
                     </button>
                     <button onclick="triggerExcelImport()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
                         <i class="fa-solid fa-file-excel"></i> Impor Data Excel
+                    </button>
+                    <button onclick="triggerExcelLegerImport()" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-graduation-cap"></i> Impor Nilai Leger
                     </button>
                     <button onclick="exportToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-lg font-medium shadow transition text-xs flex items-center gap-1.5">
                         <i class="fa-solid fa-file-export"></i> Ekspor Excel
@@ -723,106 +731,6 @@
         </div>
     </div>
 
-    <!-- MODAL INPUT NOMOR SURAT BARU -->
-    <div id="suratModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 my-8 transform transition-all">
-            <div class="flex justify-between items-center border-b pb-3 mb-4">
-                <h3 id="suratModalTitle" class="text-lg font-bold text-slate-800">Penomoran Surat Keluar Baru</h3>
-                <button onclick="closeSuratModal()" class="text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-
-            <form id="suratForm" onsubmit="handleSuratSubmit(event)" class="space-y-4 text-xs">
-                <input type="hidden" id="suratKey">
-
-                <div class="bg-indigo-50/70 p-3.5 rounded-xl border border-indigo-100 mb-3">
-                    <label class="block font-bold text-slate-700 mb-1">FORMAT NOMOR SURAT (TERPRATINJAU OTOMATIS):</label>
-                    <div id="suratPreview" class="text-sm font-mono font-bold text-indigo-900 bg-white px-3 py-2 rounded-lg border border-indigo-200 tracking-wider text-center">
-                        -
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-semibold mb-1">Kode Klasifikasi Arsip Surat *</label>
-                        <input type="text" id="suratKodeInstansi" list="klasifikasiDatalist" value="PK.03.02.01" oninput="onKodeKlasifikasiChange()" placeholder="Ketik Kode / Nama Klasifikasi" required class="w-full border rounded px-2.5 py-1.5 font-mono focus:ring-2 focus:ring-indigo-500 uppercase">
-                        <p id="suratKlasifikasiLabel" class="text-[11px] font-medium text-emerald-700 mt-1">
-                            <i class="fa-solid fa-circle-info"></i> Sekolah Dasar (Kurikulum, Bahan Ajar dan Pelatihan)
-                        </p>
-                    </div>
-                    <div>
-                        <label class="block font-semibold mb-1">Nomor Urut Surat *</label>
-                        <input type="number" id="suratUrut" min="1" oninput="updateSuratPreview()" required class="w-full border rounded px-2.5 py-1.5 font-mono focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                        <label class="block font-semibold mb-1">Tingkat Keamanan *</label>
-                        <select id="suratKeamanan" onchange="updateSuratPreview()" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 font-semibold">
-                            <option value="B">Biasa (B)</option>
-                            <option value="S">Segera (S)</option>
-                            <option value="P">Penting (P)</option>
-                            <option value="R">Rahasia (R)</option>
-                            <option value="SR">Sangat Rahasia (SR)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block font-semibold mb-1">Jenis / Singkatan Surat *</label>
-                        <select id="suratJenis" onchange="updateSuratPreview()" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 font-semibold">
-                            <option value="SKS">SKS - Surat Keterangan Siswa</option>
-                            <option value="SP">SP - Surat Panggilan Orang Tua</option>
-                            <option value="SKKB">SKKB - Surat Ket. Kelakuan Baik</option>
-                            <option value="UOT">UOT - Undangan Orang Tua</option>
-                            <option value="ST">ST - Surat Tugas</option>
-                            <option value="SU">SU - Surat Undangan</option>
-                            <option value="SK">SK - Surat Keputusan</option>
-                            <option value="CUSTOM">-- Lainnya (Ketik Manual) --</option>
-                        </select>
-                    </div>
-                    <div id="suratJenisCustomContainer" class="hidden">
-                        <label class="block font-semibold mb-1">Singkatan Kustom</label>
-                        <input type="text" id="suratJenisCustom" placeholder="misal: SKP" oninput="updateSuratPreview()" class="w-full border rounded px-2.5 py-1.5 uppercase font-mono">
-                    </div>
-                    <div>
-                        <label class="block font-semibold mb-1">Tanggal Surat *</label>
-                        <input type="date" id="suratTanggal" onchange="updateSuratPreview()" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block font-semibold mb-1">Perihal / Hal *</label>
-                    <input type="text" id="suratPerihal" placeholder="Pindah Sekolah / Keterangan Aktif / Tugas Mengajar" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
-                </div>
-
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="block font-semibold">Ditujukan / Penerima Surat *</label>
-                        <button type="button" onclick="openPickerSiswaModal()" class="text-[11px] text-indigo-600 font-bold hover:underline flex items-center gap-1">
-                            <i class="fa-solid fa-users text-xs"></i> Pilih Dari Master Siswa
-                        </button>
-                    </div>
-                    <input type="text" id="suratPenerima" placeholder="Nama Orang Tua / Instansi / Nama Siswa" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 uppercase">
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-semibold mb-1">Penandatangan *</label>
-                        <input type="text" id="suratPenandatangan" value="Kepala Sekolah" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold mb-1">Catatan / Keterangan Tambahan</label>
-                        <input type="text" id="suratKeterangan" placeholder="Keperluan mutasi, daftar ulang, KIP, dll." class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                </div>
-
-                <div class="flex justify-end gap-3 pt-3 border-t">
-                    <button type="button" onclick="closeSuratModal()" class="px-4 py-2 border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-100 transition">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow transition">Simpan & Terbitkan Nomor</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- MODAL PILIH SISWA CEPAT UNTUK SURAT -->
     <div id="pickerSiswaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print">
         <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-5 my-auto flex flex-col max-h-[80vh]">
@@ -904,7 +812,20 @@
             "B": "Biasa", "S": "Segera", "R": "Rahasia", "SR": "Sangat Rahasia", "P": "Penting"
         };
 
-        // KOMPONEN HTML KOP SURAT RESMI
+        const MAPEL_FULL_NAMES = {
+            "PAIDBP": "PAI & Budi Pekerti",
+            "PAK": "Pendidikan Agama Kristen",
+            "PPDK": "Pendidikan Pancasila",
+            "BI": "Bahasa Indonesia",
+            "MU": "Matematika",
+            "IPADSI": "IPAS",
+            "SB": "Seni Budaya",
+            "PJODK": "PJOK",
+            "BSUN": "Bahasa Sunda",
+            "PLH": "PLH",
+            "GKS": "Gabungan Kelompok Seni"
+        };
+
         const OFFICIAL_KOP_SURAT_HTML = `
             <div class="flex items-center justify-between pb-2 border-b-4 border-double border-black mb-4">
                 <img src="logo.png" alt="Logo Kota Bandung" class="h-20 w-20 object-contain">
@@ -1114,6 +1035,111 @@
             }
         }
 
+        window.triggerExcelLegerImport = function() {
+            document.getElementById('excelLegerInput').click();
+        }
+
+        window.handleExcelLegerImport = function(e) {
+            if (currentUserRole !== 'ADMIN') return;
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const data = new Uint8Array(evt.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                    let className = 'KELAS';
+                    for (let r = 0; r < 5; r++) {
+                        if (!json[r]) continue;
+                        for (let c = 0; c < json[r].length; c++) {
+                            const val = String(json[r][c] || '');
+                            if (val.toUpperCase().includes('KELAS')) {
+                                className = val.replace(':', '').trim().toUpperCase();
+                                break;
+                            }
+                        }
+                    }
+
+                    const row2 = json[2] || [];
+                    const row3 = json[3] || [];
+                    
+                    let nisCol = -1, nisnCol = -1, nameCol = -1;
+                    let mapelCols = [];
+
+                    for (let c = 0; c < row2.length; c++) {
+                        const r2Val = String(row2[c] || '').trim().toUpperCase();
+                        if (r2Val === 'NIS') nisCol = c;
+                        if (r2Val === 'NISN') nisnCol = c;
+                        if (r2Val.includes('NAMA')) nameCol = c;
+                    }
+
+                    for (let c = 4; c < row3.length; c++) {
+                        const mName = String(row3[c] || '').trim();
+                        const r2Name = String(row2[c] || '').trim();
+                        if (mName && mName !== 'undefined' && !r2Name.includes('Ketidakhadiran') && !r2Name.includes('Ekstra')) {
+                            mapelCols.push({ col: c, mapel: mName });
+                        } else if (r2Name.includes('Ketidakhadiran') || r2Name.includes('Ekstra')) {
+                            break;
+                        }
+                    }
+
+                    if (mapelCols.length === 0) {
+                        alert("Format kolom leger nilai tidak dikenali.");
+                        return;
+                    }
+
+                    let matchCount = 0;
+                    const studentsArr = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
+
+                    for (let r = 6; r < json.length; r++) {
+                        const row = json[r];
+                        if (!row || row.length === 0) continue;
+
+                        const rowNis = nisCol !== -1 && row[nisCol] ? String(row[nisCol]).trim() : '';
+                        const rowNisn = nisnCol !== -1 && row[nisnCol] ? String(row[nisnCol]).trim() : '';
+                        const rowName = nameCol !== -1 && row[nameCol] ? String(row[nameCol]).trim().toUpperCase() : '';
+
+                        if (!rowNis && !rowNisn && !rowName) continue;
+
+                        let target = studentsArr.find(s => 
+                            (rowNis && s.nis && String(s.nis).trim() === rowNis) ||
+                            (rowNisn && s.nisn && String(s.nisn).trim() === rowNisn) ||
+                            (rowName && s.name && String(s.name).trim().toUpperCase() === rowName)
+                        );
+
+                        if (target) {
+                            let nilaiObj = {};
+                            mapelCols.forEach(m => {
+                                const val = row[m.col];
+                                if (val !== undefined && val !== null && val !== '') {
+                                    nilaiObj[m.mapel] = val;
+                                }
+                            });
+
+                            const classKey = className.replace(/[^A-Z0-9]/g, '');
+                            const existingNilai = target.nilaiRapor || {};
+                            existingNilai[classKey] = nilaiObj;
+
+                            update(ref(db, `students/${target.key}`), {
+                                nilaiRapor: existingNilai
+                            });
+                            matchCount++;
+                        }
+                    }
+
+                    alert(`Berhasil mengimpor nilai rapor (${className}) untuk ${matchCount} siswa!`);
+                } catch (err) {
+                    alert("Gagal memproses file Leger Excel: " + err.message);
+                }
+                e.target.value = '';
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
         window.renderData = function() {
             const tbody = document.getElementById('tableBody');
             const emptyState = document.getElementById('emptyState');
@@ -1300,36 +1326,38 @@
             const endIndex = Math.min(startIndex + indukPageSize, totalFiltered);
             const pageStudents = studentArray.slice(startIndex, endIndex);
 
-            grid.innerHTML = pageStudents.map(s => `
-                <div class="bg-white rounded-xl shadow-md border border-slate-200 p-5 flex flex-col justify-between hover:shadow-lg transition">
-                    <div>
-                        <div class="flex justify-between items-start mb-3 border-b pb-2">
-                            <div>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">NIS: ${s.nis || '-'}</span>
-                                <h3 class="text-base font-bold text-slate-900 mt-1 uppercase">${s.name || '-'}</h3>
+            grid.innerHTML = pageStudents.map(s => {
+                const hasNilai = s.nilaiRapor && Object.keys(s.nilaiRapor).length > 0;
+                return `
+                    <div class="bg-white rounded-xl shadow-md border border-slate-200 p-5 flex flex-col justify-between hover:shadow-lg transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-3 border-b pb-2">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">NIS: ${s.nis || '-'}</span>
+                                    <h3 class="text-base font-bold text-slate-900 mt-1 uppercase">${s.name || '-'}</h3>
+                                </div>
+                                <span class="text-xs font-bold ${s.gender === 'L' ? 'text-blue-600 bg-blue-50' : 'text-pink-600 bg-pink-50'} px-2 py-0.5 rounded">${s.gender || '-'}</span>
                             </div>
-                            <span class="text-xs font-bold ${s.gender === 'L' ? 'text-blue-600 bg-blue-50' : 'text-pink-600 bg-pink-50'} px-2 py-0.5 rounded">${s.gender || '-'}</span>
+                            
+                            <div class="space-y-1.5 text-xs text-slate-600 mb-4">
+                                <p><strong class="text-slate-800">NISN:</strong> ${s.nisn || '-'}</p>
+                                <p><strong class="text-slate-800">Tgl Masuk:</strong> ${s.entryDate || '-'}</p>
+                                <p><strong class="text-slate-800">Orang Tua / Wali:</strong> ${s.parentName || '-'}</p>
+                                <p><strong class="text-slate-800">Nilai Leger Rapor:</strong> ${hasNilai ? '<span class="text-emerald-600 font-bold"><i class="fa-solid fa-circle-check"></i> Terisi</span>' : '<span class="text-amber-600 font-medium">Belum Impor</span>'}</p>
+                            </div>
                         </div>
-                        
-                        <div class="space-y-1.5 text-xs text-slate-600 mb-4">
-                            <p><strong class="text-slate-800">NISN:</strong> ${s.nisn || '-'}</p>
-                            <p><strong class="text-slate-800">Tgl Masuk:</strong> ${s.entryDate || '-'}</p>
-                            <p><strong class="text-slate-800">TTL:</strong> ${s.pobDob || '-'}</p>
-                            <p><strong class="text-slate-800">Orang Tua / Wali:</strong> ${s.parentName || '-'}</p>
-                            <p class="truncate"><strong class="text-slate-800">Alamat:</strong> ${s.address || '-'}</p>
-                        </div>
-                    </div>
 
-                    <div class="pt-3 border-t flex gap-2">
-                        <button onclick="viewIndukSheet('${s.key}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-file-lines"></i> Cetak Lembar Buku Induk
-                        </button>
-                        ${currentUserRole === 'ADMIN' ? `
-                            <button onclick="editStudent('${s.key}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg text-xs transition" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                        ` : ''}
+                        <div class="pt-3 border-t flex gap-2">
+                            <button onclick="viewIndukSheet('${s.key}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-file-lines"></i> Cetak Lembar Buku Induk
+                            </button>
+                            ${currentUserRole === 'ADMIN' ? `
+                                <button onclick="editStudent('${s.key}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg text-xs transition" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                            ` : ''}
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             renderIndukPaginationControls(startIndex + 1, endIndex, totalFiltered, totalPages);
         }
@@ -1906,6 +1934,46 @@
             const s = studentsData[key];
             if (!s) return;
 
+            let nilaiRaporHtml = '';
+            if (s.nilaiRapor && Object.keys(s.nilaiRapor).length > 0) {
+                let tablesHtml = '';
+                Object.keys(s.nilaiRapor).forEach(cKey => {
+                    const classNilai = s.nilaiRapor[cKey];
+                    let mapelRowsHtml = '';
+                    Object.keys(classNilai).forEach(m => {
+                        const mFullName = MAPEL_FULL_NAMES[m] || m;
+                        mapelRowsHtml += `
+                            <tr class="border-b border-black">
+                                <td class="p-1 border-r border-black text-left">${mFullName} (${m})</td>
+                                <td class="p-1 font-bold text-center">${classNilai[m]}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tablesHtml += `
+                        <div class="mb-3">
+                            <p class="font-bold text-[10px] uppercase mb-1 bg-slate-100 p-1 border border-black">${cKey}</p>
+                            <table class="w-full text-center border border-black text-[10px]">
+                                <thead>
+                                    <tr class="bg-gray-100 font-bold border-b border-black">
+                                        <th class="p-1 border-r border-black text-left w-2/3">Mata Pelajaran</th>
+                                        <th class="p-1">Nilai Rapor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${mapelRowsHtml}</tbody>
+                            </table>
+                        </div>
+                    `;
+                });
+
+                nilaiRaporHtml = `
+                    <div class="mb-3 page-break">
+                        <h4 class="font-bold uppercase mb-1 border-b border-black pb-0.5">J. REKAPITULASI NILAI RAPOR LEGER SISWA</h4>
+                        ${tablesHtml}
+                    </div>
+                `;
+            }
+
             const html = `
                 ${OFFICIAL_KOP_SURAT_HTML}
 
@@ -2002,6 +2070,8 @@
                         <tr><td class="py-0.5">Status Akhir</td><td>:</td><td class="font-bold uppercase">${s.notes || '-'}</td></tr>
                     </table>
                 </div>
+
+                ${nilaiRaporHtml}
 
                 <div class="mt-4 flex justify-between items-end">
                     <div class="border border-black w-20 h-24 flex items-center justify-center text-gray-400 text-[10px]">
