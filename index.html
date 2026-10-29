@@ -16,8 +16,8 @@
             .no-print { display: none !important; }
             .print-only { display: block !important; }
             body { background: white; color: black; font-family: 'Times New Roman', Times, serif; }
-            table { border-collapse: collapse; width: 100%; font-size: 7.5pt; }
-            th, td { border: 1px solid #000 !important; padding: 1.5px 3px !important; }
+            table { border-collapse: collapse; width: 100%; font-size: 8pt; }
+            th, td { border: 1px solid #000 !important; padding: 2px 4px !important; }
             #printHeader { display: block !important; margin-bottom: 10px; text-align: center; }
             #indukSheetContent, #suratReceiptContent { border: none !important; box-shadow: none !important; padding: 0 !important; }
             .page-break { page-break-after: always; }
@@ -89,7 +89,7 @@
                     <i class="fa-solid fa-right-left"></i> Mutasi Siswa
                 </button>
                 <button id="tabLegerBtn" onclick="switchTab('leger')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
-                    <i class="fa-solid fa-table-list"></i> Leger Nilai Per Kelas
+                    <i class="fa-solid fa-table-list"></i> Leger Nilai
                 </button>
                 <button id="tabSuratBtn" onclick="switchTab('surat')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
                     <i class="fa-solid fa-envelope-open-text"></i> Nomor Surat
@@ -391,7 +391,7 @@
             </div>
         </div>
 
-        <!-- VIEW 4: LEGER NILAI SISWA PER KELAS -->
+        <!-- VIEW 4: LEGER NILAI SISWA -->
         <div id="viewLeger" class="hidden">
             <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
                 <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -429,36 +429,10 @@
                 </div>
             </div>
 
-            <!-- TABEL LEGER NILAI -->
             <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs border-collapse" id="legerTable">
-                        <thead>
-                            <tr class="bg-indigo-950 text-white border-b border-indigo-900 text-center">
-                                <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 w-8">No</th>
-                                <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 w-20">NIS</th>
-                                <th rowspan="2" class="py-2 px-3 border-r border-indigo-900 min-w-[160px] text-left">Nama Siswa</th>
-                                <th rowspan="2" class="py-2 px-1 border-r border-indigo-900 w-8">L/P</th>
-                                <th colspan="8" class="py-1.5 px-2 border-r border-indigo-900 bg-indigo-900">Mata Pelajaran (Nilai Akhir)</th>
-                                <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 bg-indigo-900/80 w-14">Jumlah</th>
-                                <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 bg-indigo-900/80 w-14">Rata2</th>
-                                <th colspan="3" class="py-1.5 px-2 border-r border-indigo-900 bg-slate-800">Kehadiran</th>
-                                <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 no-print action-column w-20">Aksi</th>
-                            </tr>
-                            <tr class="bg-indigo-900 text-white text-[11px] text-center border-b border-indigo-800">
-                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">PAI</th>
-                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">PPKn</th>
-                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">B.Ind</th>
-                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">MTK</th>
-                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">IPAS</th>
-                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">PJOK</th>
-                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">Seni</th>
-                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">B.Sunda</th>
-                                <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">S</th>
-                                <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">I</th>
-                                <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">A</th>
-                            </tr>
-                        </thead>
+                        <thead id="legerTableHeader"></thead>
                         <tbody id="legerTableBody" class="divide-y divide-slate-200"></tbody>
                     </table>
                 </div>
@@ -533,9 +507,9 @@
     <!-- DATALIST KLASIFIKASI SURAT LENGKAP -->
     <datalist id="klasifikasiDatalist"></datalist>
 
-    <!-- MODAL INPUT / EDIT NILAI LEGER -->
+    <!-- MODAL INPUT / EDIT NILAI LEGER PER ROMBEL -->
     <div id="legerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 my-8 transform transition-all">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 my-8 transform transition-all">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
                 <div>
                     <h3 id="legerModalTitle" class="text-base font-bold text-slate-800">Form Input Nilai Leger Siswa</h3>
@@ -549,40 +523,7 @@
 
                 <div class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100">
                     <p class="font-bold text-indigo-900 mb-2">1. NILAI AKHIR MATA PELAJARAN (0 - 100)</p>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                        <div>
-                            <label class="block font-semibold mb-1">PAI</label>
-                            <input type="number" id="scorePai" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block font-semibold mb-1">PPKn</label>
-                            <input type="number" id="scorePpkn" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block font-semibold mb-1">B. Indonesia</label>
-                            <input type="number" id="scoreBind" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block font-semibold mb-1">Matematika</label>
-                            <input type="number" id="scoreMtk" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block font-semibold mb-1">IPAS</label>
-                            <input type="number" id="scoreIpas" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block font-semibold mb-1">PJOK</label>
-                            <input type="number" id="scorePjok" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block font-semibold mb-1">Seni & Budaya</label>
-                            <input type="number" id="scoreSeni" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block font-semibold mb-1">B. Sunda</label>
-                            <input type="number" id="scoreSunda" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                    </div>
+                    <div id="legerFormMapelContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
                 </div>
 
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
@@ -611,7 +552,7 @@
         </div>
     </div>
 
-    <!-- MODAL INPUT SISWA -->
+    <!-- MODAL INPUT SISWA & RIWAYAT NILAI BUKU INDUK -->
     <div id="studentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8 transform transition-all">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
@@ -824,9 +765,10 @@
                     </div>
                 </div>
 
-                <!-- KELOMPOK H & I. KELAS, KEHADIRAN & MENINGGALKAN SEKOLAH -->
+                <!-- KELOMPOK H & I. KELAS, KEHADIRAN & REKAP NILAI RATA-RATA -->
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">H & I. RIWAYAT KELAS, KEHADIRAN & KELULUSAN</h4>
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">H & I. RIWAYAT KELAS, KEHADIRAN & REKAP NILAI RATA-RATA</h4>
+                    
                     <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-3">
                         <div>
                             <label class="block font-medium text-[10px]">Kls 1</label>
@@ -854,16 +796,60 @@
                         </div>
                     </div>
 
-                    <!-- PENGISIAN RATA-RATA NILAI INDUK KELAS 1-6 (JIKA DIISI LANGSUNG DI BUKU INDUK) -->
-                    <div class="p-2.5 bg-white rounded border mb-3 space-y-2">
-                        <p class="font-bold text-indigo-900 text-[11px] border-b pb-1">RATA-RATA NILAI LEGER HASIL BELAJAR (KELAS 1 S.D KELAS 6)</p>
-                        <div class="grid grid-cols-2 sm:grid-cols-6 gap-2 text-[11px]">
-                            <div><label class="block font-medium">Nilai Kls 1</label><input type="text" id="scoreKls1" placeholder="85.5" class="w-full border rounded px-2 py-1"></div>
-                            <div><label class="block font-medium">Nilai Kls 2</label><input type="text" id="scoreKls2" placeholder="86.0" class="w-full border rounded px-2 py-1"></div>
-                            <div><label class="block font-medium">Nilai Kls 3</label><input type="text" id="scoreKls3" placeholder="87.2" class="w-full border rounded px-2 py-1"></div>
-                            <div><label class="block font-medium">Nilai Kls 4</label><input type="text" id="scoreKls4" placeholder="88.0" class="w-full border rounded px-2 py-1"></div>
-                            <div><label class="block font-medium">Nilai Kls 5</label><input type="text" id="scoreKls5" placeholder="88.5" class="w-full border rounded px-2 py-1"></div>
-                            <div><label class="block font-medium">Nilai Kls 6</label><input type="text" id="scoreKls6" placeholder="90.0" class="w-full border rounded px-2 py-1"></div>
+                    <!-- RIWAYAT LEGER NILAI RATA-RATA PER KELAS -->
+                    <div class="p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-lg mb-3">
+                        <p class="font-bold text-indigo-950 mb-1">REKAP RATA-RATA NILAI LEGER SISWA (KLS 1 S.D 6)</p>
+                        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-[10px]">
+                            <div>
+                                <label class="block font-semibold">Rata2 Kls 1</label>
+                                <input type="text" id="avgKls1" placeholder="85.5" class="w-full border rounded px-1.5 py-1 text-center bg-white">
+                            </div>
+                            <div>
+                                <label class="block font-semibold">Rata2 Kls 2</label>
+                                <input type="text" id="avgKls2" placeholder="86.0" class="w-full border rounded px-1.5 py-1 text-center bg-white">
+                            </div>
+                            <div>
+                                <label class="block font-semibold">Rata2 Kls 3</label>
+                                <input type="text" id="avgKls3" placeholder="87.2" class="w-full border rounded px-1.5 py-1 text-center bg-white">
+                            </div>
+                            <div>
+                                <label class="block font-semibold">Rata2 Kls 4</label>
+                                <input type="text" id="avgKls4" placeholder="88.0" class="w-full border rounded px-1.5 py-1 text-center bg-white">
+                            </div>
+                            <div>
+                                <label class="block font-semibold">Rata2 Kls 5</label>
+                                <input type="text" id="avgKls5" placeholder="89.1" class="w-full border rounded px-1.5 py-1 text-center bg-white">
+                            </div>
+                            <div>
+                                <label class="block font-semibold">Rata2 Kls 6</label>
+                                <input type="text" id="avgKls6" placeholder="90.0" class="w-full border rounded px-1.5 py-1 text-center bg-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FORM TABEL RIWAYAT NILAI MAPEL PER SEMESTER 1-12 -->
+                    <div class="p-3 bg-white border rounded-lg shadow-sm mb-3">
+                        <p class="font-bold text-indigo-900 mb-1 text-xs">INPUT RIWAYAT NILAI LENGKAP SEMESTER 1 S.D 12</p>
+                        <p class="text-[10px] text-slate-500 mb-2">Isi nilai tiap mata pelajaran untuk dicetak lengkap pada Lembar Buku Induk.</p>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-[11px] border-collapse">
+                                <thead>
+                                    <tr class="bg-indigo-900 text-white text-center">
+                                        <th class="p-1 border">Sem</th>
+                                        <th class="p-1 border">PAIDBP</th>
+                                        <th class="p-1 border">PPDK</th>
+                                        <th class="p-1 border">BI</th>
+                                        <th class="p-1 border">MU</th>
+                                        <th class="p-1 border">IPADSI</th>
+                                        <th class="p-1 border">SB</th>
+                                        <th class="p-1 border">PJODK</th>
+                                        <th class="p-1 border">BSUN</th>
+                                        <th class="p-1 border">PLH</th>
+                                        <th class="p-1 border">Seni Musik</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentGradesInputTbody"></tbody>
+                            </table>
                         </div>
                     </div>
 
@@ -1020,12 +1006,12 @@
         </div>
     </div>
 
-    <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA TERMASUK REKAP NILAI LEGER KELAS 1-6 -->
+    <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA -->
     <div id="indukPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-2 sm:p-4 no-print">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col my-auto overflow-hidden">
             <div class="flex justify-between items-center px-6 py-3.5 bg-slate-800 text-white shrink-0 border-b border-slate-700 no-print">
                 <h3 class="text-sm sm:text-base font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-file-lines text-yellow-400"></i> Pratinjau Lembar Buku Induk Siswa & Rekap Nilai Leger
+                    <i class="fa-solid fa-file-lines text-yellow-400"></i> Pratinjau Lembar Buku Induk Siswa
                 </h3>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow transition flex items-center gap-1.5">
@@ -1038,7 +1024,7 @@
             </div>
 
             <div class="p-4 sm:p-8 overflow-y-auto flex-grow bg-slate-100">
-                <div id="indukSheetContent" class="p-6 bg-white text-black font-serif text-[10.5pt] leading-snug border border-slate-300 shadow-md max-w-3xl mx-auto"></div>
+                <div id="indukSheetContent" class="p-6 bg-white text-black font-serif text-[11px] leading-snug border border-slate-300 shadow-md max-w-3xl mx-auto"></div>
             </div>
         </div>
     </div>
@@ -1064,6 +1050,91 @@
         const studentsRef = ref(db, 'students');
         const suratRef = ref(db, 'surat_keluar');
         const legerRef = ref(db, 'leger_nilai');
+
+        // MAPEL KONFIGURASI SESUAI KELAS (BARU)
+        const MAPEL_PER_KELAS = {
+            "1": [
+                { key: "paidbp", label: "PAIDBP" },
+                { key: "ppdk", label: "PPDK" },
+                { key: "bi", label: "BI" },
+                { key: "mu", label: "MU" },
+                { key: "sb", label: "SB" },
+                { key: "pjodk", label: "PJODK" },
+                { key: "bsun", label: "BSUN" },
+                { key: "plh", label: "PLH" }
+            ],
+            "2": [
+                { key: "paidbp", label: "PAIDBP" },
+                { key: "ppdk", label: "PPDK" },
+                { key: "bi", label: "BI" },
+                { key: "mu", label: "MU" },
+                { key: "sb", label: "SB" },
+                { key: "pjodk", label: "PJODK" },
+                { key: "bsun", label: "BSUN" },
+                { key: "plh", label: "PLH" }
+            ],
+            "3": [
+                { key: "paidbp", label: "PAIDBP" },
+                { key: "ppdk", label: "PPDK" },
+                { key: "bi", label: "BI" },
+                { key: "mu", label: "MU" },
+                { key: "ipadsi", label: "IPADSI" },
+                { key: "sb", label: "SB" },
+                { key: "pjodk", label: "PJODK" },
+                { key: "bsun", label: "BSUN" },
+                { key: "plh", label: "PLH" }
+            ],
+            "4": [
+                { key: "paidbp", label: "PAIDBP" },
+                { key: "ppdk", label: "PPDK" },
+                { key: "bi", label: "BI" },
+                { key: "mu", label: "MU" },
+                { key: "ipadsi", label: "IPADSI" },
+                { key: "sb", label: "SB" },
+                { key: "pjodk", label: "PJODK" },
+                { key: "bsun", label: "BSUN" },
+                { key: "plh", label: "PLH" },
+                { key: "senimusik", label: "Seni Musik" }
+            ],
+            "5": [
+                { key: "paidbp", label: "PAIDBP" },
+                { key: "ppdk", label: "PPDK" },
+                { key: "bi", label: "BI" },
+                { key: "mu", label: "MU" },
+                { key: "ipadsi", label: "IPADSI" },
+                { key: "sb", label: "SB" },
+                { key: "pjodk", label: "PJODK" },
+                { key: "bsun", label: "BSUN" },
+                { key: "plh", label: "PLH" },
+                { key: "senimusik", label: "Seni Musik" }
+            ],
+            "6": [
+                { key: "paidbp", label: "PAIDBP" },
+                { key: "ppdk", label: "PPDK" },
+                { key: "bi", label: "BI" },
+                { key: "mu", label: "MU" },
+                { key: "ipadsi", label: "IPADSI" },
+                { key: "sb", label: "SB" },
+                { key: "pjodk", label: "PJODK" },
+                { key: "bsun", label: "BSUN" },
+                { key: "plh", label: "PLH" },
+                { key: "senimusik", label: "Seni Musik" }
+            ]
+        };
+
+        // DAFTAR MAPEL LENGKAP UNTUK BUKU INDUK
+        const ALL_MAPEL_LIST = [
+            { key: "paidbp", label: "PAIDBP" },
+            { key: "ppdk", label: "PPDK" },
+            { key: "bi", label: "BI" },
+            { key: "mu", label: "MU" },
+            { key: "ipadsi", label: "IPADSI" },
+            { key: "sb", label: "SB" },
+            { key: "pjodk", label: "PJODK" },
+            { key: "bsun", label: "BSUN" },
+            { key: "plh", label: "PLH" },
+            { key: "senimusik", label: "Seni Musik" }
+        ];
 
         const KLASIFIKASI_SURAT_LIST = [
             {"kode": "HM", "nama": "Hubungan Masyarakat"}, {"kode": "HK", "nama": "Hukum"}, {"kode": "KP", "nama": "Kepegawaian"}, {"kode": "RT", "nama": "Kerumahtanggaan"}, {"kode": "TU", "nama": "Ketatausahaan"}, {"kode": "KU", "nama": "Keuangan"}, {"kode": "TL", "nama": "Organisasi dan Tata Laksana"}, {"kode": "PP", "nama": "Penelitian, Pengkajian, dan Pengembangan"}, {"kode": "PW", "nama": "Pengawasan"}, {"kode": "AR", "nama": "Kearsipan"}, {"kode": "LH", "nama": "Lingkungan Hidup"}, {"kode": "PA", "nama": "Pemberdayaan Perempuan dan Perlindungan Anak"}, {"kode": "PD", "nama": "Pemerintahan Daerah"}, {"kode": "PO", "nama": "Pemuda dan Olahraga"}, {"kode": "PB", "nama": "Penanggulangan Bencana"}, {"kode": "PK", "nama": "Pendidikan dan Kebudayaan"}, {"kode": "PN", "nama": "Perencanaan dan Pembangunan"}, {"kode": "HB", "nama": "Perhubungan"}, {"kode": "PS", "nama": "Perpustakaan"}, {"kode": "PK.03.02.01", "nama": "Sekolah Dasar (Kurikulum, Bahan Ajar dan Pelatihan)"}
@@ -1642,12 +1713,39 @@
             }).join('');
         }
 
+        /* --- FUNGSI LOGIKA LEGER NILAI PER KELAS DINAMIS --- */
         window.renderLegerTable = function() {
+            const thead = document.getElementById('legerTableHeader');
             const tbody = document.getElementById('legerTableBody');
             const emptyState = document.getElementById('legerEmptyState');
             const targetClass = document.getElementById('legerClassSelect')?.value || '1';
             const targetSemester = document.getElementById('legerSemesterSelect')?.value || '1';
             const targetYear = (document.getElementById('legerYearInput')?.value || '2025/2026').replace('/', '_');
+
+            const classMapels = MAPEL_PER_KELAS[targetClass] || MAPEL_PER_KELAS["1"];
+
+            // GENERATE HEADER LEGER SESUAI KELAS
+            let thMapelsHtml = classMapels.map(m => `<th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">${m.label}</th>`).join('');
+
+            thead.innerHTML = `
+                <tr class="bg-indigo-950 text-white border-b border-indigo-900 text-center">
+                    <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 w-8">No</th>
+                    <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 w-20">NIS</th>
+                    <th rowspan="2" class="py-2 px-3 border-r border-indigo-900 min-w-[160px] text-left">Nama Siswa</th>
+                    <th rowspan="2" class="py-2 px-1 border-r border-indigo-900 w-8">L/P</th>
+                    <th colspan="${classMapels.length}" class="py-1.5 px-2 border-r border-indigo-900 bg-indigo-900">Mata Pelajaran (Nilai Akhir)</th>
+                    <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 bg-indigo-900/80 w-14">Jumlah</th>
+                    <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 bg-indigo-900/80 w-14">Rata2</th>
+                    <th colspan="3" class="py-1.5 px-2 border-r border-indigo-900 bg-slate-800">Kehadiran</th>
+                    <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 no-print action-column w-20">Aksi</th>
+                </tr>
+                <tr class="bg-indigo-900 text-white text-[11px] text-center border-b border-indigo-800">
+                    ${thMapelsHtml}
+                    <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">S</th>
+                    <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">I</th>
+                    <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">A</th>
+                </tr>
+            `;
 
             let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
             list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
@@ -1664,18 +1762,21 @@
                 const legerKey = `${s.key}_K${targetClass}_S${targetSemester}_${targetYear}`;
                 const l = legerData[legerKey] || {};
 
-                const pai = parseFloat(l.pai) || 0;
-                const ppkn = parseFloat(l.ppkn) || 0;
-                const bind = parseFloat(l.bind) || 0;
-                const mtk = parseFloat(l.mtk) || 0;
-                const ipas = parseFloat(l.ipas) || 0;
-                const pjok = parseFloat(l.pjok) || 0;
-                const seni = parseFloat(l.seni) || 0;
-                const sunda = parseFloat(l.sunda) || 0;
+                let sum = 0;
+                let count = 0;
 
-                const hasScore = l.pai !== undefined || l.ppkn !== undefined;
-                const total = pai + ppkn + bind + mtk + ipas + pjok + seni + sunda;
-                const average = hasScore ? (total / 8).toFixed(1) : '-';
+                let scoreTdHtml = classMapels.map(m => {
+                    const scoreVal = l[m.key];
+                    if (scoreVal !== undefined && scoreVal !== "") {
+                        const numVal = parseFloat(scoreVal) || 0;
+                        sum += numVal;
+                        count++;
+                        return `<td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${scoreVal}</td>`;
+                    }
+                    return `<td class="py-2 px-1 border-r border-slate-200 font-mono text-slate-400">-</td>`;
+                }).join('');
+
+                const average = count > 0 ? (sum / classMapels.length).toFixed(1) : '-';
 
                 return `
                     <tr class="hover:bg-slate-50 transition border-b border-slate-200 text-center">
@@ -1684,16 +1785,9 @@
                         <td class="py-2 px-3 border-r border-slate-200 font-bold text-slate-900 text-left uppercase">${s.name || '-'}</td>
                         <td class="py-2 px-1 border-r border-slate-200 font-bold ${s.gender === 'L' ? 'text-blue-600' : 'text-pink-600'}">${s.gender || '-'}</td>
                         
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.pai !== undefined ? l.pai : '-'}</td>
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.ppkn !== undefined ? l.ppkn : '-'}</td>
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.bind !== undefined ? l.bind : '-'}</td>
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.mtk !== undefined ? l.mtk : '-'}</td>
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.ipas !== undefined ? l.ipas : '-'}</td>
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.pjok !== undefined ? l.pjok : '-'}</td>
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.seni !== undefined ? l.seni : '-'}</td>
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.sunda !== undefined ? l.sunda : '-'}</td>
+                        ${scoreTdHtml}
 
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-bold text-indigo-900 bg-indigo-50/50">${hasScore ? total : '-'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-bold text-indigo-900 bg-indigo-50/50">${count > 0 ? sum : '-'}</td>
                         <td class="py-2 px-1 border-r border-slate-200 font-mono font-bold text-emerald-800 bg-emerald-50/50">${average}</td>
 
                         <td class="py-2 px-1 border-r border-slate-200 font-mono text-slate-600">${l.sakit !== undefined ? l.sakit : '0'}</td>
@@ -1722,17 +1816,17 @@
 
             document.getElementById('legerModalSubtitle').textContent = `Siswa: ${studentName} | Kelas ${targetClass} Semester ${targetSemester}`;
 
+            const classMapels = MAPEL_PER_KELAS[targetClass] || MAPEL_PER_KELAS["1"];
             const legerKey = `${studentKey}_K${targetClass}_S${targetSemester}_${targetYear}`;
             const l = legerData[legerKey] || {};
 
-            document.getElementById('scorePai').value = l.pai !== undefined ? l.pai : '';
-            document.getElementById('scorePpkn').value = l.ppkn !== undefined ? l.ppkn : '';
-            document.getElementById('scoreBind').value = l.bind !== undefined ? l.bind : '';
-            document.getElementById('scoreMtk').value = l.mtk !== undefined ? l.mtk : '';
-            document.getElementById('scoreIpas').value = l.ipas !== undefined ? l.ipas : '';
-            document.getElementById('scorePjok').value = l.pjok !== undefined ? l.pjok : '';
-            document.getElementById('scoreSeni').value = l.seni !== undefined ? l.seni : '';
-            document.getElementById('scoreSunda').value = l.sunda !== undefined ? l.sunda : '';
+            const mapelContainer = document.getElementById('legerFormMapelContainer');
+            mapelContainer.innerHTML = classMapels.map(m => `
+                <div>
+                    <label class="block font-semibold mb-1">${m.label}</label>
+                    <input type="number" id="score_${m.key}" min="0" max="100" value="${l[m.key] !== undefined ? l[m.key] : ''}" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
+                </div>
+            `).join('');
 
             document.getElementById('absentSakit').value = l.sakit !== undefined ? l.sakit : '0';
             document.getElementById('absentIzin').value = l.izin !== undefined ? l.izin : '0';
@@ -1756,24 +1850,51 @@
             const targetSemester = document.getElementById('legerSemesterSelect')?.value || '1';
             const targetYear = (document.getElementById('legerYearInput')?.value || '2025/2026').replace('/', '_');
 
+            const classMapels = MAPEL_PER_KELAS[targetClass] || MAPEL_PER_KELAS["1"];
             const legerKey = `${studentKey}_K${targetClass}_S${targetSemester}_${targetYear}`;
 
             const payload = {
-                pai: document.getElementById('scorePai').value,
-                ppkn: document.getElementById('scorePpkn').value,
-                bind: document.getElementById('scoreBind').value,
-                mtk: document.getElementById('scoreMtk').value,
-                ipas: document.getElementById('scoreIpas').value,
-                pjok: document.getElementById('scorePjok').value,
-                seni: document.getElementById('scoreSeni').value,
-                sunda: document.getElementById('scoreSunda').value,
                 sakit: document.getElementById('absentSakit').value,
                 izin: document.getElementById('absentIzin').value,
                 alpa: document.getElementById('absentAlpa').value,
                 updatedAt: new Date().toISOString()
             };
 
+            let sum = 0;
+            let count = 0;
+
+            classMapels.forEach(m => {
+                const val = document.getElementById(`score_${m.key}`)?.value || '';
+                payload[m.key] = val;
+                if (val !== "") {
+                    sum += parseFloat(val) || 0;
+                    count++;
+                }
+            });
+
             set(ref(db, `leger_nilai/${legerKey}`), payload);
+
+            // SYNC OTOMATIS NILAI LEGER KE PROFIL BUKU INDUK SISWA
+            const currentStudent = studentsData[studentKey] || {};
+            const semNum = (parseInt(targetClass, 10) - 1) * 2 + parseInt(targetSemester, 10);
+            const studentGrades = currentStudent.grades || {};
+            const semGrades = studentGrades[`sem${semNum}`] || {};
+
+            classMapels.forEach(m => {
+                if (payload[m.key] !== "") {
+                    semGrades[m.key] = payload[m.key];
+                }
+            });
+
+            studentGrades[`sem${semNum}`] = semGrades;
+
+            const updateObj = { grades: studentGrades };
+            if (count > 0) {
+                const avg = (sum / classMapels.length).toFixed(1);
+                updateObj[`avgKls${targetClass}`] = avg;
+            }
+
+            update(ref(db, `students/${studentKey}`), updateObj);
             closeLegerModal();
         }
 
@@ -1782,37 +1903,43 @@
             const targetSemester = document.getElementById('legerSemesterSelect')?.value || '1';
             const targetYear = document.getElementById('legerYearInput')?.value || '2025/2026';
 
+            const classMapels = MAPEL_PER_KELAS[targetClass] || MAPEL_PER_KELAS["1"];
             let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
             list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            const headerRow = ["No", "NIS", "NISN", "Nama Lengkap Siswa", "L/P"];
+            classMapels.forEach(m => headerRow.push(m.label));
+            headerRow.push("Total Nilai", "Rata-Rata", "Sakit", "Izin", "Alpa");
 
             const exportData = [
                 [`REKAPITULASI LEGER NILAI SISWA SDN 186 CIPADUNG`],
                 [`Kelas: ${targetClass} | Semester: ${targetSemester} | Tahun Pelajaran: ${targetYear}`],
                 [""],
-                ["No", "NIS", "NISN", "Nama Lengkap Siswa", "L/P", "PAI", "PPKn", "B. Indonesia", "Matematika", "IPAS", "PJOK", "Seni & Budaya", "B. Sunda", "Total Nilai", "Rata-Rata", "Sakit", "Izin", "Alpa"]
+                headerRow
             ];
 
             list.forEach((s, idx) => {
                 const legerKey = `${s.key}_K${targetClass}_S${targetSemester}_${targetYear.replace('/', '_')}`;
                 const l = legerData[legerKey] || {};
 
-                const pai = parseFloat(l.pai) || 0;
-                const ppkn = parseFloat(l.ppkn) || 0;
-                const bind = parseFloat(l.bind) || 0;
-                const mtk = parseFloat(l.mtk) || 0;
-                const ipas = parseFloat(l.ipas) || 0;
-                const pjok = parseFloat(l.pjok) || 0;
-                const seni = parseFloat(l.seni) || 0;
-                const sunda = parseFloat(l.sunda) || 0;
+                let sum = 0;
+                let count = 0;
+                const rowVal = [idx + 1, s.nis || '', s.nisn || '', s.name || '', s.gender || ''];
 
-                const total = pai + ppkn + bind + mtk + ipas + pjok + seni + sunda;
-                const average = (total / 8).toFixed(1);
+                classMapels.forEach(m => {
+                    const scoreVal = l[m.key];
+                    if (scoreVal !== undefined && scoreVal !== "") {
+                        sum += parseFloat(scoreVal) || 0;
+                        count++;
+                        rowVal.push(scoreVal);
+                    } else {
+                        rowVal.push('');
+                    }
+                });
 
-                exportData.push([
-                    idx + 1, s.nis || '', s.nisn || '', s.name || '', s.gender || '',
-                    l.pai || '', l.ppkn || '', l.bind || '', l.mtk || '', l.ipas || '', l.pjok || '', l.seni || '', l.sunda || '',
-                    total, average, l.sakit || '0', l.izin || '0', l.alpa || '0'
-                ]);
+                const average = count > 0 ? (sum / classMapels.length).toFixed(1) : '';
+                rowVal.push(count > 0 ? sum : '', average, l.sakit || '0', l.izin || '0', l.alpa || '0');
+                exportData.push(rowVal);
             });
 
             const ws = XLSX.utils.aoa_to_sheet(exportData);
@@ -2253,35 +2380,42 @@
             container.innerHTML = html;
         }
 
-        // TAMPILAN CETAK LEMBAR BUKU INDUK SISWA LENGKAP DENGAN RIWAYAT NILAI LEGER KELAS 1-6
+        /* --- DISPLAY LEMBAR BUKU INDUK SISWA DENGAN TABEL RIWAYAT NILAI 12 SEMESTER --- */
         window.viewIndukSheet = function(key) {
             const s = studentsData[key];
             if (!s) return;
 
-            // CARI DAN HITUNG RATA-RATA NILAI DARI DATA LEGER AUTOMATIS BILA TERSEDIA
-            const getScoreFromLeger = (classNum) => {
-                let foundScores = [];
-                Object.keys(legerData).forEach(lk => {
-                    if (lk.startsWith(`${key}_K${classNum}_`)) {
-                        const l = legerData[lk];
-                        ['pai', 'ppkn', 'bind', 'mtk', 'ipas', 'pjok', 'seni', 'sunda'].forEach(m => {
-                            if (l[m] !== undefined && l[m] !== '') foundScores.push(parseFloat(l[m]));
-                        });
-                    }
-                });
-                if (foundScores.length > 0) {
-                    const sum = foundScores.reduce((a, b) => a + b, 0);
-                    return (sum / foundScores.length).toFixed(1);
-                }
-                return s[`scoreKls${classNum}`] || '-';
-            };
+            let rowsNilaiHtml = '';
+            for (let sem = 1; sem <= 12; sem++) {
+                const kls = Math.ceil(sem / 2);
+                const semInKls = (sem % 2 === 1) ? 1 : 2;
+                const semGrades = (s.grades && s.grades[`sem${sem}`]) ? s.grades[`sem${sem}`] : {};
 
-            const score1 = getScoreFromLeger(1);
-            const score2 = getScoreFromLeger(2);
-            const score3 = getScoreFromLeger(3);
-            const score4 = getScoreFromLeger(4);
-            const score5 = getScoreFromLeger(5);
-            const score6 = getScoreFromLeger(6);
+                let sum = 0;
+                let count = 0;
+
+                let mapelTdHtml = ALL_MAPEL_LIST.map(m => {
+                    const val = semGrades[m.key];
+                    if (val !== undefined && val !== "") {
+                        const numVal = parseFloat(val) || 0;
+                        sum += numVal;
+                        count++;
+                        return `<td class="p-0.5 border-r border-black font-mono">${val}</td>`;
+                    }
+                    return `<td class="p-0.5 border-r border-black text-gray-400">-</td>`;
+                }).join('');
+
+                const avg = count > 0 ? (sum / count).toFixed(1) : '-';
+
+                rowsNilaiHtml += `
+                    <tr class="border-b border-black">
+                        <td class="p-0.5 border-r border-black font-semibold text-left whitespace-nowrap">Kls ${kls} / S${semInKls} (Sem ${sem})</td>
+                        ${mapelTdHtml}
+                        <td class="p-0.5 border-r border-black font-mono font-bold">${count > 0 ? sum : '-'}</td>
+                        <td class="p-0.5 font-mono font-bold">${avg}</td>
+                    </tr>
+                `;
+            }
 
             const html = `
                 ${OFFICIAL_KOP_SURAT_HTML}
@@ -2355,38 +2489,31 @@
                 </div>
 
                 <div class="mb-2">
-                    <h4 class="font-bold uppercase mb-0.5">H & I. RIWAYAT KELAS, KEHADIRAN & HASIL BELAJAR LEGER (KELAS 1 - KELAS 6)</h4>
-                    <table class="w-full text-center border border-black mb-1">
-                        <tr class="bg-gray-100 font-bold border-b border-black">
-                            <td class="p-0.5 border-r border-black w-28">Keterangan / Kelas</td>
-                            <td class="p-0.5 border-r border-black">Kelas 1</td>
-                            <td class="p-0.5 border-r border-black">Kelas 2</td>
-                            <td class="p-0.5 border-r border-black">Kelas 3</td>
-                            <td class="p-0.5 border-r border-black">Kelas 4</td>
-                            <td class="p-0.5 border-r border-black">Kelas 5</td>
-                            <td class="p-0.5">Kelas 6</td>
-                        </tr>
-                        <tr class="border-b border-black">
-                            <td class="p-0.5 border-r border-black text-left font-semibold">Rombel Kelas</td>
-                            <td class="p-0.5 border-r border-black">${s.class1 || '-'}</td>
-                            <td class="p-0.5 border-r border-black">${s.class2 || '-'}</td>
-                            <td class="p-0.5 border-r border-black">${s.class3 || '-'}</td>
-                            <td class="p-0.5 border-r border-black">${s.class4 || '-'}</td>
-                            <td class="p-0.5 border-r border-black">${s.class5 || '-'}</td>
-                            <td class="p-0.5">${s.class6 || '-'}</td>
-                        </tr>
-                        <tr>
-                            <td class="p-0.5 border-r border-black text-left font-semibold">Rata-Rata Leger Nilai</td>
-                            <td class="p-0.5 border-r border-black font-bold text-indigo-900">${score1}</td>
-                            <td class="p-0.5 border-r border-black font-bold text-indigo-900">${score2}</td>
-                            <td class="p-0.5 border-r border-black font-bold text-indigo-900">${score3}</td>
-                            <td class="p-0.5 border-r border-black font-bold text-indigo-900">${score4}</td>
-                            <td class="p-0.5 border-r border-black font-bold text-indigo-900">${score5}</td>
-                            <td class="p-0.5 font-bold text-indigo-900">${score6}</td>
-                        </tr>
+                    <h4 class="font-bold uppercase mb-0.5">H & I. RIWAYAT KELAS & REKAPITULASI NILAI MAPEL (SEMESTER 1 - 12)</h4>
+                    <table class="w-full text-center border border-black mb-1 text-[9px]">
+                        <thead>
+                            <tr class="bg-gray-100 font-bold border-b border-black">
+                                <th class="p-0.5 border-r border-black">Semester</th>
+                                <th class="p-0.5 border-r border-black">PAIDBP</th>
+                                <th class="p-0.5 border-r border-black">PPDK</th>
+                                <th class="p-0.5 border-r border-black">BI</th>
+                                <th class="p-0.5 border-r border-black">MU</th>
+                                <th class="p-0.5 border-r border-black">IPADSI</th>
+                                <th class="p-0.5 border-r border-black">SB</th>
+                                <th class="p-0.5 border-r border-black">PJODK</th>
+                                <th class="p-0.5 border-r border-black">BSUN</th>
+                                <th class="p-0.5 border-r border-black">PLH</th>
+                                <th class="p-0.5 border-r border-black">Seni Musik</th>
+                                <th class="p-0.5 border-r border-black">Total</th>
+                                <th class="p-0.5">Rata2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsNilaiHtml}
+                        </tbody>
                     </table>
-                    <table class="w-full">
-                        <tr><td class="w-48 py-0.5">Tamata Belajar / Tgl Keluar</td><td class="w-3">:</td><td>${s.graduationInfo || '-'} / ${s.exitDate || '-'}</td></tr>
+                    <table class="w-full text-[11px] mt-2">
+                        <tr><td class="w-48 py-0.5">Tamat Belajar / Tgl Keluar</td><td class="w-3">:</td><td>${s.graduationInfo || '-'} / ${s.exitDate || '-'}</td></tr>
                         <tr><td class="py-0.5">Status Akhir</td><td>:</td><td class="font-bold uppercase">${s.notes || '-'}</td></tr>
                     </table>
                 </div>
@@ -2412,6 +2539,33 @@
         window.closeIndukPrintModal = function() {
             document.getElementById('indukPrintModal').classList.add('hidden');
             document.getElementById('indukPrintModal').classList.remove('flex');
+        }
+
+        function renderStudentGradesInputTable(existingGrades = {}) {
+            const tbody = document.getElementById('studentGradesInputTbody');
+            if (!tbody) return;
+
+            let html = '';
+            for (let sem = 1; sem <= 12; sem++) {
+                const kls = Math.ceil(sem / 2);
+                const semInKls = (sem % 2 === 1) ? 1 : 2;
+                const semData = existingGrades[`sem${sem}`] || {};
+
+                let inputsHtml = ALL_MAPEL_LIST.map(m => `
+                    <td class="p-0.5 border text-center">
+                        <input type="number" min="0" max="100" id="indukGrade_sem${sem}_${m.key}" value="${semData[m.key] !== undefined ? semData[m.key] : ''}" class="w-10 border rounded text-center text-[10px] py-0.5 focus:ring-1 focus:ring-indigo-500 font-mono">
+                    </td>
+                `).join('');
+
+                html += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-1 border font-semibold text-center whitespace-nowrap bg-slate-50">Kls ${kls}/S${semInKls}</td>
+                        ${inputsHtml}
+                    </tr>
+                `;
+            }
+
+            tbody.innerHTML = html;
         }
 
         window.filterByLetter = function(letter) {
@@ -2498,18 +2652,23 @@
                 document.getElementById('class4').value = s.class4 || '';
                 document.getElementById('class5').value = s.class5 || '';
                 document.getElementById('class6').value = s.class6 || '';
-                document.getElementById('scoreKls1').value = s.scoreKls1 || '';
-                document.getElementById('scoreKls2').value = s.scoreKls2 || '';
-                document.getElementById('scoreKls3').value = s.scoreKls3 || '';
-                document.getElementById('scoreKls4').value = s.scoreKls4 || '';
-                document.getElementById('scoreKls5').value = s.scoreKls5 || '';
-                document.getElementById('scoreKls6').value = s.scoreKls6 || '';
+
+                document.getElementById('avgKls1').value = s.avgKls1 || '';
+                document.getElementById('avgKls2').value = s.avgKls2 || '';
+                document.getElementById('avgKls3').value = s.avgKls3 || '';
+                document.getElementById('avgKls4').value = s.avgKls4 || '';
+                document.getElementById('avgKls5').value = s.avgKls5 || '';
+                document.getElementById('avgKls6').value = s.avgKls6 || '';
+
+                renderStudentGradesInputTable(s.grades || {});
+
                 document.getElementById('graduationInfo').value = s.graduationInfo || '';
                 document.getElementById('exitDate').value = s.exitDate || '';
                 document.getElementById('notes').value = s.notes || '';
-                document.getElementById('modalTitle').textContent = 'Edit Data Isian Buku Induk & Leger Nilai';
+                document.getElementById('modalTitle').textContent = 'Edit Data Isian Buku Induk (A s.d J)';
             } else {
                 document.getElementById('modalTitle').textContent = 'Tambah Data Siswa Baru';
+                renderStudentGradesInputTable({});
             }
 
             document.getElementById('studentModal').classList.remove('hidden');
@@ -2526,7 +2685,18 @@
             if (currentUserRole !== 'ADMIN') return;
 
             const key = document.getElementById('studentKey').value;
-            
+            const gradesPayload = {};
+
+            for (let sem = 1; sem <= 12; sem++) {
+                gradesPayload[`sem${sem}`] = {};
+                ALL_MAPEL_LIST.forEach(m => {
+                    const val = document.getElementById(`indukGrade_sem${sem}_${m.key}`)?.value || '';
+                    if (val !== '') {
+                        gradesPayload[`sem${sem}`][m.key] = val;
+                    }
+                });
+            }
+
             const studentPayload = {
                 nis: document.getElementById('nis').value.trim(),
                 nisn: document.getElementById('nisn').value.trim(),
@@ -2575,12 +2745,16 @@
                 class4: document.getElementById('class4').value.trim(),
                 class5: document.getElementById('class5').value.trim(),
                 class6: document.getElementById('class6').value.trim(),
-                scoreKls1: document.getElementById('scoreKls1').value.trim(),
-                scoreKls2: document.getElementById('scoreKls2').value.trim(),
-                scoreKls3: document.getElementById('scoreKls3').value.trim(),
-                scoreKls4: document.getElementById('scoreKls4').value.trim(),
-                scoreKls5: document.getElementById('scoreKls5').value.trim(),
-                scoreKls6: document.getElementById('scoreKls6').value.trim(),
+
+                avgKls1: document.getElementById('avgKls1').value.trim(),
+                avgKls2: document.getElementById('avgKls2').value.trim(),
+                avgKls3: document.getElementById('avgKls3').value.trim(),
+                avgKls4: document.getElementById('avgKls4').value.trim(),
+                avgKls5: document.getElementById('avgKls5').value.trim(),
+                avgKls6: document.getElementById('avgKls6').value.trim(),
+
+                grades: gradesPayload,
+
                 graduationInfo: document.getElementById('graduationInfo').value.trim(),
                 exitDate: document.getElementById('exitDate').value.trim(),
                 notes: document.getElementById('notes').value.trim().toUpperCase()
@@ -2763,7 +2937,7 @@
                     "Pindahan Dari", "Nama Ayah", "TTL Ayah", "Pendidikan Ayah", "Pekerjaan Ayah", "Penghasilan Ayah", 
                     "Nama Ibu", "TTL Ibu", "Pendidikan Ibu", "Pekerjaan Ibu", "Penghasilan Ibu", "Nama Wali", 
                     "Hubungan Wali", "No HP/WA", "Tes IQ", "Prestasi", "Beasiswa", "Kelas 1", "Kelas 2", 
-                    "Kelas 3", "Kelas 4", "Kelas 5", "Kelas 6", "No. Ijazah Kelulusan", "Tanggal Keluar", "Status"
+                    "Kelas 3", "Kelas 4", "Kelas 5", "Kelas 6", "Rata2 Kls 1", "Rata2 Kls 2", "Rata2 Kls 3", "Rata2 Kls 4", "Rata2 Kls 5", "Rata2 Kls 6", "No. Ijazah Kelulusan", "Tanggal Keluar", "Status"
                 ]
             ];
 
@@ -2776,7 +2950,7 @@
                     s.transferFrom||'', s.fatherName||'', s.fatherPobDob||'', s.fatherEdu||'', s.fatherJob||'', s.fatherIncome||'', 
                     s.motherName||'', s.motherPobDob||'', s.motherEdu||'', s.motherJob||'', s.motherIncome||'', s.parentName||'', 
                     s.guardianDetails||'', s.phone||'', s.iqTest||'', s.achievements||'', s.scholarship||'', s.class1||'', s.class2||'', 
-                    s.class3||'', s.class4||'', s.class5||'', s.class6||'', s.graduationInfo||'', s.exitDate||'', s.notes||''
+                    s.class3||'', s.class4||'', s.class5||'', s.class6||'', s.avgKls1||'', s.avgKls2||'', s.avgKls3||'', s.avgKls4||'', s.avgKls5||'', s.avgKls6||'', s.graduationInfo||'', s.exitDate||'', s.notes||''
                 ]);
             });
 
