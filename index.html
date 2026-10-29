@@ -16,8 +16,8 @@
             .no-print { display: none !important; }
             .print-only { display: block !important; }
             body { background: white; color: black; font-family: 'Times New Roman', Times, serif; }
-            table { border-collapse: collapse; width: 100%; font-size: 8pt; }
-            th, td { border: 1px solid #000 !important; padding: 2px 4px !important; }
+            table { border-collapse: collapse; width: 100%; font-size: 7.5pt; }
+            th, td { border: 1px solid #000 !important; padding: 1.5px 3px !important; }
             #printHeader { display: block !important; margin-bottom: 10px; text-align: center; }
             #indukSheetContent, #suratReceiptContent { border: none !important; box-shadow: none !important; padding: 0 !important; }
             .page-break { page-break-after: always; }
@@ -89,7 +89,7 @@
                     <i class="fa-solid fa-right-left"></i> Mutasi Siswa
                 </button>
                 <button id="tabLegerBtn" onclick="switchTab('leger')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
-                    <i class="fa-solid fa-table-list"></i> Leger Nilai
+                    <i class="fa-solid fa-table-list"></i> Leger Nilai Per Kelas
                 </button>
                 <button id="tabSuratBtn" onclick="switchTab('surat')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
                     <i class="fa-solid fa-envelope-open-text"></i> Nomor Surat
@@ -391,7 +391,7 @@
             </div>
         </div>
 
-        <!-- VIEW 4: LEGER NILAI SISWA (FITUR BARU) -->
+        <!-- VIEW 4: LEGER NILAI SISWA PER KELAS -->
         <div id="viewLeger" class="hidden">
             <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
                 <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -853,6 +853,20 @@
                             <input type="text" id="class6" placeholder="VI-A" class="w-full border rounded px-2 py-1 text-xs">
                         </div>
                     </div>
+
+                    <!-- PENGISIAN RATA-RATA NILAI INDUK KELAS 1-6 (JIKA DIISI LANGSUNG DI BUKU INDUK) -->
+                    <div class="p-2.5 bg-white rounded border mb-3 space-y-2">
+                        <p class="font-bold text-indigo-900 text-[11px] border-b pb-1">RATA-RATA NILAI LEGER HASIL BELAJAR (KELAS 1 S.D KELAS 6)</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-6 gap-2 text-[11px]">
+                            <div><label class="block font-medium">Nilai Kls 1</label><input type="text" id="scoreKls1" placeholder="85.5" class="w-full border rounded px-2 py-1"></div>
+                            <div><label class="block font-medium">Nilai Kls 2</label><input type="text" id="scoreKls2" placeholder="86.0" class="w-full border rounded px-2 py-1"></div>
+                            <div><label class="block font-medium">Nilai Kls 3</label><input type="text" id="scoreKls3" placeholder="87.2" class="w-full border rounded px-2 py-1"></div>
+                            <div><label class="block font-medium">Nilai Kls 4</label><input type="text" id="scoreKls4" placeholder="88.0" class="w-full border rounded px-2 py-1"></div>
+                            <div><label class="block font-medium">Nilai Kls 5</label><input type="text" id="scoreKls5" placeholder="88.5" class="w-full border rounded px-2 py-1"></div>
+                            <div><label class="block font-medium">Nilai Kls 6</label><input type="text" id="scoreKls6" placeholder="90.0" class="w-full border rounded px-2 py-1"></div>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2">
                         <div>
                             <label class="block font-semibold mb-1">Tgl & No. Ijazah Kelulusan</label>
@@ -1006,12 +1020,12 @@
         </div>
     </div>
 
-    <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA -->
+    <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA TERMASUK REKAP NILAI LEGER KELAS 1-6 -->
     <div id="indukPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-2 sm:p-4 no-print">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col my-auto overflow-hidden">
             <div class="flex justify-between items-center px-6 py-3.5 bg-slate-800 text-white shrink-0 border-b border-slate-700 no-print">
                 <h3 class="text-sm sm:text-base font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-file-lines text-yellow-400"></i> Pratinjau Lembar Buku Induk Siswa
+                    <i class="fa-solid fa-file-lines text-yellow-400"></i> Pratinjau Lembar Buku Induk Siswa & Rekap Nilai Leger
                 </h3>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow transition flex items-center gap-1.5">
@@ -1024,7 +1038,7 @@
             </div>
 
             <div class="p-4 sm:p-8 overflow-y-auto flex-grow bg-slate-100">
-                <div id="indukSheetContent" class="p-6 bg-white text-black font-serif text-[11px] leading-snug border border-slate-300 shadow-md max-w-3xl mx-auto"></div>
+                <div id="indukSheetContent" class="p-6 bg-white text-black font-serif text-[10.5pt] leading-snug border border-slate-300 shadow-md max-w-3xl mx-auto"></div>
             </div>
         </div>
     </div>
@@ -1628,7 +1642,6 @@
             }).join('');
         }
 
-        /* --- FUNGSI LOGIKA LEGER NILAI (FITUR BARU) --- */
         window.renderLegerTable = function() {
             const tbody = document.getElementById('legerTableBody');
             const emptyState = document.getElementById('legerEmptyState');
@@ -2240,9 +2253,35 @@
             container.innerHTML = html;
         }
 
+        // TAMPILAN CETAK LEMBAR BUKU INDUK SISWA LENGKAP DENGAN RIWAYAT NILAI LEGER KELAS 1-6
         window.viewIndukSheet = function(key) {
             const s = studentsData[key];
             if (!s) return;
+
+            // CARI DAN HITUNG RATA-RATA NILAI DARI DATA LEGER AUTOMATIS BILA TERSEDIA
+            const getScoreFromLeger = (classNum) => {
+                let foundScores = [];
+                Object.keys(legerData).forEach(lk => {
+                    if (lk.startsWith(`${key}_K${classNum}_`)) {
+                        const l = legerData[lk];
+                        ['pai', 'ppkn', 'bind', 'mtk', 'ipas', 'pjok', 'seni', 'sunda'].forEach(m => {
+                            if (l[m] !== undefined && l[m] !== '') foundScores.push(parseFloat(l[m]));
+                        });
+                    }
+                });
+                if (foundScores.length > 0) {
+                    const sum = foundScores.reduce((a, b) => a + b, 0);
+                    return (sum / foundScores.length).toFixed(1);
+                }
+                return s[`scoreKls${classNum}`] || '-';
+            };
+
+            const score1 = getScoreFromLeger(1);
+            const score2 = getScoreFromLeger(2);
+            const score3 = getScoreFromLeger(3);
+            const score4 = getScoreFromLeger(4);
+            const score5 = getScoreFromLeger(5);
+            const score6 = getScoreFromLeger(6);
 
             const html = `
                 ${OFFICIAL_KOP_SURAT_HTML}
@@ -2316,23 +2355,34 @@
                 </div>
 
                 <div class="mb-2">
-                    <h4 class="font-bold uppercase mb-0.5">H & I. RIWAYAT KELAS & KELULUSAN</h4>
+                    <h4 class="font-bold uppercase mb-0.5">H & I. RIWAYAT KELAS, KEHADIRAN & HASIL BELAJAR LEGER (KELAS 1 - KELAS 6)</h4>
                     <table class="w-full text-center border border-black mb-1">
                         <tr class="bg-gray-100 font-bold border-b border-black">
-                            <td class="p-0.5 border-r border-black">Kls 1</td>
-                            <td class="p-0.5 border-r border-black">Kls 2</td>
-                            <td class="p-0.5 border-r border-black">Kls 3</td>
-                            <td class="p-0.5 border-r border-black">Kls 4</td>
-                            <td class="p-0.5 border-r border-black">Kls 5</td>
-                            <td class="p-0.5">Kls 6</td>
+                            <td class="p-0.5 border-r border-black w-28">Keterangan / Kelas</td>
+                            <td class="p-0.5 border-r border-black">Kelas 1</td>
+                            <td class="p-0.5 border-r border-black">Kelas 2</td>
+                            <td class="p-0.5 border-r border-black">Kelas 3</td>
+                            <td class="p-0.5 border-r border-black">Kelas 4</td>
+                            <td class="p-0.5 border-r border-black">Kelas 5</td>
+                            <td class="p-0.5">Kelas 6</td>
                         </tr>
-                        <tr>
+                        <tr class="border-b border-black">
+                            <td class="p-0.5 border-r border-black text-left font-semibold">Rombel Kelas</td>
                             <td class="p-0.5 border-r border-black">${s.class1 || '-'}</td>
                             <td class="p-0.5 border-r border-black">${s.class2 || '-'}</td>
                             <td class="p-0.5 border-r border-black">${s.class3 || '-'}</td>
                             <td class="p-0.5 border-r border-black">${s.class4 || '-'}</td>
                             <td class="p-0.5 border-r border-black">${s.class5 || '-'}</td>
                             <td class="p-0.5">${s.class6 || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td class="p-0.5 border-r border-black text-left font-semibold">Rata-Rata Leger Nilai</td>
+                            <td class="p-0.5 border-r border-black font-bold text-indigo-900">${score1}</td>
+                            <td class="p-0.5 border-r border-black font-bold text-indigo-900">${score2}</td>
+                            <td class="p-0.5 border-r border-black font-bold text-indigo-900">${score3}</td>
+                            <td class="p-0.5 border-r border-black font-bold text-indigo-900">${score4}</td>
+                            <td class="p-0.5 border-r border-black font-bold text-indigo-900">${score5}</td>
+                            <td class="p-0.5 font-bold text-indigo-900">${score6}</td>
                         </tr>
                     </table>
                     <table class="w-full">
@@ -2448,10 +2498,16 @@
                 document.getElementById('class4').value = s.class4 || '';
                 document.getElementById('class5').value = s.class5 || '';
                 document.getElementById('class6').value = s.class6 || '';
+                document.getElementById('scoreKls1').value = s.scoreKls1 || '';
+                document.getElementById('scoreKls2').value = s.scoreKls2 || '';
+                document.getElementById('scoreKls3').value = s.scoreKls3 || '';
+                document.getElementById('scoreKls4').value = s.scoreKls4 || '';
+                document.getElementById('scoreKls5').value = s.scoreKls5 || '';
+                document.getElementById('scoreKls6').value = s.scoreKls6 || '';
                 document.getElementById('graduationInfo').value = s.graduationInfo || '';
                 document.getElementById('exitDate').value = s.exitDate || '';
                 document.getElementById('notes').value = s.notes || '';
-                document.getElementById('modalTitle').textContent = 'Edit Data Isian Buku Induk (A s.d J)';
+                document.getElementById('modalTitle').textContent = 'Edit Data Isian Buku Induk & Leger Nilai';
             } else {
                 document.getElementById('modalTitle').textContent = 'Tambah Data Siswa Baru';
             }
@@ -2519,6 +2575,12 @@
                 class4: document.getElementById('class4').value.trim(),
                 class5: document.getElementById('class5').value.trim(),
                 class6: document.getElementById('class6').value.trim(),
+                scoreKls1: document.getElementById('scoreKls1').value.trim(),
+                scoreKls2: document.getElementById('scoreKls2').value.trim(),
+                scoreKls3: document.getElementById('scoreKls3').value.trim(),
+                scoreKls4: document.getElementById('scoreKls4').value.trim(),
+                scoreKls5: document.getElementById('scoreKls5').value.trim(),
+                scoreKls6: document.getElementById('scoreKls6').value.trim(),
                 graduationInfo: document.getElementById('graduationInfo').value.trim(),
                 exitDate: document.getElementById('exitDate').value.trim(),
                 notes: document.getElementById('notes').value.trim().toUpperCase()
