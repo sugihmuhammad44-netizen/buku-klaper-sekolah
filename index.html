@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BUKU KLAPER, INDUK, MUTASI & LEGER NILAI - SDN 186 CIPADUNG</title>
+    <title>BUKU KLAPER, INDUK, MUTASI & NOMOR SURAT - SDN 186 CIPADUNG</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome CDN -->
@@ -31,7 +31,7 @@
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all">
             <div class="text-center mb-6">
                 <img src="logo.png" alt="Logo Sekolah" class="h-16 w-16 mx-auto mb-3 object-contain">
-                <h2 class="text-xl font-bold text-slate-800 uppercase">PORTAL ARSIP SISWA & LEGER NILAI</h2>
+                <h2 class="text-xl font-bold text-slate-800 uppercase">PORTAL ARSIP SISWA & SURAT</h2>
                 <p class="text-xs text-slate-500">SDN 186 CIPADUNG - KOTA BANDUNG</p>
             </div>
 
@@ -57,7 +57,7 @@
                 <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-14 w-14 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
                 <div>
                     <h1 class="text-xl font-bold tracking-tight uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h1>
-                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper, Buku Induk Siswa, Leger Nilai & Nomor Surat Cloud</p>
+                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper, Buku Induk Siswa, Mutasi & Administrasi Nomor Surat Cloud</p>
                 </div>
             </div>
             
@@ -84,9 +84,6 @@
                 </button>
                 <button id="tabIndukBtn" onclick="switchTab('induk')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
                     <i class="fa-solid fa-address-card"></i> Buku Induk Siswa
-                </button>
-                <button id="tabLegerBtn" onclick="switchTab('leger')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
-                    <i class="fa-solid fa-graduation-cap"></i> Leger Nilai Rapor
                 </button>
                 <button id="tabMutasiBtn" onclick="switchTab('mutasi')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
                     <i class="fa-solid fa-right-left"></i> Mutasi Siswa
@@ -116,7 +113,6 @@
 
         <!-- FILE INPUT EXCEL TERSEMBUNYI -->
         <input type="file" id="excelFileInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelImport(event)">
-        <input type="file" id="excelLegerInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelLegerImport(event)">
         <input type="file" id="excelSuratFileInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelSuratImport(event)">
 
         <!-- VIEW 1: BUKU KLAPER -->
@@ -225,20 +221,6 @@
                     <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
                     <p class="text-slate-500 font-medium">Belum ada data siswa yang cocok.</p>
                 </div>
-
-                <div id="klaperPagination" class="no-print p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-                    <div class="flex items-center gap-2">
-                        <span class="text-slate-600">Tampilkan</span>
-                        <select id="klaperPageSize" onchange="changeKlaperPageSize()" class="border rounded px-2 py-1 text-xs bg-white">
-                            <option value="10">10</option>
-                            <option value="25" selected>25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                        <span id="klaperInfoText" class="text-slate-600 font-medium">Menampilkan 0 - 0 dari 0 data</span>
-                    </div>
-                    <div id="klaperPageButtons" class="flex items-center gap-1"></div>
-                </div>
             </div>
         </div>
 
@@ -258,71 +240,9 @@
             </div>
 
             <div id="indukGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-            <div id="indukPagination" class="no-print mt-6 p-4 bg-white rounded-xl shadow-md border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-                <div class="flex items-center gap-2">
-                    <span class="text-slate-600">Tampilkan per Halaman</span>
-                    <select id="indukPageSize" onchange="changeIndukPageSize()" class="border rounded px-2 py-1 text-xs bg-slate-50">
-                        <option value="6">6</option>
-                        <option value="12" selected>12</option>
-                        <option value="24">24</option>
-                    </select>
-                    <span id="indukInfoText" class="text-slate-600 font-medium">Menampilkan 0 - 0 Kartu</span>
-                </div>
-                <div id="indukPageButtons" class="flex items-center gap-1"></div>
-            </div>
         </div>
 
-        <!-- VIEW 3: LEGER NILAI RAPOR -->
-        <div id="viewLeger" class="hidden">
-            <div class="admin-only-action hidden bg-white p-3.5 rounded-xl shadow-md border border-slate-200 mb-4 no-print flex flex-wrap gap-2 items-center justify-between">
-                <div class="text-xs font-bold text-slate-600 uppercase flex items-center gap-2">
-                    <i class="fa-solid fa-graduation-cap text-indigo-600"></i> Alat Pengelolaan Leger Nilai Rapor
-                </div>
-                <div class="flex flex-wrap gap-2 items-center">
-                    <button onclick="downloadTemplateLegerExcel()" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-arrow-down"></i> Download Template Leger Excel
-                    </button>
-                    <button onclick="triggerExcelLegerImport()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-excel"></i> Impor Leger Rapor Kelas (Excel)
-                    </button>
-                </div>
-            </div>
-
-            <!-- FILTER LEGER NILAI -->
-            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col sm:flex-row gap-4 justify-between items-center">
-                <div class="relative w-full sm:w-96">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="legerSearchInput" placeholder="Cari Nama atau NIS..." oninput="renderLegerTable()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm">
-                </div>
-                <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
-                    <label for="legerClassSelect" class="text-xs font-bold text-slate-700 whitespace-nowrap">PILIH TAMPILAN KELAS:</label>
-                    <select id="legerClassSelect" onchange="renderLegerTable()" class="border border-indigo-300 rounded-lg px-3 py-1.5 text-xs font-bold text-indigo-900 bg-indigo-50 focus:ring-2 focus:ring-indigo-500">
-                        <option value="KELAS1A">KELAS 1A</option>
-                        <option value="KELAS2A">KELAS 2A</option>
-                        <option value="KELAS3A">KELAS 3A</option>
-                        <option value="KELAS4A">KELAS 4A</option>
-                        <option value="KELAS5A">KELAS 5A</option>
-                        <option value="KELAS6A">KELAS 6A</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs border-collapse" id="legerTable">
-                        <thead id="legerTableHeader" class="bg-indigo-950 text-white"></thead>
-                        <tbody id="legerTableBody" class="divide-y divide-slate-200"></tbody>
-                    </table>
-                </div>
-                <div id="legerEmptyState" class="hidden py-12 text-center">
-                    <i class="fa-solid fa-graduation-cap text-4xl text-slate-300 mb-3"></i>
-                    <p class="text-slate-500 font-medium">Belum ada data leger nilai untuk kelas ini.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- VIEW 4: MUTASI SISWA -->
+        <!-- VIEW 3: MUTASI SISWA -->
         <div id="viewMutasi" class="hidden">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 no-print">
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
@@ -348,28 +268,6 @@
                 </div>
             </div>
 
-            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
-                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                    <div class="relative w-full sm:w-72">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="mutasiSearchInput" placeholder="Cari Siswa Mutasi..." oninput="renderMutasiTable()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm">
-                    </div>
-                    <select id="mutasiFilterType" onchange="renderMutasiTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 bg-white">
-                        <option value="ALL">Semua Jenis Mutasi</option>
-                        <option value="MASUK">Pindahan (Masuk)</option>
-                        <option value="KELUAR">Pindah (Keluar)</option>
-                    </select>
-                </div>
-                <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
-                    <button onclick="openModalMutasi('MASUK')" class="admin-only-action hidden bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
-                        <i class="fa-solid fa-plus"></i> Input Mutasi Masuk
-                    </button>
-                    <button onclick="openModalMutasi('KELUAR')" class="admin-only-action hidden bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
-                        <i class="fa-solid fa-minus"></i> Input Mutasi Keluar
-                    </button>
-                </div>
-            </div>
-
             <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm border-collapse" id="mutasiTable">
@@ -389,14 +287,10 @@
                         <tbody id="mutasiTableBody" class="divide-y divide-slate-200 text-xs"></tbody>
                     </table>
                 </div>
-                <div id="mutasiEmptyState" class="hidden py-12 text-center">
-                    <i class="fa-solid fa-right-left text-4xl text-slate-300 mb-3"></i>
-                    <p class="text-slate-500 font-medium">Belum ada riwayat mutasi siswa.</p>
-                </div>
             </div>
         </div>
 
-        <!-- VIEW 5: SURAT KELUAR -->
+        <!-- VIEW 4: SURAT KELUAR -->
         <div id="viewSurat" class="hidden">
             <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col sm:flex-row gap-4 justify-between items-center">
                 <div class="relative w-full sm:w-96">
@@ -406,9 +300,6 @@
                 <div class="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
                     <button onclick="openSuratModal()" class="admin-only-action hidden bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
                         <i class="fa-solid fa-file-circle-plus"></i> Buat Nomor Surat Baru
-                    </button>
-                    <button onclick="exportSuratToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-export"></i> Ekspor Agenda Surat
                     </button>
                 </div>
             </div>
@@ -432,16 +323,12 @@
                         <tbody id="suratTableBody" class="divide-y divide-slate-200 text-xs"></tbody>
                     </table>
                 </div>
-                <div id="suratEmptyState" class="hidden py-12 text-center">
-                    <i class="fa-solid fa-envelope-open text-4xl text-slate-300 mb-3"></i>
-                    <p class="text-slate-500 font-medium">Belum ada rekam penomoran surat.</p>
-                </div>
             </div>
         </div>
 
     </main>
 
-    <!-- MODAL FORM INPUT SISWA -->
+    <!-- MODAL INPUT SISWA MANUAL -->
     <div id="studentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8 transform transition-all">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
@@ -523,6 +410,56 @@
         </div>
     </div>
 
+    <!-- MODAL INPUT SURAT BARU -->
+    <div id="suratModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 transform transition-all">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 class="text-lg font-bold text-slate-800">Buat Nomor Surat Keluar Baru</h3>
+                <button onclick="closeSuratModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            
+            <form id="suratForm" onsubmit="handleSuratSubmit(event)" class="space-y-4 text-xs">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold mb-1">Tanggal Surat *</label>
+                        <input type="date" id="suratTanggal" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Kode Instansi / Klasifikasi *</label>
+                        <input type="text" id="suratKodeInstansi" placeholder="421.2" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold mb-1">Sifat Keamanan</label>
+                        <select id="suratKeamanan" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                            <option value="B">B - Biasa</option>
+                            <option value="R">R - Rahasia</option>
+                            <option value="P">P - Penting</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Penandatangan *</label>
+                        <input type="text" id="suratPenandatangan" placeholder="Kepala Sekolah" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1">Perihal / Hal *</label>
+                    <input type="text" id="suratPerihal" placeholder="Undangan Rapat Orang Tua" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1">Ditujukan / Penerima *</label>
+                    <input type="text" id="suratPenerima" placeholder="Orang Tua Siswa Kelas 6" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t">
+                    <button type="button" onclick="closeSuratModal()" class="px-4 py-2 border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-100">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow">Generate Nomor Surat</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA -->
     <div id="indukPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-2 sm:p-4 no-print">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col my-auto overflow-hidden">
@@ -567,21 +504,9 @@
         const studentsRef = ref(db, 'students');
         const suratRef = ref(db, 'surat_keluar');
 
-        const MAPEL_CONFIG = {
-            "KELAS1A": ["PAIDBP", "PPDK", "BI", "MU", "BI", "SB", "PJODK", "BSUN", "PLH", "GKS"],
-            "KELAS2A": ["PAIDBP", "PPDK", "BI", "MU", "BI", "SB", "PJODK", "BSUN", "PLH", "GKS"],
-            "KELAS3A": ["PAIDBP", "PPDK", "BI", "MU", "IPADSI", "BI", "SB", "PJODK", "BSUN", "PLH", "GKS"],
-            "KELAS4A": ["PAIDBP", "PPDK", "BI", "MU", "IPADSI", "BI", "SB", "PJODK", "BSUN", "PLH", "GKS"],
-            "KELAS5A": ["PAIDBP", "PPDK", "BI", "MU", "IPADSI", "BI", "SB", "PJODK", "BSUN", "PLH", "GKS"],
-            "KELAS6A": ["PAIDBP", "PAK", "PPDK", "BI", "MU", "IPADSI", "PJODK", "SB", "BI", "BSUN", "PLH", "GKS"]
-        };
-
         let studentsData = {};
         let suratData = {};
         let currentUserRole = 'VIEWER';
-        let currentLetterFilter = 'ALL';
-        let currentYearFilter = 'ALL';
-        let currentSearchQuery = '';
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -630,7 +555,6 @@
                 document.getElementById('totalStudentsCount').textContent = Object.keys(studentsData).length;
                 renderData();
                 renderIndukGrid();
-                renderLegerTable();
                 renderMutasiTable();
             });
 
@@ -642,8 +566,8 @@
         }
 
         window.switchTab = function(tabName) {
-            const views = ['viewKlaper', 'viewInduk', 'viewLeger', 'viewMutasi', 'viewSurat'];
-            const btns = ['tabKlaperBtn', 'tabIndukBtn', 'tabLegerBtn', 'tabMutasiBtn', 'tabSuratBtn'];
+            const views = ['viewKlaper', 'viewInduk', 'viewMutasi', 'viewSurat'];
+            const btns = ['tabKlaperBtn', 'tabIndukBtn', 'tabMutasiBtn', 'tabSuratBtn'];
 
             views.forEach(v => document.getElementById(v).classList.add('hidden'));
             btns.forEach(b => document.getElementById(b).className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap");
@@ -655,10 +579,6 @@
                 document.getElementById('viewInduk').classList.remove('hidden');
                 document.getElementById('tabIndukBtn').className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
                 renderIndukGrid();
-            } else if (tabName === 'leger') {
-                document.getElementById('viewLeger').classList.remove('hidden');
-                document.getElementById('tabLegerBtn').className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
-                renderLegerTable();
             } else if (tabName === 'mutasi') {
                 document.getElementById('viewMutasi').classList.remove('hidden');
                 document.getElementById('tabMutasiBtn').className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
@@ -716,53 +636,6 @@
             `).join('');
         }
 
-        window.renderLegerTable = function() {
-            const classKey = document.getElementById('legerClassSelect').value;
-            const mapelList = MAPEL_CONFIG[classKey] || [];
-            const header = document.getElementById('legerTableHeader');
-            const tbody = document.getElementById('legerTableBody');
-            const emptyState = document.getElementById('legerEmptyState');
-
-            let headerHtml = `<tr class="border-b border-indigo-900"><th class="py-2.5 px-2 text-center border-r border-indigo-900 w-10">No</th><th class="py-2.5 px-3 border-r border-indigo-900">Nama Lengkap Siswa</th><th class="py-2.5 px-2 text-center border-r border-indigo-900 w-24">NIS</th><th class="py-2.5 px-2 text-center border-r border-indigo-900 w-24">NISN</th>`;
-            mapelList.forEach(m => { headerHtml += `<th class="py-2.5 px-1.5 text-center border-r border-indigo-900 min-w-[50px]">${m}</th>`; });
-            headerHtml += `<th class="py-2.5 px-2 text-center bg-indigo-900">Rata-Rata</th></tr>`;
-            header.innerHTML = headerHtml;
-
-            let list = Object.values(studentsData);
-            let validRows = 0;
-            let rowsHtml = '';
-
-            list.forEach((s) => {
-                const nilaiObj = s.nilaiRapor ? (s.nilaiRapor[classKey] || null) : null;
-                if (!nilaiObj) return;
-
-                validRows++;
-                let total = 0, count = 0, mapelTds = '';
-
-                mapelList.forEach(m => {
-                    const val = nilaiObj[m];
-                    if (val !== undefined && val !== null && val !== '') {
-                        const num = parseFloat(val);
-                        if (!isNaN(num)) { total += num; count++; }
-                        mapelTds += `<td class="py-2 px-1 text-center border-r border-slate-200 font-medium">${val}</td>`;
-                    } else {
-                        mapelTds += `<td class="py-2 px-1 text-center border-r border-slate-200 text-slate-300">-</td>`;
-                    }
-                });
-
-                const avg = count > 0 ? (total / count).toFixed(1) : '-';
-                rowsHtml += `<tr class="hover:bg-slate-50 transition border-b border-slate-200"><td class="py-2 px-2 text-center border-r border-slate-200 text-slate-500">${validRows}</td><td class="py-2 px-3 border-r border-slate-200 font-bold text-slate-900 uppercase">${s.name || '-'}</td><td class="py-2 px-2 text-center border-r border-slate-200 font-mono">${s.nis || '-'}</td><td class="py-2 px-2 text-center border-r border-slate-200 font-mono">${s.nisn || '-'}</td>${mapelTds}<td class="py-2 px-2 text-center font-bold text-indigo-900 bg-indigo-50/50">${avg}</td></tr>`;
-            });
-
-            if (validRows === 0) {
-                tbody.innerHTML = '';
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-                tbody.innerHTML = rowsHtml;
-            }
-        }
-
         window.renderMutasiTable = function() {
             const tbody = document.getElementById('mutasiTableBody');
             let list = Object.values(studentsData).filter(s => (s.notes || '').toUpperCase().includes('MUTASI') || (s.transferFrom || '').trim() !== '');
@@ -798,115 +671,10 @@
                     <td class="py-2.5 px-4 border-r border-slate-200 uppercase">${s.penerima || '-'}</td>
                     <td class="py-2.5 px-3 border-r border-slate-200">${s.penandatangan || '-'}</td>
                     <td class="py-2.5 px-3 text-center no-print">
-                        <button onclick="navigator.clipboard.writeText('${s.nomorResmi}')" class="px-2 py-1 bg-slate-100 rounded text-xs"><i class="fa-solid fa-copy"></i></button>
+                        <button onclick="navigator.clipboard.writeText('${s.nomorResmi}')" class="px-2 py-1 bg-slate-100 rounded text-xs" title="Salin Nomor Surat"><i class="fa-solid fa-copy"></i></button>
                     </td>
                 </tr>
             `).join('');
-        }
-
-        window.downloadTemplateLegerExcel = function() {
-            const templateLegerData = [
-                ["LEGER NILAI RAPOR SISWA TAHUN PELAJARAN 2025/2026 GENAP"],
-                ["SEKOLAH", "", ": SDN 186 CIPADUNG KOTA BANDUNG"],
-                ["Kelas", "", ": KELAS 1A"],
-                ["NO", "NAMA SISWA", "NISN", "NIS", "MATA PELAJARAN", "", "", "", "", "", "", "", "", "", "Ketidakhadiran", "", "", "Ekstra Kurikuler"],
-                ["", "", "", "", "PAIDBP", "PPDK", "BI", "MU", "BI", "SB", "PJODK", "BSUN", "PLH", "GKS", "", "", "", "Pramuka", "Seni Tari"],
-                [""],
-                ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "Sakit", "Izin", "Alpa"],
-                [1, "ADIBA NURKHOIROOTUN HISAN", "3188779686", "2526186010001", 86, 84, 84, 85, 83, 87, 83, 85, 85, "", 4, 0, 0, "", "B"]
-            ];
-
-            const ws = XLSX.utils.aoa_to_sheet(templateLegerData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Leger_Rapor_Kelas");
-            XLSX.writeFile(wb, "Template_Leger_Nilai_Rapor_SDN186.xlsx");
-        }
-
-        window.triggerExcelLegerImport = function() { document.getElementById('excelLegerInput').click(); }
-
-        window.handleExcelLegerImport = function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                try {
-                    const data = new Uint8Array(evt.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
-                    let className = 'KELAS1A';
-                    for (let r = 0; r < 5; r++) {
-                        if (!json[r]) continue;
-                        for (let c = 0; c < json[r].length; c++) {
-                            const val = String(json[r][c] || '');
-                            if (val.toUpperCase().includes('KELAS')) {
-                                className = val.replace(':', '').replace(/\s+/g, '').toUpperCase();
-                                break;
-                            }
-                        }
-                    }
-
-                    const row2 = json[2] || json[3] || [];
-                    const row3 = json[4] || json[3] || [];
-                    let nisCol = -1, nisnCol = -1, nameCol = -1, mapelCols = [];
-
-                    for (let c = 0; c < row2.length; c++) {
-                        const r2Val = String(row2[c] || '').trim().toUpperCase();
-                        if (r2Val === 'NIS') nisCol = c;
-                        if (r2Val === 'NISN') nisnCol = c;
-                        if (r2Val.includes('NAMA')) nameCol = c;
-                    }
-
-                    for (let c = 4; c < row3.length; c++) {
-                        const mName = String(row3[c] || '').trim();
-                        const r2Name = String(row2[c] || '').trim();
-                        if (mName && mName !== 'undefined' && !r2Name.includes('Ketidakhadiran') && !r2Name.includes('Ekstra')) {
-                            mapelCols.push({ col: c, mapel: mName });
-                        }
-                    }
-
-                    let matchCount = 0;
-                    const studentsArr = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
-
-                    for (let r = 5; r < json.length; r++) {
-                        const row = json[r];
-                        if (!row || row.length === 0) continue;
-
-                        const rowNis = nisCol !== -1 && row[nisCol] ? String(row[nisCol]).trim() : '';
-                        const rowNisn = nisnCol !== -1 && row[nisnCol] ? String(row[nisnCol]).trim() : '';
-                        const rowName = nameCol !== -1 && row[nameCol] ? String(row[nameCol]).trim().toUpperCase() : '';
-
-                        if (!rowNis && !rowNisn && !rowName) continue;
-
-                        let target = studentsArr.find(s => 
-                            (rowNis && s.nis && String(s.nis).trim() === rowNis) ||
-                            (rowNisn && s.nisn && String(s.nisn).trim() === rowNisn) ||
-                            (rowName && s.name && String(s.name).trim().toUpperCase() === rowName)
-                        );
-
-                        if (target) {
-                            let nilaiObj = {};
-                            mapelCols.forEach(m => {
-                                const val = row[m.col];
-                                if (val !== undefined && val !== null && val !== '') nilaiObj[m.mapel] = val;
-                            });
-
-                            const existingNilai = target.nilaiRapor || {};
-                            existingNilai[className] = nilaiObj;
-
-                            update(ref(db, `students/${target.key}`), { nilaiRapor: existingNilai });
-                            matchCount++;
-                        }
-                    }
-
-                    alert(`Berhasil mengimpor nilai leger (${className}) untuk ${matchCount} siswa!`);
-                    renderLegerTable();
-                } catch (err) { alert("Gagal memproses file Leger Excel: " + err.message); }
-                e.target.value = '';
-            };
-            reader.readAsArrayBuffer(file);
         }
 
         window.openModal = function() {
@@ -938,6 +706,42 @@
             };
             push(studentsRef, payload);
             closeModal();
+        }
+
+        window.openSuratModal = function() {
+            document.getElementById('suratForm').reset();
+            document.getElementById('suratModal').classList.remove('hidden');
+            document.getElementById('suratModal').classList.add('flex');
+        }
+
+        window.closeSuratModal = function() {
+            document.getElementById('suratModal').classList.add('hidden');
+            document.getElementById('suratModal').classList.remove('flex');
+        }
+
+        window.handleSuratSubmit = function(e) {
+            e.preventDefault();
+            const count = Object.keys(suratData).length + 1;
+            const seqStr = String(count).padStart(3, '0');
+            const kode = document.getElementById('suratKodeInstansi').value.trim();
+            const keamanan = document.getElementById('suratKeamanan').value;
+            const dateVal = document.getElementById('suratTanggal').value;
+            const year = dateVal ? dateVal.split('-')[0] : '2026';
+
+            const nomorResmi = `${kode}/${seqStr}-${keamanan}/SDN.186/${year}`;
+
+            const payload = {
+                tanggal: dateVal,
+                nomorResmi: nomorResmi,
+                kodeInstansi: kode,
+                keamanan: keamanan,
+                perihal: document.getElementById('suratPerihal').value.trim(),
+                penerima: document.getElementById('suratPenerima').value.trim(),
+                penandatangan: document.getElementById('suratPenandatangan').value.trim()
+            };
+
+            push(suratRef, payload);
+            closeSuratModal();
         }
 
         window.viewIndukSheet = function(key) {
