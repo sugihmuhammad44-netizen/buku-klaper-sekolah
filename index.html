@@ -117,6 +117,7 @@
         <!-- FILE INPUT EXCEL TERSEMBUNYI -->
         <input type="file" id="excelFileInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelImport(event)">
         <input type="file" id="excelLegerInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelLegerImport(event)">
+        <input type="file" id="excelSuratFileInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelSuratImport(event)">
 
         <!-- VIEW 1: BUKU KLAPER -->
         <div id="viewKlaper">
@@ -180,25 +181,6 @@
                             <option value="MUTASI">MUTASI / PINDAH</option>
                         </select>
                     </div>
-                </div>
-            </div>
-
-            <!-- HEADER KOP SURAT CETAK -->
-            <div id="printHeader" class="hidden print-only mb-6">
-                <div class="flex items-center justify-between pb-2 border-b-4 border-double border-black">
-                    <img src="logo.png" alt="Logo Kota Bandung" class="h-20 w-20 object-contain">
-                    <div class="text-center flex-grow px-2 font-serif">
-                        <h3 class="text-sm font-bold uppercase leading-tight">PEMERINTAH KOTA BANDUNG</h3>
-                        <h3 class="text-sm font-bold uppercase leading-tight">DINAS PENDIDIKAN</h3>
-                        <h1 class="text-lg font-extrabold uppercase leading-tight mt-0.5">SEKOLAH DASAR NEGERI 186 CIPADUNG</h1>
-                        <h2 class="text-base font-bold uppercase leading-tight">KOTA BANDUNG</h2>
-                        <p class="text-[10px] mt-1 font-normal">Alamat : Jl. A.H Nasution KM.13.5 No.71 Kel. Cipadung Kec. Cibiru Bandung</p>
-                    </div>
-                    <div class="w-20"></div>
-                </div>
-                <div class="text-center mt-3">
-                    <h2 class="text-base font-bold uppercase underline">BUKU KLAPER SISWA SEKOLAH</h2>
-                    <p class="text-xs text-slate-600">Dokumen Resmi Arsip Indeks Abjad & Tahun Masuk Data Siswa</p>
                 </div>
             </div>
 
@@ -291,11 +273,11 @@
             </div>
         </div>
 
-        <!-- VIEW NEW: LEGER NILAI RAPOR -->
+        <!-- VIEW 3: LEGER NILAI RAPOR -->
         <div id="viewLeger" class="hidden">
             <div class="admin-only-action hidden bg-white p-3.5 rounded-xl shadow-md border border-slate-200 mb-4 no-print flex flex-wrap gap-2 items-center justify-between">
                 <div class="text-xs font-bold text-slate-600 uppercase flex items-center gap-2">
-                    <i class="fa-solid fa-graduation-cap text-indigo-600"></i> Pengelolaan Leger Nilai Rapor
+                    <i class="fa-solid fa-graduation-cap text-indigo-600"></i> Alat Pengelolaan Leger Nilai Rapor
                 </div>
                 <div class="flex flex-wrap gap-2 items-center">
                     <button onclick="downloadTemplateLegerExcel()" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
@@ -366,6 +348,28 @@
                 </div>
             </div>
 
+            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                    <div class="relative w-full sm:w-72">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="mutasiSearchInput" placeholder="Cari Siswa Mutasi..." oninput="renderMutasiTable()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm">
+                    </div>
+                    <select id="mutasiFilterType" onchange="renderMutasiTable()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 bg-white">
+                        <option value="ALL">Semua Jenis Mutasi</option>
+                        <option value="MASUK">Pindahan (Masuk)</option>
+                        <option value="KELUAR">Pindah (Keluar)</option>
+                    </select>
+                </div>
+                <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
+                    <button onclick="openModalMutasi('MASUK')" class="admin-only-action hidden bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i> Input Mutasi Masuk
+                    </button>
+                    <button onclick="openModalMutasi('KELUAR')" class="admin-only-action hidden bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-minus"></i> Input Mutasi Keluar
+                    </button>
+                </div>
+            </div>
+
             <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm border-collapse" id="mutasiTable">
@@ -385,11 +389,30 @@
                         <tbody id="mutasiTableBody" class="divide-y divide-slate-200 text-xs"></tbody>
                     </table>
                 </div>
+                <div id="mutasiEmptyState" class="hidden py-12 text-center">
+                    <i class="fa-solid fa-right-left text-4xl text-slate-300 mb-3"></i>
+                    <p class="text-slate-500 font-medium">Belum ada riwayat mutasi siswa.</p>
+                </div>
             </div>
         </div>
 
         <!-- VIEW 5: SURAT KELUAR -->
         <div id="viewSurat" class="hidden">
+            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col sm:flex-row gap-4 justify-between items-center">
+                <div class="relative w-full sm:w-96">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="suratSearchInput" placeholder="Cari Nomor Surat, Perihal, atau Penerima..." oninput="renderSuratTable()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm">
+                </div>
+                <div class="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
+                    <button onclick="openSuratModal()" class="admin-only-action hidden bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-circle-plus"></i> Buat Nomor Surat Baru
+                    </button>
+                    <button onclick="exportSuratToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-2 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-export"></i> Ekspor Agenda Surat
+                    </button>
+                </div>
+            </div>
+
             <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm border-collapse" id="suratTable">
@@ -409,10 +432,96 @@
                         <tbody id="suratTableBody" class="divide-y divide-slate-200 text-xs"></tbody>
                     </table>
                 </div>
+                <div id="suratEmptyState" class="hidden py-12 text-center">
+                    <i class="fa-solid fa-envelope-open text-4xl text-slate-300 mb-3"></i>
+                    <p class="text-slate-500 font-medium">Belum ada rekam penomoran surat.</p>
+                </div>
             </div>
         </div>
 
     </main>
+
+    <!-- MODAL FORM INPUT SISWA -->
+    <div id="studentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8 transform transition-all">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 id="modalTitle" class="text-xl font-bold text-slate-800">Formulir Isian Buku Induk Siswa</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            
+            <form id="studentForm" onsubmit="handleFormSubmit(event)" class="space-y-4 max-h-[78vh] overflow-y-auto pr-2 text-xs">
+                <input type="hidden" id="studentKey">
+
+                <div class="bg-indigo-50/60 p-3.5 rounded-xl border border-indigo-100">
+                    <h4 class="font-bold text-indigo-900 uppercase tracking-wider mb-2.5">A. KETERANGAN PRIBADI PESERTA DIDIK</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2">
+                        <div>
+                            <label class="block font-semibold mb-1">Nomor Induk / NIS *</label>
+                            <input type="text" id="nis" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">NISN</label>
+                            <input type="text" id="nisn" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">NIK Siswa</label>
+                            <input type="text" id="nik" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2">
+                        <div class="sm:col-span-2">
+                            <label class="block font-semibold mb-1">1. Nama Lengkap *</label>
+                            <input type="text" id="name" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 uppercase">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">2. Nama Panggilan</label>
+                            <input type="text" id="nickname" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-2">
+                        <div>
+                            <label class="block font-semibold mb-1">3. Jenis Kelamin *</label>
+                            <select id="gender" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                                <option value="L">Laki-laki (L)</option>
+                                <option value="P">Perempuan (P)</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block font-semibold mb-1">4. Tempat & Tanggal Lahir</label>
+                            <input type="text" id="pobDob" placeholder="Bandung, 12 Mei 2012" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">5. Agama</label>
+                            <input type="text" id="religion" placeholder="ISLAM" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 uppercase">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">B. ORANG TUA / WALI & KETETAPAN AKHIR</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2">
+                        <div>
+                            <label class="block font-semibold mb-1">Nama Wali / Orang Tua *</label>
+                            <input type="text" id="parentName" required class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 uppercase">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Tanggal Masuk Sekolah</label>
+                            <input type="text" id="entryDate" placeholder="15 Juli 2019" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Status / Catatan Akhir *</label>
+                            <input type="text" id="notes" placeholder="AKTIF / LULUS / MUTASI" class="w-full border rounded px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500 uppercase">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-100">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow">Simpan Data Siswa</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- MODAL CETAK LEMBAR BUKU INDUK SISWA -->
     <div id="indukPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-2 sm:p-4 no-print">
@@ -422,10 +531,10 @@
                     <i class="fa-solid fa-file-lines text-yellow-400"></i> Pratinjau Lembar Buku Induk Siswa
                 </h3>
                 <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow transition flex items-center gap-1.5">
+                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow flex items-center gap-1.5">
                         <i class="fa-solid fa-print"></i> Cetak Lembar Ini
                     </button>
-                    <button onclick="closeIndukPrintModal()" class="bg-slate-600 hover:bg-slate-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                    <button onclick="closeIndukPrintModal()" class="bg-slate-600 hover:bg-slate-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1">
                         <i class="fa-solid fa-xmark"></i> Tutup
                     </button>
                 </div>
@@ -456,6 +565,7 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
         const studentsRef = ref(db, 'students');
+        const suratRef = ref(db, 'surat_keluar');
 
         const MAPEL_CONFIG = {
             "KELAS1A": ["PAIDBP", "PPDK", "BI", "MU", "BI", "SB", "PJODK", "BSUN", "PLH", "GKS"],
@@ -467,26 +577,67 @@
         };
 
         let studentsData = {};
+        let suratData = {};
         let currentUserRole = 'VIEWER';
+        let currentLetterFilter = 'ALL';
+        let currentYearFilter = 'ALL';
+        let currentSearchQuery = '';
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('loginModal').classList.add('hidden');
-                currentUserRole = user.email.toLowerCase().includes('admin') ? 'ADMIN' : 'VIEWER';
+                document.getElementById('currentUserLabel').textContent = user.email;
+
+                if (user.email.toLowerCase().includes('admin')) {
+                    currentUserRole = 'ADMIN';
+                    document.getElementById('userRoleBadge').textContent = 'Admin / Operator';
+                    document.getElementById('adminHeaderActions').classList.remove('hidden');
+                    document.querySelectorAll('.admin-only-action').forEach(el => el.classList.remove('hidden'));
+                } else {
+                    currentUserRole = 'VIEWER';
+                    document.getElementById('userRoleBadge').textContent = 'Guru / Viewer';
+                    document.getElementById('adminHeaderActions').classList.add('hidden');
+                    document.querySelectorAll('.admin-only-action').forEach(el => el.classList.add('hidden'));
+                }
                 listenToData();
             } else {
                 document.getElementById('loginModal').classList.remove('hidden');
             }
         });
 
+        window.handleLogin = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            try {
+                errorDiv.classList.add('hidden');
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                errorDiv.textContent = "Gagal Masuk: Email atau Kata Sandi Salah.";
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        window.handleLogout = function() { signOut(auth); }
+
         function listenToData() {
             onValue(studentsRef, (snapshot) => {
                 studentsData = snapshot.val() || {};
                 document.getElementById('syncIndicator').className = "h-3 w-3 rounded-full bg-emerald-500";
                 document.getElementById('syncText').textContent = "Terhubung ke Cloud Database";
+                document.getElementById('totalStudentsCount').textContent = Object.keys(studentsData).length;
                 renderData();
                 renderIndukGrid();
                 renderLegerTable();
+                renderMutasiTable();
+            });
+
+            onValue(suratRef, (snapshot) => {
+                suratData = snapshot.val() || {};
+                document.getElementById('totalSuratCount').textContent = Object.keys(suratData).length;
+                renderSuratTable();
             });
         }
 
@@ -508,7 +659,61 @@
                 document.getElementById('viewLeger').classList.remove('hidden');
                 document.getElementById('tabLegerBtn').className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
                 renderLegerTable();
+            } else if (tabName === 'mutasi') {
+                document.getElementById('viewMutasi').classList.remove('hidden');
+                document.getElementById('tabMutasiBtn').className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
+                renderMutasiTable();
+            } else if (tabName === 'surat') {
+                document.getElementById('viewSurat').classList.remove('hidden');
+                document.getElementById('tabSuratBtn').className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
+                renderSuratTable();
             }
+        }
+
+        window.renderData = function() {
+            const tbody = document.getElementById('tableBody');
+            let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
+            list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            tbody.innerHTML = list.map((s, idx) => `
+                <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-500 font-medium">${idx + 1}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 font-mono">${s.nis || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200 font-semibold text-slate-900">${s.name || '-'}</td>
+                    <td class="py-2.5 px-2 text-center border-r border-slate-200 font-bold ${s.gender === 'L' ? 'text-blue-600' : 'text-pink-600'}">${s.gender || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200 text-slate-700">${s.parentName || '-'}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-600">${s.entryDate || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${s.class1 || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${s.class2 || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${s.class3 || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${s.class4 || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${s.class5 || '-'}</td>
+                    <td class="py-2.5 px-1.5 text-center border-r border-slate-200 text-slate-700 bg-slate-50">${s.class6 || '-'}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 text-slate-600">${s.exitDate || '-'}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200"><span class="px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">${s.notes || 'AKTIF'}</span></td>
+                    <td class="py-2.5 px-3 text-center no-print action-column ${currentUserRole === 'ADMIN' ? '' : 'hidden'}">
+                        <button onclick="editStudent('${s.key}')" class="px-2 py-1 bg-blue-50 text-blue-600 border border-blue-200 rounded text-xs">Edit</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.renderIndukGrid = function() {
+            const grid = document.getElementById('indukGrid');
+            let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
+
+            grid.innerHTML = list.map(s => `
+                <div class="bg-white rounded-xl shadow-md border border-slate-200 p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">NIS: ${s.nis || '-'}</span>
+                        <h3 class="text-base font-bold text-slate-900 mt-1 uppercase">${s.name || '-'}</h3>
+                        <p class="text-xs text-slate-600 mt-2"><strong>Orang Tua:</strong> ${s.parentName || '-'}</p>
+                    </div>
+                    <button onclick="viewIndukSheet('${s.key}')" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1.5 rounded-lg text-xs flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-file-lines"></i> Cetak Lembar Buku Induk
+                    </button>
+                </div>
+            `).join('');
         }
 
         window.renderLegerTable = function() {
@@ -517,36 +722,22 @@
             const header = document.getElementById('legerTableHeader');
             const tbody = document.getElementById('legerTableBody');
             const emptyState = document.getElementById('legerEmptyState');
-            const query = (document.getElementById('legerSearchInput')?.value || '').toLowerCase();
 
-            let headerHtml = `
-                <tr class="border-b border-indigo-900">
-                    <th class="py-2.5 px-2 text-center border-r border-indigo-900 w-10">No</th>
-                    <th class="py-2.5 px-3 border-r border-indigo-900">Nama Lengkap Siswa</th>
-                    <th class="py-2.5 px-2 text-center border-r border-indigo-900 w-24">NIS</th>
-                    <th class="py-2.5 px-2 text-center border-r border-indigo-900 w-24">NISN</th>
-            `;
-            mapelList.forEach(m => {
-                headerHtml += `<th class="py-2.5 px-1.5 text-center border-r border-indigo-900 min-w-[50px]">${m}</th>`;
-            });
+            let headerHtml = `<tr class="border-b border-indigo-900"><th class="py-2.5 px-2 text-center border-r border-indigo-900 w-10">No</th><th class="py-2.5 px-3 border-r border-indigo-900">Nama Lengkap Siswa</th><th class="py-2.5 px-2 text-center border-r border-indigo-900 w-24">NIS</th><th class="py-2.5 px-2 text-center border-r border-indigo-900 w-24">NISN</th>`;
+            mapelList.forEach(m => { headerHtml += `<th class="py-2.5 px-1.5 text-center border-r border-indigo-900 min-w-[50px]">${m}</th>`; });
             headerHtml += `<th class="py-2.5 px-2 text-center bg-indigo-900">Rata-Rata</th></tr>`;
             header.innerHTML = headerHtml;
 
             let list = Object.values(studentsData);
-            if (query) {
-                list = list.filter(s => (s.name||'').toLowerCase().includes(query) || (s.nis||'').includes(query));
-            }
-
             let validRows = 0;
             let rowsHtml = '';
 
-            list.forEach((s, idx) => {
+            list.forEach((s) => {
                 const nilaiObj = s.nilaiRapor ? (s.nilaiRapor[classKey] || null) : null;
                 if (!nilaiObj) return;
 
                 validRows++;
-                let total = 0, count = 0;
-                let mapelTds = '';
+                let total = 0, count = 0, mapelTds = '';
 
                 mapelList.forEach(m => {
                     const val = nilaiObj[m];
@@ -560,17 +751,7 @@
                 });
 
                 const avg = count > 0 ? (total / count).toFixed(1) : '-';
-
-                rowsHtml += `
-                    <tr class="hover:bg-slate-50 transition border-b border-slate-200">
-                        <td class="py-2 px-2 text-center border-r border-slate-200 text-slate-500">${validRows}</td>
-                        <td class="py-2 px-3 border-r border-slate-200 font-bold text-slate-900 uppercase">${s.name || '-'}</td>
-                        <td class="py-2 px-2 text-center border-r border-slate-200 font-mono">${s.nis || '-'}</td>
-                        <td class="py-2 px-2 text-center border-r border-slate-200 font-mono">${s.nisn || '-'}</td>
-                        ${mapelTds}
-                        <td class="py-2 px-2 text-center font-bold text-indigo-900 bg-indigo-50/50">${avg}</td>
-                    </tr>
-                `;
+                rowsHtml += `<tr class="hover:bg-slate-50 transition border-b border-slate-200"><td class="py-2 px-2 text-center border-r border-slate-200 text-slate-500">${validRows}</td><td class="py-2 px-3 border-r border-slate-200 font-bold text-slate-900 uppercase">${s.name || '-'}</td><td class="py-2 px-2 text-center border-r border-slate-200 font-mono">${s.nis || '-'}</td><td class="py-2 px-2 text-center border-r border-slate-200 font-mono">${s.nisn || '-'}</td>${mapelTds}<td class="py-2 px-2 text-center font-bold text-indigo-900 bg-indigo-50/50">${avg}</td></tr>`;
             });
 
             if (validRows === 0) {
@@ -582,6 +763,47 @@
             }
         }
 
+        window.renderMutasiTable = function() {
+            const tbody = document.getElementById('mutasiTableBody');
+            let list = Object.values(studentsData).filter(s => (s.notes || '').toUpperCase().includes('MUTASI') || (s.transferFrom || '').trim() !== '');
+
+            document.getElementById('statTotalMutasi').textContent = list.length;
+            tbody.innerHTML = list.map((s, idx) => `
+                <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200">${idx + 1}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 font-bold text-amber-700">MUTASI</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200 font-mono">${s.nis || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200 font-bold uppercase">${s.name || '-'}</td>
+                    <td class="py-2.5 px-2 text-center border-r border-slate-200 font-bold">${s.gender || '-'}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200">${s.exitDate || s.entryDate || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200">${s.transferFrom || s.notes || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200 uppercase">${s.parentName || '-'}</td>
+                    <td class="py-2.5 px-3 text-center"><button onclick="viewIndukSheet('${s.key}')" class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-xs"><i class="fa-solid fa-print"></i></button></td>
+                </tr>
+            `).join('');
+        }
+
+        window.renderSuratTable = function() {
+            const tbody = document.getElementById('suratTableBody');
+            let list = Object.values(suratData);
+
+            tbody.innerHTML = list.map((s, idx) => `
+                <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200">${idx + 1}</td>
+                    <td class="py-2.5 px-3 text-center border-r border-slate-200">${s.tanggal || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200 font-mono font-bold text-indigo-900">${s.nomorResmi || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200">${s.kodeInstansi || '-'}</td>
+                    <td class="py-2.5 px-2 text-center border-r border-slate-200 font-bold">${s.keamanan || 'B'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200">${s.perihal || '-'}</td>
+                    <td class="py-2.5 px-4 border-r border-slate-200 uppercase">${s.penerima || '-'}</td>
+                    <td class="py-2.5 px-3 border-r border-slate-200">${s.penandatangan || '-'}</td>
+                    <td class="py-2.5 px-3 text-center no-print">
+                        <button onclick="navigator.clipboard.writeText('${s.nomorResmi}')" class="px-2 py-1 bg-slate-100 rounded text-xs"><i class="fa-solid fa-copy"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
         window.downloadTemplateLegerExcel = function() {
             const templateLegerData = [
                 ["LEGER NILAI RAPOR SISWA TAHUN PELAJARAN 2025/2026 GENAP"],
@@ -591,8 +813,7 @@
                 ["", "", "", "", "PAIDBP", "PPDK", "BI", "MU", "BI", "SB", "PJODK", "BSUN", "PLH", "GKS", "", "", "", "Pramuka", "Seni Tari"],
                 [""],
                 ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "Sakit", "Izin", "Alpa"],
-                [1, "ADIBA NURKHOIROOTUN HISAN", "3188779686", "2526186010001", 86, 84, 84, 85, 83, 87, 83, 85, 85, "", 4, 0, 0, "", "B"],
-                [2, "AINA NUHA ZHAHIRA", "3188019923", "2526186010002", 90, 88, 88, 89, 87, 88, 83, 89, 89, "", 2, 0, 0, "", "B"]
+                [1, "ADIBA NURKHOIROOTUN HISAN", "3188779686", "2526186010001", 86, 84, 84, 85, 83, 87, 83, 85, 85, "", 4, 0, 0, "", "B"]
             ];
 
             const ws = XLSX.utils.aoa_to_sheet(templateLegerData);
@@ -601,12 +822,9 @@
             XLSX.writeFile(wb, "Template_Leger_Nilai_Rapor_SDN186.xlsx");
         }
 
-        window.triggerExcelLegerImport = function() {
-            document.getElementById('excelLegerInput').click();
-        }
+        window.triggerExcelLegerImport = function() { document.getElementById('excelLegerInput').click(); }
 
         window.handleExcelLegerImport = function(e) {
-            if (currentUserRole !== 'ADMIN') return;
             const file = e.target.files[0];
             if (!file) return;
 
@@ -632,9 +850,7 @@
 
                     const row2 = json[2] || json[3] || [];
                     const row3 = json[4] || json[3] || [];
-
-                    let nisCol = -1, nisnCol = -1, nameCol = -1;
-                    let mapelCols = [];
+                    let nisCol = -1, nisnCol = -1, nameCol = -1, mapelCols = [];
 
                     for (let c = 0; c < row2.length; c++) {
                         const r2Val = String(row2[c] || '').trim().toUpperCase();
@@ -648,8 +864,6 @@
                         const r2Name = String(row2[c] || '').trim();
                         if (mName && mName !== 'undefined' && !r2Name.includes('Ketidakhadiran') && !r2Name.includes('Ekstra')) {
                             mapelCols.push({ col: c, mapel: mName });
-                        } else if (r2Name.includes('Ketidakhadiran') || r2Name.includes('Ekstra')) {
-                            break;
                         }
                     }
 
@@ -676,29 +890,76 @@
                             let nilaiObj = {};
                             mapelCols.forEach(m => {
                                 const val = row[m.col];
-                                if (val !== undefined && val !== null && val !== '') {
-                                    nilaiObj[m.mapel] = val;
-                                }
+                                if (val !== undefined && val !== null && val !== '') nilaiObj[m.mapel] = val;
                             });
 
                             const existingNilai = target.nilaiRapor || {};
                             existingNilai[className] = nilaiObj;
 
-                            update(ref(db, `students/${target.key}`), {
-                                nilaiRapor: existingNilai
-                            });
+                            update(ref(db, `students/${target.key}`), { nilaiRapor: existingNilai });
                             matchCount++;
                         }
                     }
 
                     alert(`Berhasil mengimpor nilai leger (${className}) untuk ${matchCount} siswa!`);
                     renderLegerTable();
-                } catch (err) {
-                    alert("Gagal memproses file Leger Excel: " + err.message);
-                }
+                } catch (err) { alert("Gagal memproses file Leger Excel: " + err.message); }
                 e.target.value = '';
             };
             reader.readAsArrayBuffer(file);
+        }
+
+        window.openModal = function() {
+            document.getElementById('studentForm').reset();
+            document.getElementById('studentKey').value = '';
+            document.getElementById('studentModal').classList.remove('hidden');
+            document.getElementById('studentModal').classList.add('flex');
+        }
+
+        window.closeModal = function() {
+            document.getElementById('studentModal').classList.add('hidden');
+            document.getElementById('studentModal').classList.remove('flex');
+        }
+
+        window.handleFormSubmit = function(e) {
+            e.preventDefault();
+            const payload = {
+                nis: document.getElementById('nis').value.trim(),
+                nisn: document.getElementById('nisn').value.trim(),
+                nik: document.getElementById('nik').value.trim(),
+                name: document.getElementById('name').value.trim().toUpperCase(),
+                nickname: document.getElementById('nickname').value.trim(),
+                gender: document.getElementById('gender').value,
+                pobDob: document.getElementById('pobDob').value.trim(),
+                religion: document.getElementById('religion').value.trim().toUpperCase(),
+                parentName: document.getElementById('parentName').value.trim().toUpperCase(),
+                entryDate: document.getElementById('entryDate').value.trim(),
+                notes: document.getElementById('notes').value.trim().toUpperCase() || 'AKTIF'
+            };
+            push(studentsRef, payload);
+            closeModal();
+        }
+
+        window.viewIndukSheet = function(key) {
+            const s = studentsData[key];
+            if (!s) return;
+            document.getElementById('indukSheetContent').innerHTML = `
+                <div class="text-center font-bold uppercase mb-4">
+                    <h2 class="text-sm underline">LEMBAR BUKU INDUK PESERTA DIDIK</h2>
+                    <p class="text-xs">NIS: ${s.nis || '-'} | NISN: ${s.nisn || '-'}</p>
+                </div>
+                <p><strong>Nama Lengkap:</strong> ${s.name || '-'}</p>
+                <p><strong>Jenis Kelamin:</strong> ${s.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</p>
+                <p><strong>Orang Tua / Wali:</strong> ${s.parentName || '-'}</p>
+                <p><strong>Status:</strong> ${s.notes || 'AKTIF'}</p>
+            `;
+            document.getElementById('indukPrintModal').classList.remove('hidden');
+            document.getElementById('indukPrintModal').classList.add('flex');
+        }
+
+        window.closeIndukPrintModal = function() {
+            document.getElementById('indukPrintModal').classList.add('hidden');
+            document.getElementById('indukPrintModal').classList.remove('flex');
         }
     </script>
 </body>
