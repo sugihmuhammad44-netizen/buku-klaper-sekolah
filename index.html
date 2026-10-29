@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BUKU KLAPER, INDUK, MUTASI & NOMOR SURAT - SDN 186 CIPADUNG</title>
+    <title>BUKU KLAPER, INDUK, MUTASI, LEGER NILAI & NOMOR SURAT - SDN 186 CIPADUNG</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome CDN -->
@@ -16,7 +16,7 @@
             .no-print { display: none !important; }
             .print-only { display: block !important; }
             body { background: white; color: black; font-family: 'Times New Roman', Times, serif; }
-            table { border-collapse: collapse; width: 100%; font-size: 8.5pt; }
+            table { border-collapse: collapse; width: 100%; font-size: 8pt; }
             th, td { border: 1px solid #000 !important; padding: 2px 4px !important; }
             #printHeader { display: block !important; margin-bottom: 10px; text-align: center; }
             #indukSheetContent, #suratReceiptContent { border: none !important; box-shadow: none !important; padding: 0 !important; }
@@ -31,7 +31,7 @@
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all">
             <div class="text-center mb-6">
                 <img src="logo.png" alt="Logo Sekolah" class="h-16 w-16 mx-auto mb-3 object-contain">
-                <h2 class="text-xl font-bold text-slate-800 uppercase">PORTAL ARSIP SISWA & SURAT</h2>
+                <h2 class="text-xl font-bold text-slate-800 uppercase">PORTAL ARSIP SISWA, LEGER & SURAT</h2>
                 <p class="text-xs text-slate-500">SDN 186 CIPADUNG - KOTA BANDUNG</p>
             </div>
 
@@ -57,7 +57,7 @@
                 <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-14 w-14 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
                 <div>
                     <h1 class="text-xl font-bold tracking-tight uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h1>
-                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper, Buku Induk Siswa, Mutasi & Administrasi Nomor Surat Cloud</p>
+                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper, Buku Induk Siswa, Mutasi, Leger Nilai & Nomor Surat Cloud</p>
                 </div>
             </div>
             
@@ -80,13 +80,16 @@
         <div class="bg-indigo-950 border-t border-indigo-800 px-4 sm:px-8">
             <div class="max-w-7xl mx-auto flex gap-2 sm:gap-4 overflow-x-auto">
                 <button id="tabKlaperBtn" onclick="switchTab('klaper')" class="py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap">
-                    <i class="fa-solid fa-book"></i> Buku Klaper (Daftar Abjad)
+                    <i class="fa-solid fa-book"></i> Buku Klaper
                 </button>
                 <button id="tabIndukBtn" onclick="switchTab('induk')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
-                    <i class="fa-solid fa-address-card"></i> Buku Induk Siswa (Format MS Word)
+                    <i class="fa-solid fa-address-card"></i> Buku Induk Siswa
                 </button>
                 <button id="tabMutasiBtn" onclick="switchTab('mutasi')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
-                    <i class="fa-solid fa-right-left"></i> Mutasi Siswa (Masuk / Keluar)
+                    <i class="fa-solid fa-right-left"></i> Mutasi Siswa
+                </button>
+                <button id="tabLegerBtn" onclick="switchTab('leger')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
+                    <i class="fa-solid fa-table-list"></i> Leger Nilai
                 </button>
                 <button id="tabSuratBtn" onclick="switchTab('surat')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
                     <i class="fa-solid fa-envelope-open-text"></i> Nomor Surat
@@ -179,14 +182,22 @@
                 </div>
             </div>
 
-            <div id="printHeader" class="hidden print-only mb-6 text-center border-b-2 border-black pb-4">
-                <div class="flex items-center justify-center space-x-4">
-                    <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-20 w-20 object-contain">
-                    <div>
-                        <h1 class="text-xl font-bold uppercase tracking-wider">BUKU KLAPER SISWA SEKOLAH</h1>
-                        <h2 class="text-lg font-semibold uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h2>
-                        <p class="text-xs text-slate-600 mt-1">Dokumen Resmi Arsip Indeks Abjad & Tahun Masuk Data Siswa</p>
+            <!-- HEADER KOP SURAT UNTUK CETAK BUKU KLAPER -->
+            <div id="printHeader" class="hidden print-only mb-6">
+                <div class="flex items-center justify-between pb-2 border-b-4 border-double border-black">
+                    <img src="logo.png" alt="Logo Kota Bandung" class="h-20 w-20 object-contain">
+                    <div class="text-center flex-grow px-2 font-serif">
+                        <h3 class="text-sm font-bold tracking-wider uppercase leading-tight">PEMERINTAH KOTA BANDUNG</h3>
+                        <h3 class="text-sm font-bold tracking-wider uppercase leading-tight">DINAS PENDIDIKAN</h3>
+                        <h1 class="text-lg font-extrabold tracking-wide uppercase leading-tight mt-0.5">SEKOLAH DASAR NEGERI 186 CIPADUNG</h1>
+                        <h2 class="text-base font-bold tracking-wider uppercase leading-tight">KOTA BANDUNG</h2>
+                        <p class="text-[10px] mt-1 font-normal">Alamat : Jl. A.H Nasution KM.13.5 No.71 Kel. Cipadung Kec. Cibiru Bandung</p>
                     </div>
+                    <div class="w-20"></div>
+                </div>
+                <div class="text-center mt-3">
+                    <h2 class="text-base font-bold uppercase underline tracking-wider">BUKU KLAPER SISWA SEKOLAH</h2>
+                    <p class="text-xs text-slate-600">Dokumen Resmi Arsip Indeks Abjad & Tahun Masuk Data Siswa</p>
                 </div>
             </div>
 
@@ -232,7 +243,6 @@
                     <p class="text-slate-500 font-medium">Belum ada data siswa yang cocok.</p>
                 </div>
 
-                <!-- CONTROLLER PAGINATION KLAPER -->
                 <div id="klaperPagination" class="no-print p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
                     <div class="flex items-center gap-2">
                         <span class="text-slate-600">Tampilkan</span>
@@ -286,7 +296,6 @@
 
             <div id="indukGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-            <!-- CONTROLLER PAGINATION INDUK -->
             <div id="indukPagination" class="no-print mt-6 p-4 bg-white rounded-xl shadow-md border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
                 <div class="flex items-center gap-2">
                     <span class="text-slate-600">Tampilkan per Halaman</span>
@@ -302,9 +311,8 @@
             </div>
         </div>
 
-        <!-- VIEW 4: MUTASI SISWA -->
+        <!-- VIEW 3: MUTASI SISWA -->
         <div id="viewMutasi" class="hidden">
-            <!-- RINGKASAN STATISTIK MUTASI -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 no-print">
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
                     <div>
@@ -383,9 +391,86 @@
             </div>
         </div>
 
-        <!-- VIEW 3: MANAJEMEN NOMOR SURAT -->
+        <!-- VIEW 4: LEGER NILAI SISWA (FITUR BARU) -->
+        <div id="viewLeger" class="hidden">
+            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                    <div class="flex items-center gap-2">
+                        <label for="legerClassSelect" class="text-xs font-bold text-slate-700 whitespace-nowrap">Rombel / Kelas:</label>
+                        <select id="legerClassSelect" onchange="renderLegerTable()" class="border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                            <option value="1">Kelas 1</option>
+                            <option value="2">Kelas 2</option>
+                            <option value="3">Kelas 3</option>
+                            <option value="4">Kelas 4</option>
+                            <option value="5">Kelas 5</option>
+                            <option value="6">Kelas 6</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label for="legerSemesterSelect" class="text-xs font-bold text-slate-700 whitespace-nowrap">Semester:</label>
+                        <select id="legerSemesterSelect" onchange="renderLegerTable()" class="border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                            <option value="1">Ganjil (1)</option>
+                            <option value="2">Genap (2)</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label for="legerYearInput" class="text-xs font-bold text-slate-700 whitespace-nowrap">Tahun Pelajaran:</label>
+                        <input type="text" id="legerYearInput" value="2025/2026" onchange="renderLegerTable()" class="w-28 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-mono text-center focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
+                    <button onclick="exportLegerToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-1.5 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-export"></i> Ekspor Leger (Excel)
+                    </button>
+                    <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-800 text-white px-3.5 py-1.5 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-print"></i> Cetak Leger
+                    </button>
+                </div>
+            </div>
+
+            <!-- TABEL LEGER NILAI -->
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse" id="legerTable">
+                        <thead>
+                            <tr class="bg-indigo-950 text-white border-b border-indigo-900 text-center">
+                                <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 w-8">No</th>
+                                <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 w-20">NIS</th>
+                                <th rowspan="2" class="py-2 px-3 border-r border-indigo-900 min-w-[160px] text-left">Nama Siswa</th>
+                                <th rowspan="2" class="py-2 px-1 border-r border-indigo-900 w-8">L/P</th>
+                                <th colspan="8" class="py-1.5 px-2 border-r border-indigo-900 bg-indigo-900">Mata Pelajaran (Nilai Akhir)</th>
+                                <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 bg-indigo-900/80 w-14">Jumlah</th>
+                                <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 bg-indigo-900/80 w-14">Rata2</th>
+                                <th colspan="3" class="py-1.5 px-2 border-r border-indigo-900 bg-slate-800">Kehadiran</th>
+                                <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 no-print action-column w-20">Aksi</th>
+                            </tr>
+                            <tr class="bg-indigo-900 text-white text-[11px] text-center border-b border-indigo-800">
+                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">PAI</th>
+                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">PPKn</th>
+                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">B.Ind</th>
+                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">MTK</th>
+                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">IPAS</th>
+                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">PJOK</th>
+                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">Seni</th>
+                                <th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">B.Sunda</th>
+                                <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">S</th>
+                                <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">I</th>
+                                <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">A</th>
+                            </tr>
+                        </thead>
+                        <tbody id="legerTableBody" class="divide-y divide-slate-200"></tbody>
+                    </table>
+                </div>
+                <div id="legerEmptyState" class="hidden py-12 text-center">
+                    <i class="fa-solid fa-table-list text-4xl text-slate-300 mb-3"></i>
+                    <p class="text-slate-500 font-medium">Belum ada data nilai leger untuk rombel ini.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 5: MANAJEMEN NOMOR SURAT -->
         <div id="viewSurat" class="hidden">
-            <!-- ALAT PENGELOLAAN ARSIP SURAT (ADMIN) -->
             <div class="admin-only-action hidden bg-white p-3.5 rounded-xl shadow-md border border-slate-200 mb-4 no-print flex flex-wrap gap-2 items-center justify-between">
                 <div class="text-xs font-bold text-slate-600 uppercase flex items-center gap-2">
                     <i class="fa-solid fa-screwdriver-wrench text-indigo-600"></i> Alat Pengelolaan Agenda Nomor Surat
@@ -400,7 +485,6 @@
                 </div>
             </div>
 
-            <!-- FILE INPUT EXCEL SURAT TERSEMBUNYI -->
             <input type="file" id="excelSuratFileInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelSuratImport(event)">
 
             <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col sm:flex-row gap-4 justify-between items-center">
@@ -448,6 +532,84 @@
 
     <!-- DATALIST KLASIFIKASI SURAT LENGKAP -->
     <datalist id="klasifikasiDatalist"></datalist>
+
+    <!-- MODAL INPUT / EDIT NILAI LEGER -->
+    <div id="legerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 my-8 transform transition-all">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <div>
+                    <h3 id="legerModalTitle" class="text-base font-bold text-slate-800">Form Input Nilai Leger Siswa</h3>
+                    <p id="legerModalSubtitle" class="text-xs text-indigo-600 font-semibold"></p>
+                </div>
+                <button onclick="closeLegerModal()" class="text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <form id="legerForm" onsubmit="handleLegerSubmit(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="legerStudentKey">
+
+                <div class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100">
+                    <p class="font-bold text-indigo-900 mb-2">1. NILAI AKHIR MATA PELAJARAN (0 - 100)</p>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        <div>
+                            <label class="block font-semibold mb-1">PAI</label>
+                            <input type="number" id="scorePai" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">PPKn</label>
+                            <input type="number" id="scorePpkn" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">B. Indonesia</label>
+                            <input type="number" id="scoreBind" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Matematika</label>
+                            <input type="number" id="scoreMtk" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">IPAS</label>
+                            <input type="number" id="scoreIpas" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">PJOK</label>
+                            <input type="number" id="scorePjok" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Seni & Budaya</label>
+                            <input type="number" id="scoreSeni" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">B. Sunda</label>
+                            <input type="number" id="scoreSunda" min="0" max="100" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <p class="font-bold text-slate-800 mb-2">2. REKAPITULASI KEHADIRAN (HARI)</p>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="block font-semibold mb-1">Sakit (S)</label>
+                            <input type="number" id="absentSakit" min="0" value="0" class="w-full border rounded px-2 py-1 text-center font-semibold focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Izin (I)</label>
+                            <input type="number" id="absentIzin" min="0" value="0" class="w-full border rounded px-2 py-1 text-center font-semibold focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Tanpa Ket. (A)</label>
+                            <input type="number" id="absentAlpa" min="0" value="0" class="w-full border rounded px-2 py-1 text-center font-semibold focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t">
+                    <button type="button" onclick="closeLegerModal()" class="px-4 py-2 border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-100 transition">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow transition">Simpan Nilai Leger</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- MODAL INPUT SISWA -->
     <div id="studentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
@@ -887,6 +1049,7 @@
         const db = getDatabase(app);
         const studentsRef = ref(db, 'students');
         const suratRef = ref(db, 'surat_keluar');
+        const legerRef = ref(db, 'leger_nilai');
 
         const KLASIFIKASI_SURAT_LIST = [
             {"kode": "HM", "nama": "Hubungan Masyarakat"}, {"kode": "HK", "nama": "Hukum"}, {"kode": "KP", "nama": "Kepegawaian"}, {"kode": "RT", "nama": "Kerumahtanggaan"}, {"kode": "TU", "nama": "Ketatausahaan"}, {"kode": "KU", "nama": "Keuangan"}, {"kode": "TL", "nama": "Organisasi dan Tata Laksana"}, {"kode": "PP", "nama": "Penelitian, Pengkajian, dan Pengembangan"}, {"kode": "PW", "nama": "Pengawasan"}, {"kode": "AR", "nama": "Kearsipan"}, {"kode": "LH", "nama": "Lingkungan Hidup"}, {"kode": "PA", "nama": "Pemberdayaan Perempuan dan Perlindungan Anak"}, {"kode": "PD", "nama": "Pemerintahan Daerah"}, {"kode": "PO", "nama": "Pemuda dan Olahraga"}, {"kode": "PB", "nama": "Penanggulangan Bencana"}, {"kode": "PK", "nama": "Pendidikan dan Kebudayaan"}, {"kode": "PN", "nama": "Perencanaan dan Pembangunan"}, {"kode": "HB", "nama": "Perhubungan"}, {"kode": "PS", "nama": "Perpustakaan"}, {"kode": "PK.03.02.01", "nama": "Sekolah Dasar (Kurikulum, Bahan Ajar dan Pelatihan)"}
@@ -896,8 +1059,23 @@
             "B": "Biasa", "S": "Segera", "R": "Rahasia", "SR": "Sangat Rahasia", "P": "Penting"
         };
 
+        const OFFICIAL_KOP_SURAT_HTML = `
+            <div class="flex items-center justify-between pb-2 border-b-4 border-double border-black mb-4">
+                <img src="logo.png" alt="Logo Kota Bandung" class="h-20 w-20 object-contain">
+                <div class="text-center flex-grow px-2 font-serif">
+                    <h3 class="text-xs sm:text-sm font-bold tracking-wider uppercase leading-tight">PEMERINTAH KOTA BANDUNG</h3>
+                    <h3 class="text-xs sm:text-sm font-bold tracking-wider uppercase leading-tight">DINAS PENDIDIKAN</h3>
+                    <h1 class="text-base sm:text-lg font-extrabold tracking-wide uppercase leading-tight mt-0.5">SEKOLAH DASAR NEGERI 186 CIPADUNG</h1>
+                    <h2 class="text-xs sm:text-base font-bold tracking-wider uppercase leading-tight">KOTA BANDUNG</h2>
+                    <p class="text-[10px] mt-1 font-normal">Alamat : Jl. A.H Nasution KM.13.5 No.71 Kel. Cipadung Kec. Cibiru Bandung</p>
+                </div>
+                <div class="w-20"></div>
+            </div>
+        `;
+
         let studentsData = {};
         let suratData = {};
+        let legerData = {};
         let currentLetterFilter = 'ALL';
         let currentYearFilter = 'ALL';
         let currentSearchQuery = '';
@@ -929,6 +1107,7 @@
                 }
                 listenToData();
                 listenToSuratData();
+                listenToLegerData();
                 populateKlasifikasiDatalist();
             } else {
                 loginModal.classList.remove('hidden');
@@ -963,6 +1142,7 @@
                 renderData();
                 renderIndukGrid();
                 renderMutasiTable();
+                renderLegerTable();
             }, (error) => {
                 document.getElementById('syncIndicator').className = "h-3 w-3 rounded-full bg-red-500";
                 document.getElementById('syncText').textContent = "Gagal terhubung ke Cloud Database";
@@ -973,6 +1153,13 @@
             onValue(suratRef, (snapshot) => {
                 suratData = snapshot.val() || {};
                 renderSuratTable();
+            });
+        }
+
+        function listenToLegerData() {
+            onValue(legerRef, (snapshot) => {
+                legerData = snapshot.val() || {};
+                renderLegerTable();
             });
         }
 
@@ -1053,41 +1240,35 @@
         }
 
         window.switchTab = function(tabName) {
-            const viewKlaper = document.getElementById('viewKlaper');
-            const viewInduk = document.getElementById('viewInduk');
-            const viewMutasi = document.getElementById('viewMutasi');
-            const viewSurat = document.getElementById('viewSurat');
+            const views = {
+                klaper: document.getElementById('viewKlaper'),
+                induk: document.getElementById('viewInduk'),
+                mutasi: document.getElementById('viewMutasi'),
+                leger: document.getElementById('viewLeger'),
+                surat: document.getElementById('viewSurat')
+            };
 
-            const btnKlaper = document.getElementById('tabKlaperBtn');
-            const btnInduk = document.getElementById('tabIndukBtn');
-            const btnMutasi = document.getElementById('tabMutasiBtn');
-            const btnSurat = document.getElementById('tabSuratBtn');
+            const btns = {
+                klaper: document.getElementById('tabKlaperBtn'),
+                induk: document.getElementById('tabIndukBtn'),
+                mutasi: document.getElementById('tabMutasiBtn'),
+                leger: document.getElementById('tabLegerBtn'),
+                surat: document.getElementById('tabSuratBtn')
+            };
 
-            viewKlaper.classList.add('hidden');
-            viewInduk.classList.add('hidden');
-            viewMutasi.classList.add('hidden');
-            viewSurat.classList.add('hidden');
+            Object.keys(views).forEach(key => {
+                views[key].classList.add('hidden');
+                btns[key].className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
+            });
 
-            btnKlaper.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
-            btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
-            btnMutasi.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
-            btnSurat.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
-
-            if (tabName === 'klaper') {
-                viewKlaper.classList.remove('hidden');
-                btnKlaper.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
-            } else if (tabName === 'induk') {
-                viewInduk.classList.remove('hidden');
-                btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
-                renderIndukGrid();
-            } else if (tabName === 'mutasi') {
-                viewMutasi.classList.remove('hidden');
-                btnMutasi.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
-                renderMutasiTable();
-            } else if (tabName === 'surat') {
-                viewSurat.classList.remove('hidden');
-                btnSurat.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
-                renderSuratTable();
+            if (views[tabName]) {
+                views[tabName].classList.remove('hidden');
+                btns[tabName].className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
+                
+                if (tabName === 'induk') renderIndukGrid();
+                else if (tabName === 'mutasi') renderMutasiTable();
+                else if (tabName === 'leger') renderLegerTable();
+                else if (tabName === 'surat') renderSuratTable();
             }
         }
 
@@ -1447,6 +1628,186 @@
             }).join('');
         }
 
+        /* --- FUNGSI LOGIKA LEGER NILAI (FITUR BARU) --- */
+        window.renderLegerTable = function() {
+            const tbody = document.getElementById('legerTableBody');
+            const emptyState = document.getElementById('legerEmptyState');
+            const targetClass = document.getElementById('legerClassSelect')?.value || '1';
+            const targetSemester = document.getElementById('legerSemesterSelect')?.value || '1';
+            const targetYear = (document.getElementById('legerYearInput')?.value || '2025/2026').replace('/', '_');
+
+            let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
+            list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            if (list.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            tbody.innerHTML = list.map((s, idx) => {
+                const legerKey = `${s.key}_K${targetClass}_S${targetSemester}_${targetYear}`;
+                const l = legerData[legerKey] || {};
+
+                const pai = parseFloat(l.pai) || 0;
+                const ppkn = parseFloat(l.ppkn) || 0;
+                const bind = parseFloat(l.bind) || 0;
+                const mtk = parseFloat(l.mtk) || 0;
+                const ipas = parseFloat(l.ipas) || 0;
+                const pjok = parseFloat(l.pjok) || 0;
+                const seni = parseFloat(l.seni) || 0;
+                const sunda = parseFloat(l.sunda) || 0;
+
+                const hasScore = l.pai !== undefined || l.ppkn !== undefined;
+                const total = pai + ppkn + bind + mtk + ipas + pjok + seni + sunda;
+                const average = hasScore ? (total / 8).toFixed(1) : '-';
+
+                return `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-200 text-center">
+                        <td class="py-2 px-2 border-r border-slate-200 text-slate-500 font-medium">${idx + 1}</td>
+                        <td class="py-2 px-2 border-r border-slate-200 font-mono">${s.nis || '-'}</td>
+                        <td class="py-2 px-3 border-r border-slate-200 font-bold text-slate-900 text-left uppercase">${s.name || '-'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-bold ${s.gender === 'L' ? 'text-blue-600' : 'text-pink-600'}">${s.gender || '-'}</td>
+                        
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.pai !== undefined ? l.pai : '-'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.ppkn !== undefined ? l.ppkn : '-'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.bind !== undefined ? l.bind : '-'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.mtk !== undefined ? l.mtk : '-'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.ipas !== undefined ? l.ipas : '-'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.pjok !== undefined ? l.pjok : '-'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.seni !== undefined ? l.seni : '-'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${l.sunda !== undefined ? l.sunda : '-'}</td>
+
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-bold text-indigo-900 bg-indigo-50/50">${hasScore ? total : '-'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-bold text-emerald-800 bg-emerald-50/50">${average}</td>
+
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono text-slate-600">${l.sakit !== undefined ? l.sakit : '0'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono text-slate-600">${l.izin !== undefined ? l.izin : '0'}</td>
+                        <td class="py-2 px-1 border-r border-slate-200 font-mono text-slate-600">${l.alpa !== undefined ? l.alpa : '0'}</td>
+
+                        <td class="py-2 px-2 border-r border-slate-200 no-print action-column">
+                            ${currentUserRole === 'ADMIN' ? `
+                                <button onclick="openLegerModal('${s.key}', '${s.name}')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded text-xs transition font-semibold" title="Input/Edit Nilai">
+                                    <i class="fa-solid fa-pen-to-square"></i> Isi Nilai
+                                </button>
+                            ` : '-'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        window.openLegerModal = function(studentKey, studentName) {
+            document.getElementById('legerForm').reset();
+            document.getElementById('legerStudentKey').value = studentKey;
+
+            const targetClass = document.getElementById('legerClassSelect')?.value || '1';
+            const targetSemester = document.getElementById('legerSemesterSelect')?.value || '1';
+            const targetYear = (document.getElementById('legerYearInput')?.value || '2025/2026').replace('/', '_');
+
+            document.getElementById('legerModalSubtitle').textContent = `Siswa: ${studentName} | Kelas ${targetClass} Semester ${targetSemester}`;
+
+            const legerKey = `${studentKey}_K${targetClass}_S${targetSemester}_${targetYear}`;
+            const l = legerData[legerKey] || {};
+
+            document.getElementById('scorePai').value = l.pai !== undefined ? l.pai : '';
+            document.getElementById('scorePpkn').value = l.ppkn !== undefined ? l.ppkn : '';
+            document.getElementById('scoreBind').value = l.bind !== undefined ? l.bind : '';
+            document.getElementById('scoreMtk').value = l.mtk !== undefined ? l.mtk : '';
+            document.getElementById('scoreIpas').value = l.ipas !== undefined ? l.ipas : '';
+            document.getElementById('scorePjok').value = l.pjok !== undefined ? l.pjok : '';
+            document.getElementById('scoreSeni').value = l.seni !== undefined ? l.seni : '';
+            document.getElementById('scoreSunda').value = l.sunda !== undefined ? l.sunda : '';
+
+            document.getElementById('absentSakit').value = l.sakit !== undefined ? l.sakit : '0';
+            document.getElementById('absentIzin').value = l.izin !== undefined ? l.izin : '0';
+            document.getElementById('absentAlpa').value = l.alpa !== undefined ? l.alpa : '0';
+
+            document.getElementById('legerModal').classList.remove('hidden');
+            document.getElementById('legerModal').classList.add('flex');
+        }
+
+        window.closeLegerModal = function() {
+            document.getElementById('legerModal').classList.add('hidden');
+            document.getElementById('legerModal').classList.remove('flex');
+        }
+
+        window.handleLegerSubmit = function(e) {
+            e.preventDefault();
+            if (currentUserRole !== 'ADMIN') return;
+
+            const studentKey = document.getElementById('legerStudentKey').value;
+            const targetClass = document.getElementById('legerClassSelect')?.value || '1';
+            const targetSemester = document.getElementById('legerSemesterSelect')?.value || '1';
+            const targetYear = (document.getElementById('legerYearInput')?.value || '2025/2026').replace('/', '_');
+
+            const legerKey = `${studentKey}_K${targetClass}_S${targetSemester}_${targetYear}`;
+
+            const payload = {
+                pai: document.getElementById('scorePai').value,
+                ppkn: document.getElementById('scorePpkn').value,
+                bind: document.getElementById('scoreBind').value,
+                mtk: document.getElementById('scoreMtk').value,
+                ipas: document.getElementById('scoreIpas').value,
+                pjok: document.getElementById('scorePjok').value,
+                seni: document.getElementById('scoreSeni').value,
+                sunda: document.getElementById('scoreSunda').value,
+                sakit: document.getElementById('absentSakit').value,
+                izin: document.getElementById('absentIzin').value,
+                alpa: document.getElementById('absentAlpa').value,
+                updatedAt: new Date().toISOString()
+            };
+
+            set(ref(db, `leger_nilai/${legerKey}`), payload);
+            closeLegerModal();
+        }
+
+        window.exportLegerToExcel = function() {
+            const targetClass = document.getElementById('legerClassSelect')?.value || '1';
+            const targetSemester = document.getElementById('legerSemesterSelect')?.value || '1';
+            const targetYear = document.getElementById('legerYearInput')?.value || '2025/2026';
+
+            let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
+            list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            const exportData = [
+                [`REKAPITULASI LEGER NILAI SISWA SDN 186 CIPADUNG`],
+                [`Kelas: ${targetClass} | Semester: ${targetSemester} | Tahun Pelajaran: ${targetYear}`],
+                [""],
+                ["No", "NIS", "NISN", "Nama Lengkap Siswa", "L/P", "PAI", "PPKn", "B. Indonesia", "Matematika", "IPAS", "PJOK", "Seni & Budaya", "B. Sunda", "Total Nilai", "Rata-Rata", "Sakit", "Izin", "Alpa"]
+            ];
+
+            list.forEach((s, idx) => {
+                const legerKey = `${s.key}_K${targetClass}_S${targetSemester}_${targetYear.replace('/', '_')}`;
+                const l = legerData[legerKey] || {};
+
+                const pai = parseFloat(l.pai) || 0;
+                const ppkn = parseFloat(l.ppkn) || 0;
+                const bind = parseFloat(l.bind) || 0;
+                const mtk = parseFloat(l.mtk) || 0;
+                const ipas = parseFloat(l.ipas) || 0;
+                const pjok = parseFloat(l.pjok) || 0;
+                const seni = parseFloat(l.seni) || 0;
+                const sunda = parseFloat(l.sunda) || 0;
+
+                const total = pai + ppkn + bind + mtk + ipas + pjok + seni + sunda;
+                const average = (total / 8).toFixed(1);
+
+                exportData.push([
+                    idx + 1, s.nis || '', s.nisn || '', s.name || '', s.gender || '',
+                    l.pai || '', l.ppkn || '', l.bind || '', l.mtk || '', l.ipas || '', l.pjok || '', l.seni || '', l.sunda || '',
+                    total, average, l.sakit || '0', l.izin || '0', l.alpa || '0'
+                ]);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(exportData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Leger_Nilai");
+            XLSX.writeFile(wb, `Leger_Nilai_Kelas_${targetClass}_SDN186.xlsx`);
+        }
+
         window.openModalMutasi = function(tipe) {
             openModal();
             if (tipe === 'MASUK') {
@@ -1468,7 +1829,6 @@
             return found ? found.nama : 'Klasifikasi Umum';
         }
 
-        // FUNGSI FORMAT NOMOR SURAT DENGAN CPADUNG CODE (/SDN186CPD/)
         window.formatFullNomorSurat = function(kodeKlasifikasi, urut, jenis, keamanan, tanggalStr) {
             const dateObj = tanggalStr ? new Date(tanggalStr) : new Date();
             const monthRomawi = getRomawiBulan(dateObj.getMonth());
@@ -1680,14 +2040,10 @@
             if (!s) return;
 
             const html = `
-                <div class="text-center font-bold text-xs uppercase mb-4 pb-2 border-b-2 border-black">
-                    <div class="flex items-center justify-center space-x-3 mb-1">
-                        <img src="logo.png" alt="Logo" class="h-10 w-10 object-contain">
-                        <div>
-                            <h2 class="text-sm">BUKTI REGISTRASI NOMOR SURAT KELUAR</h2>
-                            <h3 class="text-xs font-normal">SDN 186 CIPADUNG - KOTA BANDUNG</h3>
-                        </div>
-                    </div>
+                ${OFFICIAL_KOP_SURAT_HTML}
+
+                <div class="text-center font-bold text-xs uppercase mb-4">
+                    <h2 class="text-sm underline">BUKTI REGISTRASI NOMOR SURAT KELUAR</h2>
                 </div>
 
                 <div class="p-3 border border-dashed border-slate-400 bg-slate-50 mb-4 rounded">
@@ -1889,14 +2245,10 @@
             if (!s) return;
 
             const html = `
-                <div class="text-center font-bold text-xs uppercase mb-3 pb-1 border-b-2 border-black">
-                    <div class="flex items-center justify-center space-x-3 mb-1">
-                        <img src="logo.png" alt="Logo" class="h-10 w-10 object-contain">
-                        <div>
-                            <h2 class="text-sm">LEMBAR BUKU INDUK PESERTA DIDIK</h2>
-                            <h3 class="text-xs font-normal">SDN 186 CIPADUNG - KOTA BANDUNG</h3>
-                        </div>
-                    </div>
+                ${OFFICIAL_KOP_SURAT_HTML}
+
+                <div class="text-center font-bold text-xs uppercase mb-3">
+                    <h2 class="text-sm underline">LEMBAR BUKU INDUK PESERTA DIDIK</h2>
                     <p class="text-[11px] font-normal">Nomor Induk / NISN : ${s.nis || '..........'} / ${s.nisn || '..........'}</p>
                 </div>
 
