@@ -179,14 +179,22 @@
                 </div>
             </div>
 
-            <div id="printHeader" class="hidden print-only mb-6 text-center border-b-2 border-black pb-4">
-                <div class="flex items-center justify-center space-x-4">
-                    <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-20 w-20 object-contain">
-                    <div>
-                        <h1 class="text-xl font-bold uppercase tracking-wider">BUKU KLAPER SISWA SEKOLAH</h1>
-                        <h2 class="text-lg font-semibold uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h2>
-                        <p class="text-xs text-slate-600 mt-1">Dokumen Resmi Arsip Indeks Abjad & Tahun Masuk Data Siswa</p>
+            <!-- HEADER KOP SURAT UNTUK CETAK BUKU KLAPER -->
+            <div id="printHeader" class="hidden print-only mb-6">
+                <div class="flex items-center justify-between pb-2 border-b-4 border-double border-black">
+                    <img src="logo.png" alt="Logo Kota Bandung" class="h-20 w-20 object-contain">
+                    <div class="text-center flex-grow px-2 font-serif">
+                        <h3 class="text-sm font-bold tracking-wider uppercase leading-tight">PEMERINTAH KOTA BANDUNG</h3>
+                        <h3 class="text-sm font-bold tracking-wider uppercase leading-tight">DINAS PENDIDIKAN</h3>
+                        <h1 class="text-lg font-extrabold tracking-wide uppercase leading-tight mt-0.5">SEKOLAH DASAR NEGERI 186 CIPADUNG</h1>
+                        <h2 class="text-base font-bold tracking-wider uppercase leading-tight">KOTA BANDUNG</h2>
+                        <p class="text-[10px] mt-1 font-normal">Alamat : Jl. A.H Nasution KM.13.5 No.71 Kel. Cipadung Kec. Cibiru Bandung</p>
                     </div>
+                    <div class="w-20"></div> <!-- Penyeimbang rata tengah logo -->
+                </div>
+                <div class="text-center mt-3">
+                    <h2 class="text-base font-bold uppercase underline tracking-wider">BUKU KLAPER SISWA SEKOLAH</h2>
+                    <p class="text-xs text-slate-600">Dokumen Resmi Arsip Indeks Abjad & Tahun Masuk Data Siswa</p>
                 </div>
             </div>
 
@@ -896,6 +904,21 @@
             "B": "Biasa", "S": "Segera", "R": "Rahasia", "SR": "Sangat Rahasia", "P": "Penting"
         };
 
+        // KOMPONEN HTML KOP SURAT RESMI
+        const OFFICIAL_KOP_SURAT_HTML = `
+            <div class="flex items-center justify-between pb-2 border-b-4 border-double border-black mb-4">
+                <img src="logo.png" alt="Logo Kota Bandung" class="h-20 w-20 object-contain">
+                <div class="text-center flex-grow px-2 font-serif">
+                    <h3 class="text-xs sm:text-sm font-bold tracking-wider uppercase leading-tight">PEMERINTAH KOTA BANDUNG</h3>
+                    <h3 class="text-xs sm:text-sm font-bold tracking-wider uppercase leading-tight">DINAS PENDIDIKAN</h3>
+                    <h1 class="text-base sm:text-lg font-extrabold tracking-wide uppercase leading-tight mt-0.5">SEKOLAH DASAR NEGERI 186 CIPADUNG</h1>
+                    <h2 class="text-xs sm:text-base font-bold tracking-wider uppercase leading-tight">KOTA BANDUNG</h2>
+                    <p class="text-[10px] mt-1 font-normal">Alamat : Jl. A.H Nasution KM.13.5 No.71 Kel. Cipadung Kec. Cibiru Bandung</p>
+                </div>
+                <div class="w-20"></div>
+            </div>
+        `;
+
         let studentsData = {};
         let suratData = {};
         let currentLetterFilter = 'ALL';
@@ -1468,7 +1491,6 @@
             return found ? found.nama : 'Klasifikasi Umum';
         }
 
-        // FUNGSI FORMAT NOMOR SURAT DENGAN CPADUNG CODE (/SDN186CPD/)
         window.formatFullNomorSurat = function(kodeKlasifikasi, urut, jenis, keamanan, tanggalStr) {
             const dateObj = tanggalStr ? new Date(tanggalStr) : new Date();
             const monthRomawi = getRomawiBulan(dateObj.getMonth());
@@ -1680,14 +1702,10 @@
             if (!s) return;
 
             const html = `
-                <div class="text-center font-bold text-xs uppercase mb-4 pb-2 border-b-2 border-black">
-                    <div class="flex items-center justify-center space-x-3 mb-1">
-                        <img src="logo.png" alt="Logo" class="h-10 w-10 object-contain">
-                        <div>
-                            <h2 class="text-sm">BUKTI REGISTRASI NOMOR SURAT KELUAR</h2>
-                            <h3 class="text-xs font-normal">SDN 186 CIPADUNG - KOTA BANDUNG</h3>
-                        </div>
-                    </div>
+                ${OFFICIAL_KOP_SURAT_HTML}
+
+                <div class="text-center font-bold text-xs uppercase mb-4">
+                    <h2 class="text-sm underline">BUKTI REGISTRASI NOMOR SURAT KELUAR</h2>
                 </div>
 
                 <div class="p-3 border border-dashed border-slate-400 bg-slate-50 mb-4 rounded">
@@ -1889,14 +1907,10 @@
             if (!s) return;
 
             const html = `
-                <div class="text-center font-bold text-xs uppercase mb-3 pb-1 border-b-2 border-black">
-                    <div class="flex items-center justify-center space-x-3 mb-1">
-                        <img src="logo.png" alt="Logo" class="h-10 w-10 object-contain">
-                        <div>
-                            <h2 class="text-sm">LEMBAR BUKU INDUK PESERTA DIDIK</h2>
-                            <h3 class="text-xs font-normal">SDN 186 CIPADUNG - KOTA BANDUNG</h3>
-                        </div>
-                    </div>
+                ${OFFICIAL_KOP_SURAT_HTML}
+
+                <div class="text-center font-bold text-xs uppercase mb-3">
+                    <h2 class="text-sm underline">LEMBAR BUKU INDUK PESERTA DIDIK</h2>
                     <p class="text-[11px] font-normal">Nomor Induk / NISN : ${s.nis || '..........'} / ${s.nisn || '..........'}</p>
                 </div>
 
