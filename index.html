@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BUKU KLAPER, INDUK, MUTASI, LEGER NILAI & NOMOR SURAT - SDN 186 CIPADUNG</title>
+    <title>BUKU KLAPER, INDUK, MUTASI, RAPOR & NOMOR SURAT - SDN 186 CIPADUNG</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome CDN -->
@@ -16,10 +16,10 @@
             .no-print { display: none !important; }
             .print-only { display: block !important; }
             body { background: white; color: black; font-family: 'Times New Roman', Times, serif; }
-            table { border-collapse: collapse; width: 100%; font-size: 8pt; }
+            table { border-collapse: collapse; width: 100%; font-size: 8.5pt; }
             th, td { border: 1px solid #000 !important; padding: 2px 4px !important; }
             #printHeader { display: block !important; margin-bottom: 10px; text-align: center; }
-            #indukSheetContent, #suratReceiptContent { border: none !important; box-shadow: none !important; padding: 0 !important; }
+            #indukSheetContent, #suratReceiptContent, #raporSheetContent { border: none !important; box-shadow: none !important; padding: 0 !important; }
             .page-break { page-break-after: always; }
         }
     </style>
@@ -31,7 +31,7 @@
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all">
             <div class="text-center mb-6">
                 <img src="logo.png" alt="Logo Sekolah" class="h-16 w-16 mx-auto mb-3 object-contain">
-                <h2 class="text-xl font-bold text-slate-800 uppercase">PORTAL ARSIP SISWA, LEGER & SURAT</h2>
+                <h2 class="text-xl font-bold text-slate-800 uppercase">PORTAL ARSIP SISWA & SURAT</h2>
                 <p class="text-xs text-slate-500">SDN 186 CIPADUNG - KOTA BANDUNG</p>
             </div>
 
@@ -57,7 +57,7 @@
                 <img src="logo.png" alt="Logo SDN 186 Cipadung" class="h-14 w-14 object-contain rounded-lg shadow-sm border border-indigo-700 bg-white p-1">
                 <div>
                     <h1 class="text-xl font-bold tracking-tight uppercase">SDN 186 CIPADUNG - KOTA BANDUNG</h1>
-                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper, Buku Induk Siswa, Mutasi, Leger Nilai & Nomor Surat Cloud</p>
+                    <p class="text-indigo-200 text-xs">Sistem Informasi Buku Klaper, Buku Induk, Mutasi, Rapor Capaian & Nomor Surat Cloud</p>
                 </div>
             </div>
             
@@ -80,16 +80,16 @@
         <div class="bg-indigo-950 border-t border-indigo-800 px-4 sm:px-8">
             <div class="max-w-7xl mx-auto flex gap-2 sm:gap-4 overflow-x-auto">
                 <button id="tabKlaperBtn" onclick="switchTab('klaper')" class="py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap">
-                    <i class="fa-solid fa-book"></i> Buku Klaper
+                    <i class="fa-solid fa-book"></i> Buku Klaper (Daftar Abjad)
                 </button>
                 <button id="tabIndukBtn" onclick="switchTab('induk')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
                     <i class="fa-solid fa-address-card"></i> Buku Induk Siswa
                 </button>
-                <button id="tabMutasiBtn" onclick="switchTab('mutasi')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
-                    <i class="fa-solid fa-right-left"></i> Mutasi Siswa
+                <button id="tabRaporBtn" onclick="switchTab('rapor')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
+                    <i class="fa-solid fa-graduation-cap"></i> Rapor Capaian Siswa
                 </button>
-                <button id="tabLegerBtn" onclick="switchTab('leger')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
-                    <i class="fa-solid fa-table-list"></i> Leger Nilai
+                <button id="tabMutasiBtn" onclick="switchTab('mutasi')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
+                    <i class="fa-solid fa-right-left"></i> Mutasi Siswa (Masuk / Keluar)
                 </button>
                 <button id="tabSuratBtn" onclick="switchTab('surat')" class="py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap">
                     <i class="fa-solid fa-envelope-open-text"></i> Nomor Surat
@@ -243,6 +243,7 @@
                     <p class="text-slate-500 font-medium">Belum ada data siswa yang cocok.</p>
                 </div>
 
+                <!-- CONTROLLER PAGINATION KLAPER -->
                 <div id="klaperPagination" class="no-print p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
                     <div class="flex items-center gap-2">
                         <span class="text-slate-600">Tampilkan</span>
@@ -296,6 +297,7 @@
 
             <div id="indukGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
+            <!-- CONTROLLER PAGINATION INDUK -->
             <div id="indukPagination" class="no-print mt-6 p-4 bg-white rounded-xl shadow-md border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
                 <div class="flex items-center gap-2">
                     <span class="text-slate-600">Tampilkan per Halaman</span>
@@ -311,8 +313,47 @@
             </div>
         </div>
 
-        <!-- VIEW 3: MUTASI SISWA -->
+        <!-- VIEW NEW: RAPOR CAPAIAN SISWA -->
+        <div id="viewRapor" class="hidden">
+            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div class="relative w-full md:w-96">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="raporSearchInput" placeholder="Cari Nama Siswa, NIS, NISN..." oninput="handleRaporSearch()" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm">
+                </div>
+                <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                    <label for="raporKelasFilter" class="text-xs font-medium text-slate-600 whitespace-nowrap">Filter Kelas:</label>
+                    <select id="raporKelasFilter" onchange="renderRaporGrid()" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white font-semibold">
+                        <option value="ALL">Semua Kelas (1-6)</option>
+                        <option value="1">Kelas 1</option>
+                        <option value="2">Kelas 2</option>
+                        <option value="3">Kelas 3</option>
+                        <option value="4">Kelas 4</option>
+                        <option value="5">Kelas 5</option>
+                        <option value="6">Kelas 6</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="raporGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+            <!-- CONTROLLER PAGINATION RAPOR -->
+            <div id="raporPagination" class="no-print mt-6 p-4 bg-white rounded-xl shadow-md border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-600">Tampilkan per Halaman</span>
+                    <select id="raporPageSize" onchange="changeRaporPageSize()" class="border rounded px-2 py-1 text-xs bg-slate-50">
+                        <option value="6">6</option>
+                        <option value="12" selected>12</option>
+                        <option value="24">24</option>
+                    </select>
+                    <span id="raporInfoText" class="text-slate-600 font-medium">Menampilkan 0 - 0 dari 0 Siswa</span>
+                </div>
+                <div id="raporPageButtons" class="flex items-center gap-1"></div>
+            </div>
+        </div>
+
+        <!-- VIEW 4: MUTASI SISWA -->
         <div id="viewMutasi" class="hidden">
+            <!-- RINGKASAN STATISTIK MUTASI -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 no-print">
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
                     <div>
@@ -391,60 +432,9 @@
             </div>
         </div>
 
-        <!-- VIEW 4: LEGER NILAI SISWA -->
-        <div id="viewLeger" class="hidden">
-            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col md:flex-row gap-4 justify-between items-center">
-                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                    <div class="flex items-center gap-2">
-                        <label for="legerClassSelect" class="text-xs font-bold text-slate-700 whitespace-nowrap">Rombel / Kelas:</label>
-                        <select id="legerClassSelect" onchange="renderLegerTable()" class="border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
-                            <option value="1">Kelas 1</option>
-                            <option value="2">Kelas 2</option>
-                            <option value="3">Kelas 3</option>
-                            <option value="4">Kelas 4</option>
-                            <option value="5">Kelas 5</option>
-                            <option value="6">Kelas 6</option>
-                        </select>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <label for="legerSemesterSelect" class="text-xs font-bold text-slate-700 whitespace-nowrap">Semester:</label>
-                        <select id="legerSemesterSelect" onchange="renderLegerTable()" class="border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
-                            <option value="1">Ganjil (1)</option>
-                            <option value="2">Genap (2)</option>
-                        </select>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <label for="legerYearInput" class="text-xs font-bold text-slate-700 whitespace-nowrap">Tahun Pelajaran:</label>
-                        <input type="text" id="legerYearInput" value="2025/2026" onchange="renderLegerTable()" class="w-28 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-mono text-center focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
-                    <button onclick="exportLegerToExcel()" class="bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-1.5 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-export"></i> Ekspor Leger (Excel)
-                    </button>
-                    <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-800 text-white px-3.5 py-1.5 rounded-lg font-semibold shadow transition text-xs flex items-center gap-1.5">
-                        <i class="fa-solid fa-print"></i> Cetak Leger
-                    </button>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs border-collapse" id="legerTable">
-                        <thead id="legerTableHeader"></thead>
-                        <tbody id="legerTableBody" class="divide-y divide-slate-200"></tbody>
-                    </table>
-                </div>
-                <div id="legerEmptyState" class="hidden py-12 text-center">
-                    <i class="fa-solid fa-table-list text-4xl text-slate-300 mb-3"></i>
-                    <p class="text-slate-500 font-medium">Belum ada data nilai leger untuk rombel ini.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- VIEW 5: MANAJEMEN NOMOR SURAT -->
+        <!-- VIEW 3: MANAJEMEN NOMOR SURAT -->
         <div id="viewSurat" class="hidden">
+            <!-- ALAT PENGELOLAAN ARSIP SURAT (ADMIN) -->
             <div class="admin-only-action hidden bg-white p-3.5 rounded-xl shadow-md border border-slate-200 mb-4 no-print flex flex-wrap gap-2 items-center justify-between">
                 <div class="text-xs font-bold text-slate-600 uppercase flex items-center gap-2">
                     <i class="fa-solid fa-screwdriver-wrench text-indigo-600"></i> Alat Pengelolaan Agenda Nomor Surat
@@ -459,6 +449,7 @@
                 </div>
             </div>
 
+            <!-- FILE INPUT EXCEL SURAT TERSEMBUNYI -->
             <input type="file" id="excelSuratFileInput" class="hidden" accept=".xlsx, .xls" onchange="handleExcelSuratImport(event)">
 
             <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 no-print flex flex-col sm:flex-row gap-4 justify-between items-center">
@@ -507,52 +498,7 @@
     <!-- DATALIST KLASIFIKASI SURAT LENGKAP -->
     <datalist id="klasifikasiDatalist"></datalist>
 
-    <!-- MODAL INPUT / EDIT NILAI LEGER PER ROMBEL -->
-    <div id="legerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 my-8 transform transition-all">
-            <div class="flex justify-between items-center border-b pb-3 mb-4">
-                <div>
-                    <h3 id="legerModalTitle" class="text-base font-bold text-slate-800">Form Input Nilai Leger Siswa</h3>
-                    <p id="legerModalSubtitle" class="text-xs text-indigo-600 font-semibold"></p>
-                </div>
-                <button onclick="closeLegerModal()" class="text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-
-            <form id="legerForm" onsubmit="handleLegerSubmit(event)" class="space-y-4 text-xs">
-                <input type="hidden" id="legerStudentKey">
-
-                <div class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100">
-                    <p class="font-bold text-indigo-900 mb-2">1. NILAI AKHIR MATA PELAJARAN (0 - 100)</p>
-                    <div id="legerFormMapelContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
-                </div>
-
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                    <p class="font-bold text-slate-800 mb-2">2. REKAPITULASI KEHADIRAN (HARI)</p>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div>
-                            <label class="block font-semibold mb-1">Sakit (S)</label>
-                            <input type="number" id="absentSakit" min="0" value="0" class="w-full border rounded px-2 py-1 text-center font-semibold focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block font-semibold mb-1">Izin (I)</label>
-                            <input type="number" id="absentIzin" min="0" value="0" class="w-full border rounded px-2 py-1 text-center font-semibold focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block font-semibold mb-1">Tanpa Ket. (A)</label>
-                            <input type="number" id="absentAlpa" min="0" value="0" class="w-full border rounded px-2 py-1 text-center font-semibold focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-end gap-3 pt-3 border-t">
-                    <button type="button" onclick="closeLegerModal()" class="px-4 py-2 border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-100 transition">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow transition">Simpan Nilai Leger</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL INPUT SISWA & RIWAYAT NILAI BUKU INDUK -->
+    <!-- MODAL INPUT SISWA EKSISTING -->
     <div id="studentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 no-print overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8 transform transition-all">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
@@ -765,10 +711,9 @@
                     </div>
                 </div>
 
-                <!-- KELOMPOK H & I. KELAS, KEHADIRAN & REKAP NILAI RATA-RATA -->
+                <!-- KELOMPOK H & I. KELAS, KEHADIRAN & MENINGGALKAN SEKOLAH -->
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">H & I. RIWAYAT KELAS, KEHADIRAN & REKAP NILAI RATA-RATA</h4>
-                    
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2.5">H & I. RIWAYAT KELAS, KEHADIRAN & KELULUSAN</h4>
                     <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-3">
                         <div>
                             <label class="block font-medium text-[10px]">Kls 1</label>
@@ -795,64 +740,6 @@
                             <input type="text" id="class6" placeholder="VI-A" class="w-full border rounded px-2 py-1 text-xs">
                         </div>
                     </div>
-
-                    <!-- RIWAYAT LEGER NILAI RATA-RATA PER KELAS -->
-                    <div class="p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-lg mb-3">
-                        <p class="font-bold text-indigo-950 mb-1">REKAP RATA-RATA NILAI LEGER SISWA (KLS 1 S.D 6)</p>
-                        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-[10px]">
-                            <div>
-                                <label class="block font-semibold">Rata2 Kls 1</label>
-                                <input type="text" id="avgKls1" placeholder="85.5" class="w-full border rounded px-1.5 py-1 text-center bg-white">
-                            </div>
-                            <div>
-                                <label class="block font-semibold">Rata2 Kls 2</label>
-                                <input type="text" id="avgKls2" placeholder="86.0" class="w-full border rounded px-1.5 py-1 text-center bg-white">
-                            </div>
-                            <div>
-                                <label class="block font-semibold">Rata2 Kls 3</label>
-                                <input type="text" id="avgKls3" placeholder="87.2" class="w-full border rounded px-1.5 py-1 text-center bg-white">
-                            </div>
-                            <div>
-                                <label class="block font-semibold">Rata2 Kls 4</label>
-                                <input type="text" id="avgKls4" placeholder="88.0" class="w-full border rounded px-1.5 py-1 text-center bg-white">
-                            </div>
-                            <div>
-                                <label class="block font-semibold">Rata2 Kls 5</label>
-                                <input type="text" id="avgKls5" placeholder="89.1" class="w-full border rounded px-1.5 py-1 text-center bg-white">
-                            </div>
-                            <div>
-                                <label class="block font-semibold">Rata2 Kls 6</label>
-                                <input type="text" id="avgKls6" placeholder="90.0" class="w-full border rounded px-1.5 py-1 text-center bg-white">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- FORM TABEL RIWAYAT NILAI MAPEL PER SEMESTER 1-12 -->
-                    <div class="p-3 bg-white border rounded-lg shadow-sm mb-3">
-                        <p class="font-bold text-indigo-900 mb-1 text-xs">INPUT RIWAYAT NILAI LENGKAP SEMESTER 1 S.D 12</p>
-                        <p class="text-[10px] text-slate-500 mb-2">Isi nilai tiap mata pelajaran untuk dicetak lengkap pada Lembar Buku Induk.</p>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-[11px] border-collapse">
-                                <thead>
-                                    <tr class="bg-indigo-900 text-white text-center">
-                                        <th class="p-1 border">Sem</th>
-                                        <th class="p-1 border">PAIDBP</th>
-                                        <th class="p-1 border">PPDK</th>
-                                        <th class="p-1 border">BI</th>
-                                        <th class="p-1 border">MU</th>
-                                        <th class="p-1 border">IPADSI</th>
-                                        <th class="p-1 border">SB</th>
-                                        <th class="p-1 border">PJODK</th>
-                                        <th class="p-1 border">BSUN</th>
-                                        <th class="p-1 border">PLH</th>
-                                        <th class="p-1 border">Seni Musik</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="studentGradesInputTbody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-2">
                         <div>
                             <label class="block font-semibold mb-1">Tgl & No. Ijazah Kelulusan</label>
@@ -874,6 +761,150 @@
                     <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow transition">Simpan Data Buku Induk</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL INPUT RAPOR SISWA -->
+    <div id="raporModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center z-50 p-3 sm:p-4 no-print overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-5xl w-full p-5 my-6 transform transition-all">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <div>
+                    <h3 id="raporModalTitle" class="text-lg font-bold text-slate-800 uppercase">Form Input Nilai & Capaian Rapor Siswa</h3>
+                    <p id="raporModalSubtitle" class="text-xs text-indigo-600 font-semibold">-</p>
+                </div>
+                <button onclick="closeRaporModal()" class="text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
+
+            <form id="raporForm" onsubmit="handleRaporFormSubmit(event)" class="space-y-4 max-h-[75vh] overflow-y-auto pr-2 text-xs">
+                <input type="hidden" id="raporStudentKey">
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-indigo-50/70 p-3 rounded-xl border border-indigo-100">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Pilih Tingkat Kelas *</label>
+                        <select id="raporFormKelas" onchange="onRaporFormKelasChange()" class="w-full border rounded px-2.5 py-1.5 font-bold text-indigo-900 bg-white focus:ring-2 focus:ring-indigo-500">
+                            <option value="1">Kelas 1</option>
+                            <option value="2">Kelas 2</option>
+                            <option value="3">Kelas 3</option>
+                            <option value="4">Kelas 4</option>
+                            <option value="5">Kelas 5</option>
+                            <option value="6">Kelas 6</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Pilih Semester *</label>
+                        <select id="raporFormSemester" onchange="loadRaporFormData()" class="w-full border rounded px-2.5 py-1.5 font-bold text-indigo-900 bg-white focus:ring-2 focus:ring-indigo-500">
+                            <option value="1">Semester 1 (Ganjil)</option>
+                            <option value="2">Semester 2 (Genap)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Tahun Pelajaran *</label>
+                        <input type="text" id="raporFormTahunAjar" placeholder="2025 / 2026" class="w-full border rounded px-2.5 py-1.5 bg-white font-semibold focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- TABEL MATEL RAPOR -->
+                <div class="border rounded-xl overflow-hidden bg-white shadow-sm">
+                    <div class="bg-indigo-900 text-white px-3 py-2 font-bold text-xs flex justify-between items-center">
+                        <span>1. ISIAN CAPAIAN MATA PELAJARAN</span>
+                        <span id="raporMatelCountBadge" class="text-[10px] bg-indigo-700 px-2 py-0.5 rounded">9 Mata Pelajaran</span>
+                    </div>
+                    <div class="p-3">
+                        <table class="w-full text-left border-collapse" id="raporMapelInputTable">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 text-[11px] font-bold border-b">
+                                    <th class="p-2 text-center w-10">No</th>
+                                    <th class="p-2 min-w-[180px]">Mata Pelajaran</th>
+                                    <th class="p-2 text-center w-20">Nilai</th>
+                                    <th class="p-2 min-w-[280px]">Capaian Kompetensi / Deskripsi Ringkas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="raporMapelInputTbody" class="divide-y divide-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- KELOMPOK EKSTRAKURIKULER & KETIDAKHADIRAN -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border rounded-xl p-3 bg-slate-50">
+                        <h4 class="font-bold text-slate-800 uppercase mb-2 text-xs border-b pb-1">2. KEGIATAN EKSTRAKURIKULER</h4>
+                        <div class="space-y-2">
+                            <div class="grid grid-cols-5 gap-2 items-center">
+                                <span class="col-span-2 font-semibold">1. Pramuka</span>
+                                <input type="text" id="ekstraNilai1" placeholder="Nilai (A/B)" class="border rounded px-2 py-1 text-center bg-white">
+                                <input type="text" id="ekstraKet1" placeholder="Keterangan..." class="col-span-2 border rounded px-2 py-1 bg-white">
+                            </div>
+                            <div class="grid grid-cols-5 gap-2 items-center">
+                                <span class="col-span-2 font-semibold">2. Seni Tari</span>
+                                <input type="text" id="ekstraNilai2" placeholder="Nilai (A/B)" class="border rounded px-2 py-1 text-center bg-white">
+                                <input type="text" id="ekstraKet2" placeholder="Keterangan..." class="col-span-2 border rounded px-2 py-1 bg-white">
+                            </div>
+                            <div class="grid grid-cols-5 gap-2 items-center">
+                                <span class="col-span-2 font-semibold">3. Futsal</span>
+                                <input type="text" id="ekstraNilai3" placeholder="Nilai (A/B)" class="border rounded px-2 py-1 text-center bg-white">
+                                <input type="text" id="ekstraKet3" placeholder="Keterangan..." class="col-span-2 border rounded px-2 py-1 bg-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border rounded-xl p-3 bg-slate-50 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-800 uppercase mb-2 text-xs border-b pb-1">3. KETIDAKHADIRAN</h4>
+                            <div class="grid grid-cols-2 gap-3 mb-3">
+                                <div>
+                                    <label class="block font-semibold mb-1">Sakit (Hari)</label>
+                                    <input type="text" id="absenSakit" placeholder="0" class="w-full border rounded px-2.5 py-1 text-center bg-white font-bold">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold mb-1">Izin (Hari)</label>
+                                    <input type="text" id="absenIzin" placeholder="0" class="w-full border rounded px-2.5 py-1 text-center bg-white font-bold">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="raporKeputusanContainer" class="pt-2 border-t border-slate-200">
+                            <label class="block font-bold text-indigo-900 mb-1">Keputusan Akhir Tahun Pelajaran (Khusus Sem 2)</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <select id="raporKeputusanStatus" class="border rounded px-2 py-1 bg-white font-bold text-emerald-700">
+                                    <option value="NAIK KELAS">NAIK KELAS</option>
+                                    <option value="TIDAK NAIK KELAS">TIDAK NAIK KELAS</option>
+                                    <option value="LULUS">LULUS</option>
+                                    <option value="TIDAK LULUS">TIDAK LULUS</option>
+                                </select>
+                                <input type="text" id="raporTglKeputusan" placeholder="22 Juni 2026" class="border rounded px-2 py-1 bg-white">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t">
+                    <button type="button" onclick="closeRaporModal()" class="px-4 py-2 border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-100 transition">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow transition">Simpan Capaian Rapor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL CETAK LEMBAR RAPOR CAPAIAN SISWA -->
+    <div id="raporPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-2 sm:p-4 no-print">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col my-auto overflow-hidden">
+            <div class="flex justify-between items-center px-6 py-3.5 bg-slate-800 text-white shrink-0 border-b border-slate-700 no-print">
+                <h3 class="text-sm sm:text-base font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-yellow-400"></i> Pratinjau Lembar Rapor Capaian Competensi Siswa
+                </h3>
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-print"></i> Cetak Lembar Rapor
+                    </button>
+                    <button onclick="closeRaporPrintModal()" class="bg-slate-600 hover:bg-slate-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                        <i class="fa-solid fa-xmark"></i> Tutup
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-4 sm:p-8 overflow-y-auto flex-grow bg-slate-100">
+                <div id="raporSheetContent" class="p-6 bg-white text-black font-serif text-[11px] leading-snug border border-slate-300 shadow-md max-w-3xl mx-auto"></div>
+            </div>
         </div>
     </div>
 
@@ -1049,92 +1080,16 @@
         const db = getDatabase(app);
         const studentsRef = ref(db, 'students');
         const suratRef = ref(db, 'surat_keluar');
-        const legerRef = ref(db, 'leger_nilai');
 
-        // MAPEL KONFIGURASI SESUAI KELAS (BARU)
-        const MAPEL_PER_KELAS = {
-            "1": [
-                { key: "paidbp", label: "PAIDBP" },
-                { key: "ppdk", label: "PPDK" },
-                { key: "bi", label: "BI" },
-                { key: "mu", label: "MU" },
-                { key: "sb", label: "SB" },
-                { key: "pjodk", label: "PJODK" },
-                { key: "bsun", label: "BSUN" },
-                { key: "plh", label: "PLH" }
-            ],
-            "2": [
-                { key: "paidbp", label: "PAIDBP" },
-                { key: "ppdk", label: "PPDK" },
-                { key: "bi", label: "BI" },
-                { key: "mu", label: "MU" },
-                { key: "sb", label: "SB" },
-                { key: "pjodk", label: "PJODK" },
-                { key: "bsun", label: "BSUN" },
-                { key: "plh", label: "PLH" }
-            ],
-            "3": [
-                { key: "paidbp", label: "PAIDBP" },
-                { key: "ppdk", label: "PPDK" },
-                { key: "bi", label: "BI" },
-                { key: "mu", label: "MU" },
-                { key: "ipadsi", label: "IPADSI" },
-                { key: "sb", label: "SB" },
-                { key: "pjodk", label: "PJODK" },
-                { key: "bsun", label: "BSUN" },
-                { key: "plh", label: "PLH" }
-            ],
-            "4": [
-                { key: "paidbp", label: "PAIDBP" },
-                { key: "ppdk", label: "PPDK" },
-                { key: "bi", label: "BI" },
-                { key: "mu", label: "MU" },
-                { key: "ipadsi", label: "IPADSI" },
-                { key: "sb", label: "SB" },
-                { key: "pjodk", label: "PJODK" },
-                { key: "bsun", label: "BSUN" },
-                { key: "plh", label: "PLH" },
-                { key: "senimusik", label: "Seni Musik" }
-            ],
-            "5": [
-                { key: "paidbp", label: "PAIDBP" },
-                { key: "ppdk", label: "PPDK" },
-                { key: "bi", label: "BI" },
-                { key: "mu", label: "MU" },
-                { key: "ipadsi", label: "IPADSI" },
-                { key: "sb", label: "SB" },
-                { key: "pjodk", label: "PJODK" },
-                { key: "bsun", label: "BSUN" },
-                { key: "plh", label: "PLH" },
-                { key: "senimusik", label: "Seni Musik" }
-            ],
-            "6": [
-                { key: "paidbp", label: "PAIDBP" },
-                { key: "ppdk", label: "PPDK" },
-                { key: "bi", label: "BI" },
-                { key: "mu", label: "MU" },
-                { key: "ipadsi", label: "IPADSI" },
-                { key: "sb", label: "SB" },
-                { key: "pjodk", label: "PJODK" },
-                { key: "bsun", label: "BSUN" },
-                { key: "plh", label: "PLH" },
-                { key: "senimusik", label: "Seni Musik" }
-            ]
+        // MAP MATA PELAJARAN SESUAI KELAS (TEMPLATE WORD)
+        const MAPEL_BY_KELAS = {
+            "1": ["Pendidikan Agama dan Budi Pekerti", "Pendidikan Pancasila", "Bahasa Indonesia", "Matematika", "Bahasa Inggris", "Seni Budaya / Seni Rupa", "Pendidikan Jasmani, Olahraga & Kesehatan", "Muatan Lokal (Bahasa Sunda)", "Pendidikan Lingkungan Hidup (PLH)"],
+            "2": ["Pendidikan Agama dan Budi Pekerti", "Pendidikan Pancasila", "Bahasa Indonesia", "Matematika", "Bahasa Inggris", "Seni Budaya / Seni Rupa", "Pendidikan Jasmani, Olahraga & Kesehatan", "Muatan Lokal (Bahasa Sunda)", "Pendidikan Lingkungan Hidup (PLH)"],
+            "3": ["Pendidikan Agama dan Budi Pekerti", "Pendidikan Pancasila", "Bahasa Indonesia", "Matematika", "IPAS (Ilmu Pengetahuan Alam & Sosial)", "Bahasa Inggris", "Seni Budaya / Seni Rupa", "Pendidikan Jasmani, Olahraga & Kesehatan", "Muatan Lokal (Bahasa Sunda)", "Pendidikan Lingkungan Hidup (PLH)"],
+            "4": ["Pendidikan Agama dan Budi Pekerti", "Pendidikan Pancasila", "Bahasa Indonesia", "Matematika", "IPAS (Ilmu Pengetahuan Alam & Sosial)", "Bahasa Inggris", "Seni Budaya / Seni Rupa", "Pendidikan Jasmani, Olahraga & Kesehatan", "Muatan Lokal (Bahasa Sunda)", "Pendidikan Lingkungan Hidup (PLH)", "Seni Musik"],
+            "5": ["Pendidikan Agama dan Budi Pekerti", "Pendidikan Pancasila", "Bahasa Indonesia", "Matematika", "IPAS (Ilmu Pengetahuan Alam & Sosial)", "Bahasa Inggris", "Seni Budaya / Seni Rupa", "Pendidikan Jasmani, Olahraga & Kesehatan", "Muatan Lokal (Bahasa Sunda)", "Pendidikan Lingkungan Hidup (PLH)", "Seni Musik"],
+            "6": ["Pendidikan Agama dan Budi Pekerti", "Pendidikan Pancasila", "Bahasa Indonesia", "Matematika", "IPAS (Ilmu Pengetahuan Alam & Sosial)", "Bahasa Inggris", "Seni Budaya / Seni Rupa", "Pendidikan Jasmani, Olahraga & Kesehatan", "Muatan Lokal (Bahasa Sunda)", "Pendidikan Lingkungan Hidup (PLH)", "Seni Musik"]
         };
-
-        // DAFTAR MAPEL LENGKAP UNTUK BUKU INDUK
-        const ALL_MAPEL_LIST = [
-            { key: "paidbp", label: "PAIDBP" },
-            { key: "ppdk", label: "PPDK" },
-            { key: "bi", label: "BI" },
-            { key: "mu", label: "MU" },
-            { key: "ipadsi", label: "IPADSI" },
-            { key: "sb", label: "SB" },
-            { key: "pjodk", label: "PJODK" },
-            { key: "bsun", label: "BSUN" },
-            { key: "plh", label: "PLH" },
-            { key: "senimusik", label: "Seni Musik" }
-        ];
 
         const KLASIFIKASI_SURAT_LIST = [
             {"kode": "HM", "nama": "Hubungan Masyarakat"}, {"kode": "HK", "nama": "Hukum"}, {"kode": "KP", "nama": "Kepegawaian"}, {"kode": "RT", "nama": "Kerumahtanggaan"}, {"kode": "TU", "nama": "Ketatausahaan"}, {"kode": "KU", "nama": "Keuangan"}, {"kode": "TL", "nama": "Organisasi dan Tata Laksana"}, {"kode": "PP", "nama": "Penelitian, Pengkajian, dan Pengembangan"}, {"kode": "PW", "nama": "Pengawasan"}, {"kode": "AR", "nama": "Kearsipan"}, {"kode": "LH", "nama": "Lingkungan Hidup"}, {"kode": "PA", "nama": "Pemberdayaan Perempuan dan Perlindungan Anak"}, {"kode": "PD", "nama": "Pemerintahan Daerah"}, {"kode": "PO", "nama": "Pemuda dan Olahraga"}, {"kode": "PB", "nama": "Penanggulangan Bencana"}, {"kode": "PK", "nama": "Pendidikan dan Kebudayaan"}, {"kode": "PN", "nama": "Perencanaan dan Pembangunan"}, {"kode": "HB", "nama": "Perhubungan"}, {"kode": "PS", "nama": "Perpustakaan"}, {"kode": "PK.03.02.01", "nama": "Sekolah Dasar (Kurikulum, Bahan Ajar dan Pelatihan)"}
@@ -1144,6 +1099,7 @@
             "B": "Biasa", "S": "Segera", "R": "Rahasia", "SR": "Sangat Rahasia", "P": "Penting"
         };
 
+        // KOMPONEN HTML KOP SURAT RESMI
         const OFFICIAL_KOP_SURAT_HTML = `
             <div class="flex items-center justify-between pb-2 border-b-4 border-double border-black mb-4">
                 <img src="logo.png" alt="Logo Kota Bandung" class="h-20 w-20 object-contain">
@@ -1160,11 +1116,11 @@
 
         let studentsData = {};
         let suratData = {};
-        let legerData = {};
         let currentLetterFilter = 'ALL';
         let currentYearFilter = 'ALL';
         let currentSearchQuery = '';
         let currentIndukQuery = '';
+        let currentRaporQuery = '';
         let currentUserRole = 'VIEWER';
 
         let klaperCurrentPage = 1;
@@ -1172,6 +1128,9 @@
 
         let indukCurrentPage = 1;
         let indukPageSize = 12;
+
+        let raporCurrentPage = 1;
+        let raporPageSize = 12;
 
         onAuthStateChanged(auth, (user) => {
             const loginModal = document.getElementById('loginModal');
@@ -1192,7 +1151,6 @@
                 }
                 listenToData();
                 listenToSuratData();
-                listenToLegerData();
                 populateKlasifikasiDatalist();
             } else {
                 loginModal.classList.remove('hidden');
@@ -1226,8 +1184,8 @@
                 updateYearFilterControls();
                 renderData();
                 renderIndukGrid();
+                renderRaporGrid();
                 renderMutasiTable();
-                renderLegerTable();
             }, (error) => {
                 document.getElementById('syncIndicator').className = "h-3 w-3 rounded-full bg-red-500";
                 document.getElementById('syncText').textContent = "Gagal terhubung ke Cloud Database";
@@ -1238,13 +1196,6 @@
             onValue(suratRef, (snapshot) => {
                 suratData = snapshot.val() || {};
                 renderSuratTable();
-            });
-        }
-
-        function listenToLegerData() {
-            onValue(legerRef, (snapshot) => {
-                legerData = snapshot.val() || {};
-                renderLegerTable();
             });
         }
 
@@ -1325,35 +1276,49 @@
         }
 
         window.switchTab = function(tabName) {
-            const views = {
-                klaper: document.getElementById('viewKlaper'),
-                induk: document.getElementById('viewInduk'),
-                mutasi: document.getElementById('viewMutasi'),
-                leger: document.getElementById('viewLeger'),
-                surat: document.getElementById('viewSurat')
-            };
+            const viewKlaper = document.getElementById('viewKlaper');
+            const viewInduk = document.getElementById('viewInduk');
+            const viewRapor = document.getElementById('viewRapor');
+            const viewMutasi = document.getElementById('viewMutasi');
+            const viewSurat = document.getElementById('viewSurat');
 
-            const btns = {
-                klaper: document.getElementById('tabKlaperBtn'),
-                induk: document.getElementById('tabIndukBtn'),
-                mutasi: document.getElementById('tabMutasiBtn'),
-                leger: document.getElementById('tabLegerBtn'),
-                surat: document.getElementById('tabSuratBtn')
-            };
+            const btnKlaper = document.getElementById('tabKlaperBtn');
+            const btnInduk = document.getElementById('tabIndukBtn');
+            const btnRapor = document.getElementById('tabRaporBtn');
+            const btnMutasi = document.getElementById('tabMutasiBtn');
+            const btnSurat = document.getElementById('tabSuratBtn');
 
-            Object.keys(views).forEach(key => {
-                views[key].classList.add('hidden');
-                btns[key].className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
-            });
+            viewKlaper.classList.add('hidden');
+            viewInduk.classList.add('hidden');
+            viewRapor.classList.add('hidden');
+            viewMutasi.classList.add('hidden');
+            viewSurat.classList.add('hidden');
 
-            if (views[tabName]) {
-                views[tabName].classList.remove('hidden');
-                btns[tabName].className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
-                
-                if (tabName === 'induk') renderIndukGrid();
-                else if (tabName === 'mutasi') renderMutasiTable();
-                else if (tabName === 'leger') renderLegerTable();
-                else if (tabName === 'surat') renderSuratTable();
+            btnKlaper.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
+            btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
+            btnRapor.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
+            btnMutasi.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
+            btnSurat.className = "py-3 px-4 font-bold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition whitespace-nowrap";
+
+            if (tabName === 'klaper') {
+                viewKlaper.classList.remove('hidden');
+                btnKlaper.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
+            } else if (tabName === 'induk') {
+                viewInduk.classList.remove('hidden');
+                btnInduk.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
+                renderIndukGrid();
+            } else if (tabName === 'rapor') {
+                viewRapor.classList.remove('hidden');
+                btnRapor.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
+                renderRaporGrid();
+            } else if (tabName === 'mutasi') {
+                viewMutasi.classList.remove('hidden');
+                btnMutasi.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
+                renderMutasiTable();
+            } else if (tabName === 'surat') {
+                viewSurat.classList.remove('hidden');
+                btnSurat.className = "py-3 px-4 font-bold text-sm border-b-2 border-yellow-400 text-yellow-400 flex items-center gap-2 transition whitespace-nowrap";
+                renderSuratTable();
             }
         }
 
@@ -1629,6 +1594,400 @@
             renderIndukGrid();
         }
 
+        // --- MANAJEMEN RAPOR SISWA LOGIK ---
+        window.renderRaporGrid = function() {
+            const grid = document.getElementById('raporGrid');
+            const filterKelas = document.getElementById('raporKelasFilter')?.value || 'ALL';
+
+            let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
+            list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            if (currentRaporQuery.trim() !== '') {
+                const q = currentRaporQuery.toLowerCase();
+                list = list.filter(s => 
+                    (s.name || '').toLowerCase().includes(q) ||
+                    (s.nis || '').toLowerCase().includes(q) ||
+                    (s.nisn || '').toLowerCase().includes(q)
+                );
+            }
+
+            const total = list.length;
+
+            if (total === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400"><i class="fa-solid fa-graduation-cap text-4xl mb-2"></i><p>Tidak ada data siswa untuk pengelolaan Rapor.</p></div>`;
+                renderRaporPaginationControls(0, 0, 0, 0);
+                return;
+            }
+
+            const totalPages = Math.ceil(total / raporPageSize);
+            if (raporCurrentPage > totalPages) raporCurrentPage = totalPages;
+            if (raporCurrentPage < 1) raporCurrentPage = 1;
+
+            const startIndex = (raporCurrentPage - 1) * raporPageSize;
+            const endIndex = Math.min(startIndex + raporPageSize, total);
+            const pageStudents = list.slice(startIndex, endIndex);
+
+            grid.innerHTML = pageStudents.map(s => {
+                const raporRecs = s.raporData || {};
+                const availableClasses = Object.keys(raporRecs).join(', ') || 'Belum diisi';
+
+                return `
+                    <div class="bg-white rounded-xl shadow-md border border-slate-200 p-5 flex flex-col justify-between hover:shadow-lg transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2 border-b pb-2">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">NIS: ${s.nis || '-'}</span>
+                                    <h3 class="text-base font-bold text-slate-900 mt-1 uppercase">${s.name || '-'}</h3>
+                                </div>
+                                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">NISN: ${s.nisn || '-'}</span>
+                            </div>
+                            <div class="text-xs text-slate-600 mb-4">
+                                <p><strong class="text-slate-800">Status Isian Rapor:</strong></p>
+                                <p class="text-[11px] font-medium text-indigo-900 bg-slate-50 p-1.5 rounded border border-slate-200 mt-1">Kelas Tersedia: ${availableClasses}</p>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t flex flex-col gap-2">
+                            <div class="grid grid-cols-2 gap-2">
+                                ${currentUserRole === 'ADMIN' ? `
+                                    <button onclick="openRaporModal('${s.key}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-1.5 px-2 rounded-lg text-xs transition flex items-center justify-center gap-1">
+                                        <i class="fa-solid fa-pen-to-square"></i> Input / Edit Rapor
+                                    </button>
+                                ` : ''}
+                                <button onclick="selectRaporToPrint('${s.key}')" class="${currentUserRole === 'ADMIN' ? '' : 'col-span-2'} bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-1.5 px-2 rounded-lg text-xs transition flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-print"></i> Cetak Lembar Rapor
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            renderRaporPaginationControls(startIndex + 1, endIndex, total, totalPages);
+        }
+
+        function renderRaporPaginationControls(start, end, total, totalPages) {
+            document.getElementById('raporInfoText').textContent = `Menampilkan ${start} - ${end} dari ${total} Siswa`;
+            const container = document.getElementById('raporPageButtons');
+            if (total === 0 || totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = `
+                <button onclick="goToRaporPage(${raporCurrentPage - 1})" ${raporCurrentPage === 1 ? 'disabled' : ''} class="px-2.5 py-1 rounded border text-xs bg-white hover:bg-slate-100 disabled:opacity-40 font-medium">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+            `;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= raporCurrentPage - 1 && i <= raporCurrentPage + 1)) {
+                    html += `
+                        <button onclick="goToRaporPage(${i})" class="px-3 py-1 rounded border text-xs font-bold transition ${i === raporCurrentPage ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white hover:bg-slate-100 text-slate-700'}">
+                            ${i}
+                        </button>
+                    `;
+                } else if (i === raporCurrentPage - 2 || i === raporCurrentPage + 2) {
+                    html += `<span class="px-1 text-slate-400">...</span>`;
+                }
+            }
+
+            html += `
+                <button onclick="goToRaporPage(${raporCurrentPage + 1})" ${raporCurrentPage === totalPages ? 'disabled' : ''} class="px-2.5 py-1 rounded border text-xs bg-white hover:bg-slate-100 disabled:opacity-40 font-medium">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        window.goToRaporPage = function(page) {
+            raporCurrentPage = page;
+            renderRaporGrid();
+        }
+
+        window.changeRaporPageSize = function() {
+            raporPageSize = parseInt(document.getElementById('raporPageSize').value, 10);
+            raporCurrentPage = 1;
+            renderRaporGrid();
+        }
+
+        window.handleRaporSearch = function() {
+            currentRaporQuery = document.getElementById('raporSearchInput').value;
+            raporCurrentPage = 1;
+            renderRaporGrid();
+        }
+
+        window.openRaporModal = function(key) {
+            const s = studentsData[key];
+            if (!s) return;
+
+            document.getElementById('raporStudentKey').value = key;
+            document.getElementById('raporModalSubtitle').textContent = `Siswa: ${s.name} | NIS: ${s.nis || '-'} | NISN: ${s.nisn || '-'}`;
+
+            document.getElementById('raporFormKelas').value = "1";
+            document.getElementById('raporFormSemester').value = "1";
+            document.getElementById('raporFormTahunAjar').value = "2025/2026";
+
+            onRaporFormKelasChange();
+            loadRaporFormData();
+
+            document.getElementById('raporModal').classList.remove('hidden');
+            document.getElementById('raporModal').classList.add('flex');
+        }
+
+        window.closeRaporModal = function() {
+            document.getElementById('raporModal').classList.add('hidden');
+            document.getElementById('raporModal').classList.remove('flex');
+        }
+
+        window.onRaporFormKelasChange = function() {
+            const kelas = document.getElementById('raporFormKelas').value;
+            const mapelList = MAPEL_BY_KELAS[kelas] || MAPEL_BY_KELAS["1"];
+
+            document.getElementById('raporMatelCountBadge').textContent = `${mapelList.length} Mata Pelajaran`;
+
+            const tbody = document.getElementById('raporMapelInputTbody');
+            tbody.innerHTML = mapelList.map((m, idx) => `
+                <tr>
+                    <td class="p-2 text-center font-bold text-slate-500">${idx + 1}</td>
+                    <td class="p-2 font-semibold text-slate-800">${m}</td>
+                    <td class="p-2 text-center">
+                        <input type="text" id="mapelNilai_${idx}" placeholder="0-100" class="w-full border rounded px-2 py-1 text-center font-bold text-indigo-900 bg-slate-50 focus:bg-white">
+                    </td>
+                    <td class="p-2">
+                        <input type="text" id="mapelCapaian_${idx}" placeholder="Deskripsi capaian kompetensi..." class="w-full border rounded px-2.5 py-1 text-xs bg-slate-50 focus:bg-white">
+                    </td>
+                </tr>
+            `).join('');
+
+            loadRaporFormData();
+        }
+
+        window.loadRaporFormData = function() {
+            const key = document.getElementById('raporStudentKey').value;
+            const s = studentsData[key];
+            if (!s) return;
+
+            const kelas = document.getElementById('raporFormKelas').value;
+            const semester = document.getElementById('raporFormSemester').value;
+            const mapelList = MAPEL_BY_KELAS[kelas] || MAPEL_BY_KELAS["1"];
+
+            const savedRapor = (s.raporData && s.raporData[`kelas_${kelas}`] && s.raporData[`kelas_${kelas}`][`sem_${semester}`]) ? s.raporData[`kelas_${kelas}`][`sem_${semester}`] : null;
+
+            if (semester === "2") {
+                document.getElementById('raporKeputusanContainer').classList.remove('hidden');
+            } else {
+                document.getElementById('raporKeputusanContainer').classList.add('hidden');
+            }
+
+            if (savedRapor) {
+                document.getElementById('raporFormTahunAjar').value = savedRapor.tahunAjar || "2025/2026";
+                mapelList.forEach((_, idx) => {
+                    const mp = savedRapor.mapelData ? savedRapor.mapelData[idx] : null;
+                    document.getElementById(`mapelNilai_${idx}`).value = mp ? (mp.nilai || '') : '';
+                    document.getElementById(`mapelCapaian_${idx}`).value = mp ? (mp.capaian || '') : '';
+                });
+
+                document.getElementById('ekstraNilai1').value = savedRapor.ekstra1 ? savedRapor.ekstra1.nilai || '' : '';
+                document.getElementById('ekstraKet1').value = savedRapor.ekstra1 ? savedRapor.ekstra1.ket || '' : '';
+                document.getElementById('ekstraNilai2').value = savedRapor.ekstra2 ? savedRapor.ekstra2.nilai || '' : '';
+                document.getElementById('ekstraKet2').value = savedRapor.ekstra2 ? savedRapor.ekstra2.ket || '' : '';
+                document.getElementById('ekstraNilai3').value = savedRapor.ekstra3 ? savedRapor.ekstra3.nilai || '' : '';
+                document.getElementById('ekstraKet3').value = savedRapor.ekstra3 ? savedRapor.ekstra3.ket || '' : '';
+
+                document.getElementById('absenSakit').value = savedRapor.sakit || '';
+                document.getElementById('absenIzin').value = savedRapor.izin || '';
+
+                if (savedRapor.keputusan) {
+                    document.getElementById('raporKeputusanStatus').value = savedRapor.keputusan.status || 'NAIK KELAS';
+                    document.getElementById('raporTglKeputusan').value = savedRapor.keputusan.tanggal || '';
+                }
+            } else {
+                mapelList.forEach((_, idx) => {
+                    document.getElementById(`mapelNilai_${idx}`).value = '';
+                    document.getElementById(`mapelCapaian_${idx}`).value = '';
+                });
+                document.getElementById('ekstraNilai1').value = ''; document.getElementById('ekstraKet1').value = '';
+                document.getElementById('ekstraNilai2').value = ''; document.getElementById('ekstraKet2').value = '';
+                document.getElementById('ekstraNilai3').value = ''; document.getElementById('ekstraKet3').value = '';
+                document.getElementById('absenSakit').value = ''; document.getElementById('absenIzin').value = '';
+                document.getElementById('raporKeputusanStatus').value = 'NAIK KELAS';
+                document.getElementById('raporTglKeputusan').value = '';
+            }
+        }
+
+        window.handleRaporFormSubmit = function(e) {
+            e.preventDefault();
+            if (currentUserRole !== 'ADMIN') return;
+
+            const key = document.getElementById('raporStudentKey').value;
+            const kelas = document.getElementById('raporFormKelas').value;
+            const semester = document.getElementById('raporFormSemester').value;
+            const tahunAjar = document.getElementById('raporFormTahunAjar').value.trim();
+            const mapelList = MAPEL_BY_KELAS[kelas] || MAPEL_BY_KELAS["1"];
+
+            const mapelDataArr = mapelList.map((m, idx) => ({
+                nama: m,
+                nilai: document.getElementById(`mapelNilai_${idx}`).value.trim(),
+                capaian: document.getElementById(`mapelCapaian_${idx}`).value.trim()
+            }));
+
+            const payloadRaporSem = {
+                tahunAjar: tahunAjar,
+                mapelData: mapelDataArr,
+                ekstra1: { nilai: document.getElementById('ekstraNilai1').value.trim(), ket: document.getElementById('ekstraKet1').value.trim() },
+                ekstra2: { nilai: document.getElementById('ekstraNilai2').value.trim(), ket: document.getElementById('ekstraKet2').value.trim() },
+                ekstra3: { nilai: document.getElementById('ekstraNilai3').value.trim(), ket: document.getElementById('ekstraKet3').value.trim() },
+                sakit: document.getElementById('absenSakit').value.trim(),
+                izin: document.getElementById('absenIzin').value.trim(),
+                keputusan: semester === "2" ? {
+                    status: document.getElementById('raporKeputusanStatus').value,
+                    tanggal: document.getElementById('raporTglKeputusan').value.trim()
+                } : null
+            };
+
+            update(ref(db, `students/${key}/raporData/kelas_${kelas}/sem_${semester}`), payloadRaporSem);
+            alert(`Capaian Rapor Kelas ${kelas} Semester ${semester} berhasil disimpan ke Cloud!`);
+            closeRaporModal();
+        }
+
+        window.selectRaporToPrint = function(key) {
+            const s = studentsData[key];
+            if (!s) return;
+
+            const availableClasses = Object.keys(s.raporData || {});
+            if (availableClasses.length === 0) {
+                alert("Siswa ini belum memiliki isian data Rapor. Silakan lakukan input nilai terlebih dahulu.");
+                return;
+            }
+
+            const chosenClassStr = prompt(`Pilih Kelas Rapor yang ingin dicetak (1, 2, 3, 4, 5, atau 6):\nTersedia data: ${availableClasses.join(', ')}`, "1");
+            if (!chosenClassStr) return;
+
+            const chosenSem = prompt("Pilih Semester (1 atau 2):", "1");
+            if (!chosenSem) return;
+
+            printRaporSheet(key, chosenClassStr.trim(), chosenSem.trim());
+        }
+
+        window.printRaporSheet = function(key, kelas, semester) {
+            const s = studentsData[key];
+            if (!s) return;
+
+            const raporObj = (s.raporData && s.raporData[`kelas_${kelas}`] && s.raporData[`kelas_${kelas}`][`sem_${semester}`]) ? s.raporData[`kelas_${kelas}`][`sem_${semester}`] : null;
+
+            if (!raporObj) {
+                alert(`Data Rapor untuk Kelas ${kelas} Semester ${semester} belum diisi.`);
+                return;
+            }
+
+            const mapelList = MAPEL_BY_KELAS[kelas] || MAPEL_BY_KELAS["1"];
+            const mapelRows = mapelList.map((m, idx) => {
+                const mp = raporObj.mapelData ? raporObj.mapelData[idx] : null;
+                return `
+                    <tr class="border-b border-black">
+                        <td class="p-1 text-center border-r border-black">${idx + 1}</td>
+                        <td class="p-1 border-r border-black font-semibold">${m}</td>
+                        <td class="p-1 text-center border-r border-black font-bold">${mp ? (mp.nilai || '-') : '-'}</td>
+                        <td class="p-1">${mp ? (mp.capaian || '-') : '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            const html = `
+                ${OFFICIAL_KOP_SURAT_HTML}
+
+                <div class="text-center font-bold text-xs uppercase mb-3">
+                    <h2 class="text-sm underline">LAPORAN CAPAIAN KOMPETENSI SISWA — KELAS ${kelas}</h2>
+                </div>
+
+                <div class="mb-3 text-xs">
+                    <div class="flex justify-between border-b border-black pb-1 mb-1">
+                        <span><strong>Nama Peserta Didik:</strong> <span class="uppercase font-bold">${s.name || '-'}</span></span>
+                        <span><strong>NIS:</strong> ${s.nis || '-'} &nbsp;|&nbsp; <strong>NISN:</strong> ${s.nisn || '-'}</span>
+                    </div>
+                    <div class="flex justify-between font-semibold">
+                        <span>Kelas / Fase : Kelas ${kelas}</span>
+                        <span>Tahun Pelajaran : ${raporObj.tahunAjar || '20.... / 20....'}</span>
+                        <span>Semester : ${semester}</span>
+                    </div>
+                </div>
+
+                <table class="w-full border border-black text-[11px] mb-3">
+                    <thead>
+                        <tr class="bg-gray-100 font-bold border-b border-black text-center">
+                            <td class="p-1 border-r border-black w-8">No.</td>
+                            <td class="p-1 border-r border-black min-w-[180px]">MATA PELAJARAN</td>
+                            <td class="p-1 border-r border-black w-16">NILAI</td>
+                            <td class="p-1">CAPAIAN KOMPETENSI</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${mapelRows}
+                    </tbody>
+                </table>
+
+                <div class="grid grid-cols-2 gap-4 mb-3 text-[11px]">
+                    <div>
+                        <p class="font-bold uppercase mb-1">EKSTRAKURIKULER (KELAS ${kelas} - SEMESTER ${semester})</p>
+                        <table class="w-full border border-black text-center">
+                            <tr class="bg-gray-100 font-bold border-b border-black">
+                                <td class="p-1 border-r border-black text-left">Kegiatan Ekstrakurikuler</td>
+                                <td class="p-1 border-r border-black w-12">Nilai</td>
+                                <td class="p-1 text-left">Keterangan</td>
+                            </tr>
+                            <tr class="border-b border-black"><td class="p-1 text-left border-r border-black">1. Pramuka</td><td class="p-1 border-r border-black font-bold">${raporObj.ekstra1 ? raporObj.ekstra1.nilai || '-' : '-'}</td><td class="p-1 text-left">${raporObj.ekstra1 ? raporObj.ekstra1.ket || '-' : '-'}</td></tr>
+                            <tr class="border-b border-black"><td class="p-1 text-left border-r border-black">2. Seni Tari</td><td class="p-1 border-r border-black font-bold">${raporObj.ekstra2 ? raporObj.ekstra2.nilai || '-' : '-'}</td><td class="p-1 text-left">${raporObj.ekstra2 ? raporObj.ekstra2.ket || '-' : '-'}</td></tr>
+                            <tr><td class="p-1 text-left border-r border-black">3. Futsal</td><td class="p-1 border-r border-black font-bold">${raporObj.ekstra3 ? raporObj.ekstra3.nilai || '-' : '-'}</td><td class="p-1 text-left">${raporObj.ekstra3 ? raporObj.ekstra3.ket || '-' : '-'}</td></tr>
+                        </table>
+                    </div>
+
+                    <div>
+                        <p class="font-bold uppercase mb-1">KETIDAKHADIRAN (KELAS ${kelas} - SEMESTER ${semester})</p>
+                        <table class="w-full border border-black text-center">
+                            <tr class="bg-gray-100 font-bold border-b border-black">
+                                <td class="p-1 border-r border-black text-left">Alasan Ketidakhadiran</td>
+                                <td class="p-1 w-24">Jumlah Hari</td>
+                            </tr>
+                            <tr class="border-b border-black"><td class="p-1 text-left border-r border-black">Sakit</td><td class="p-1 font-bold">${raporObj.sakit || '0'} hari</td></tr>
+                            <tr><td class="p-1 text-left border-r border-black">Izin</td><td class="p-1 font-bold">${raporObj.izin || '0'} hari</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                ${semester === "2" && raporObj.keputusan ? `
+                    <div class="p-2 border border-black bg-gray-50 text-[11px] mb-4">
+                        <p class="font-bold">Keputusan Akhir Tahun Pelajaran:</p>
+                        <p>Berdasarkan pencapaian Semester 1 & 2, peserta didik ditetapkan: <strong class="uppercase underline text-black">${raporObj.keputusan.status || 'NAIK KELAS'}</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tanggal: ${raporObj.keputusan.tanggal || '......................... 20....'}</p>
+                    </div>
+                ` : ''}
+
+                <div class="mt-6 flex justify-between items-end text-[11px]">
+                    <div class="text-center">
+                        <p>Mengetahui,</p>
+                        <p class="mb-10">Orang Tua / Wali Siswa</p>
+                        <p class="font-bold underline">_________________________</p>
+                    </div>
+                    <div class="text-center">
+                        <p>Bandung, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        <p class="mb-10">Wali Kelas / Guru</p>
+                        <p class="font-bold underline">_________________________</p>
+                        <p>NIP. .................................................</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('raporSheetContent').innerHTML = html;
+            document.getElementById('raporPrintModal').classList.remove('hidden');
+            document.getElementById('raporPrintModal').classList.add('flex');
+        }
+
+        window.closeRaporPrintModal = function() {
+            document.getElementById('raporPrintModal').classList.add('hidden');
+            document.getElementById('raporPrintModal').classList.remove('flex');
+        }
+
         window.renderMutasiTable = function() {
             const tbody = document.getElementById('mutasiTableBody');
             const emptyState = document.getElementById('mutasiEmptyState');
@@ -1711,241 +2070,6 @@
                     </tr>
                 `;
             }).join('');
-        }
-
-        /* --- FUNGSI LOGIKA LEGER NILAI PER KELAS DINAMIS --- */
-        window.renderLegerTable = function() {
-            const thead = document.getElementById('legerTableHeader');
-            const tbody = document.getElementById('legerTableBody');
-            const emptyState = document.getElementById('legerEmptyState');
-            const targetClass = document.getElementById('legerClassSelect')?.value || '1';
-            const targetSemester = document.getElementById('legerSemesterSelect')?.value || '1';
-            const targetYear = (document.getElementById('legerYearInput')?.value || '2025/2026').replace('/', '_');
-
-            const classMapels = MAPEL_PER_KELAS[targetClass] || MAPEL_PER_KELAS["1"];
-
-            // GENERATE HEADER LEGER SESUAI KELAS
-            let thMapelsHtml = classMapels.map(m => `<th class="py-1 px-1 border-r border-indigo-800 min-w-[45px]">${m.label}</th>`).join('');
-
-            thead.innerHTML = `
-                <tr class="bg-indigo-950 text-white border-b border-indigo-900 text-center">
-                    <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 w-8">No</th>
-                    <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 w-20">NIS</th>
-                    <th rowspan="2" class="py-2 px-3 border-r border-indigo-900 min-w-[160px] text-left">Nama Siswa</th>
-                    <th rowspan="2" class="py-2 px-1 border-r border-indigo-900 w-8">L/P</th>
-                    <th colspan="${classMapels.length}" class="py-1.5 px-2 border-r border-indigo-900 bg-indigo-900">Mata Pelajaran (Nilai Akhir)</th>
-                    <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 bg-indigo-900/80 w-14">Jumlah</th>
-                    <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 bg-indigo-900/80 w-14">Rata2</th>
-                    <th colspan="3" class="py-1.5 px-2 border-r border-indigo-900 bg-slate-800">Kehadiran</th>
-                    <th rowspan="2" class="py-2 px-2 border-r border-indigo-900 no-print action-column w-20">Aksi</th>
-                </tr>
-                <tr class="bg-indigo-900 text-white text-[11px] text-center border-b border-indigo-800">
-                    ${thMapelsHtml}
-                    <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">S</th>
-                    <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">I</th>
-                    <th class="py-1 px-1 border-r border-slate-700 bg-slate-800 w-10">A</th>
-                </tr>
-            `;
-
-            let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
-            list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-
-            if (list.length === 0) {
-                tbody.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            tbody.innerHTML = list.map((s, idx) => {
-                const legerKey = `${s.key}_K${targetClass}_S${targetSemester}_${targetYear}`;
-                const l = legerData[legerKey] || {};
-
-                let sum = 0;
-                let count = 0;
-
-                let scoreTdHtml = classMapels.map(m => {
-                    const scoreVal = l[m.key];
-                    if (scoreVal !== undefined && scoreVal !== "") {
-                        const numVal = parseFloat(scoreVal) || 0;
-                        sum += numVal;
-                        count++;
-                        return `<td class="py-2 px-1 border-r border-slate-200 font-mono font-semibold">${scoreVal}</td>`;
-                    }
-                    return `<td class="py-2 px-1 border-r border-slate-200 font-mono text-slate-400">-</td>`;
-                }).join('');
-
-                const average = count > 0 ? (sum / classMapels.length).toFixed(1) : '-';
-
-                return `
-                    <tr class="hover:bg-slate-50 transition border-b border-slate-200 text-center">
-                        <td class="py-2 px-2 border-r border-slate-200 text-slate-500 font-medium">${idx + 1}</td>
-                        <td class="py-2 px-2 border-r border-slate-200 font-mono">${s.nis || '-'}</td>
-                        <td class="py-2 px-3 border-r border-slate-200 font-bold text-slate-900 text-left uppercase">${s.name || '-'}</td>
-                        <td class="py-2 px-1 border-r border-slate-200 font-bold ${s.gender === 'L' ? 'text-blue-600' : 'text-pink-600'}">${s.gender || '-'}</td>
-                        
-                        ${scoreTdHtml}
-
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-bold text-indigo-900 bg-indigo-50/50">${count > 0 ? sum : '-'}</td>
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono font-bold text-emerald-800 bg-emerald-50/50">${average}</td>
-
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono text-slate-600">${l.sakit !== undefined ? l.sakit : '0'}</td>
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono text-slate-600">${l.izin !== undefined ? l.izin : '0'}</td>
-                        <td class="py-2 px-1 border-r border-slate-200 font-mono text-slate-600">${l.alpa !== undefined ? l.alpa : '0'}</td>
-
-                        <td class="py-2 px-2 border-r border-slate-200 no-print action-column">
-                            ${currentUserRole === 'ADMIN' ? `
-                                <button onclick="openLegerModal('${s.key}', '${s.name}')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded text-xs transition font-semibold" title="Input/Edit Nilai">
-                                    <i class="fa-solid fa-pen-to-square"></i> Isi Nilai
-                                </button>
-                            ` : '-'}
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        window.openLegerModal = function(studentKey, studentName) {
-            document.getElementById('legerForm').reset();
-            document.getElementById('legerStudentKey').value = studentKey;
-
-            const targetClass = document.getElementById('legerClassSelect')?.value || '1';
-            const targetSemester = document.getElementById('legerSemesterSelect')?.value || '1';
-            const targetYear = (document.getElementById('legerYearInput')?.value || '2025/2026').replace('/', '_');
-
-            document.getElementById('legerModalSubtitle').textContent = `Siswa: ${studentName} | Kelas ${targetClass} Semester ${targetSemester}`;
-
-            const classMapels = MAPEL_PER_KELAS[targetClass] || MAPEL_PER_KELAS["1"];
-            const legerKey = `${studentKey}_K${targetClass}_S${targetSemester}_${targetYear}`;
-            const l = legerData[legerKey] || {};
-
-            const mapelContainer = document.getElementById('legerFormMapelContainer');
-            mapelContainer.innerHTML = classMapels.map(m => `
-                <div>
-                    <label class="block font-semibold mb-1">${m.label}</label>
-                    <input type="number" id="score_${m.key}" min="0" max="100" value="${l[m.key] !== undefined ? l[m.key] : ''}" class="w-full border rounded px-2 py-1 font-semibold text-center focus:ring-2 focus:ring-indigo-500">
-                </div>
-            `).join('');
-
-            document.getElementById('absentSakit').value = l.sakit !== undefined ? l.sakit : '0';
-            document.getElementById('absentIzin').value = l.izin !== undefined ? l.izin : '0';
-            document.getElementById('absentAlpa').value = l.alpa !== undefined ? l.alpa : '0';
-
-            document.getElementById('legerModal').classList.remove('hidden');
-            document.getElementById('legerModal').classList.add('flex');
-        }
-
-        window.closeLegerModal = function() {
-            document.getElementById('legerModal').classList.add('hidden');
-            document.getElementById('legerModal').classList.remove('flex');
-        }
-
-        window.handleLegerSubmit = function(e) {
-            e.preventDefault();
-            if (currentUserRole !== 'ADMIN') return;
-
-            const studentKey = document.getElementById('legerStudentKey').value;
-            const targetClass = document.getElementById('legerClassSelect')?.value || '1';
-            const targetSemester = document.getElementById('legerSemesterSelect')?.value || '1';
-            const targetYear = (document.getElementById('legerYearInput')?.value || '2025/2026').replace('/', '_');
-
-            const classMapels = MAPEL_PER_KELAS[targetClass] || MAPEL_PER_KELAS["1"];
-            const legerKey = `${studentKey}_K${targetClass}_S${targetSemester}_${targetYear}`;
-
-            const payload = {
-                sakit: document.getElementById('absentSakit').value,
-                izin: document.getElementById('absentIzin').value,
-                alpa: document.getElementById('absentAlpa').value,
-                updatedAt: new Date().toISOString()
-            };
-
-            let sum = 0;
-            let count = 0;
-
-            classMapels.forEach(m => {
-                const val = document.getElementById(`score_${m.key}`)?.value || '';
-                payload[m.key] = val;
-                if (val !== "") {
-                    sum += parseFloat(val) || 0;
-                    count++;
-                }
-            });
-
-            set(ref(db, `leger_nilai/${legerKey}`), payload);
-
-            // SYNC OTOMATIS NILAI LEGER KE PROFIL BUKU INDUK SISWA
-            const currentStudent = studentsData[studentKey] || {};
-            const semNum = (parseInt(targetClass, 10) - 1) * 2 + parseInt(targetSemester, 10);
-            const studentGrades = currentStudent.grades || {};
-            const semGrades = studentGrades[`sem${semNum}`] || {};
-
-            classMapels.forEach(m => {
-                if (payload[m.key] !== "") {
-                    semGrades[m.key] = payload[m.key];
-                }
-            });
-
-            studentGrades[`sem${semNum}`] = semGrades;
-
-            const updateObj = { grades: studentGrades };
-            if (count > 0) {
-                const avg = (sum / classMapels.length).toFixed(1);
-                updateObj[`avgKls${targetClass}`] = avg;
-            }
-
-            update(ref(db, `students/${studentKey}`), updateObj);
-            closeLegerModal();
-        }
-
-        window.exportLegerToExcel = function() {
-            const targetClass = document.getElementById('legerClassSelect')?.value || '1';
-            const targetSemester = document.getElementById('legerSemesterSelect')?.value || '1';
-            const targetYear = document.getElementById('legerYearInput')?.value || '2025/2026';
-
-            const classMapels = MAPEL_PER_KELAS[targetClass] || MAPEL_PER_KELAS["1"];
-            let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
-            list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-
-            const headerRow = ["No", "NIS", "NISN", "Nama Lengkap Siswa", "L/P"];
-            classMapels.forEach(m => headerRow.push(m.label));
-            headerRow.push("Total Nilai", "Rata-Rata", "Sakit", "Izin", "Alpa");
-
-            const exportData = [
-                [`REKAPITULASI LEGER NILAI SISWA SDN 186 CIPADUNG`],
-                [`Kelas: ${targetClass} | Semester: ${targetSemester} | Tahun Pelajaran: ${targetYear}`],
-                [""],
-                headerRow
-            ];
-
-            list.forEach((s, idx) => {
-                const legerKey = `${s.key}_K${targetClass}_S${targetSemester}_${targetYear.replace('/', '_')}`;
-                const l = legerData[legerKey] || {};
-
-                let sum = 0;
-                let count = 0;
-                const rowVal = [idx + 1, s.nis || '', s.nisn || '', s.name || '', s.gender || ''];
-
-                classMapels.forEach(m => {
-                    const scoreVal = l[m.key];
-                    if (scoreVal !== undefined && scoreVal !== "") {
-                        sum += parseFloat(scoreVal) || 0;
-                        count++;
-                        rowVal.push(scoreVal);
-                    } else {
-                        rowVal.push('');
-                    }
-                });
-
-                const average = count > 0 ? (sum / classMapels.length).toFixed(1) : '';
-                rowVal.push(count > 0 ? sum : '', average, l.sakit || '0', l.izin || '0', l.alpa || '0');
-                exportData.push(rowVal);
-            });
-
-            const ws = XLSX.utils.aoa_to_sheet(exportData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Leger_Nilai");
-            XLSX.writeFile(wb, `Leger_Nilai_Kelas_${targetClass}_SDN186.xlsx`);
         }
 
         window.openModalMutasi = function(tipe) {
@@ -2380,42 +2504,9 @@
             container.innerHTML = html;
         }
 
-        /* --- DISPLAY LEMBAR BUKU INDUK SISWA DENGAN TABEL RIWAYAT NILAI 12 SEMESTER --- */
         window.viewIndukSheet = function(key) {
             const s = studentsData[key];
             if (!s) return;
-
-            let rowsNilaiHtml = '';
-            for (let sem = 1; sem <= 12; sem++) {
-                const kls = Math.ceil(sem / 2);
-                const semInKls = (sem % 2 === 1) ? 1 : 2;
-                const semGrades = (s.grades && s.grades[`sem${sem}`]) ? s.grades[`sem${sem}`] : {};
-
-                let sum = 0;
-                let count = 0;
-
-                let mapelTdHtml = ALL_MAPEL_LIST.map(m => {
-                    const val = semGrades[m.key];
-                    if (val !== undefined && val !== "") {
-                        const numVal = parseFloat(val) || 0;
-                        sum += numVal;
-                        count++;
-                        return `<td class="p-0.5 border-r border-black font-mono">${val}</td>`;
-                    }
-                    return `<td class="p-0.5 border-r border-black text-gray-400">-</td>`;
-                }).join('');
-
-                const avg = count > 0 ? (sum / count).toFixed(1) : '-';
-
-                rowsNilaiHtml += `
-                    <tr class="border-b border-black">
-                        <td class="p-0.5 border-r border-black font-semibold text-left whitespace-nowrap">Kls ${kls} / S${semInKls} (Sem ${sem})</td>
-                        ${mapelTdHtml}
-                        <td class="p-0.5 border-r border-black font-mono font-bold">${count > 0 ? sum : '-'}</td>
-                        <td class="p-0.5 font-mono font-bold">${avg}</td>
-                    </tr>
-                `;
-            }
 
             const html = `
                 ${OFFICIAL_KOP_SURAT_HTML}
@@ -2489,31 +2580,27 @@
                 </div>
 
                 <div class="mb-2">
-                    <h4 class="font-bold uppercase mb-0.5">H & I. RIWAYAT KELAS & REKAPITULASI NILAI MAPEL (SEMESTER 1 - 12)</h4>
-                    <table class="w-full text-center border border-black mb-1 text-[9px]">
-                        <thead>
-                            <tr class="bg-gray-100 font-bold border-b border-black">
-                                <th class="p-0.5 border-r border-black">Semester</th>
-                                <th class="p-0.5 border-r border-black">PAIDBP</th>
-                                <th class="p-0.5 border-r border-black">PPDK</th>
-                                <th class="p-0.5 border-r border-black">BI</th>
-                                <th class="p-0.5 border-r border-black">MU</th>
-                                <th class="p-0.5 border-r border-black">IPADSI</th>
-                                <th class="p-0.5 border-r border-black">SB</th>
-                                <th class="p-0.5 border-r border-black">PJODK</th>
-                                <th class="p-0.5 border-r border-black">BSUN</th>
-                                <th class="p-0.5 border-r border-black">PLH</th>
-                                <th class="p-0.5 border-r border-black">Seni Musik</th>
-                                <th class="p-0.5 border-r border-black">Total</th>
-                                <th class="p-0.5">Rata2</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${rowsNilaiHtml}
-                        </tbody>
+                    <h4 class="font-bold uppercase mb-0.5">H & I. RIWAYAT KELAS & KELULUSAN</h4>
+                    <table class="w-full text-center border border-black mb-1">
+                        <tr class="bg-gray-100 font-bold border-b border-black">
+                            <td class="p-0.5 border-r border-black">Kls 1</td>
+                            <td class="p-0.5 border-r border-black">Kls 2</td>
+                            <td class="p-0.5 border-r border-black">Kls 3</td>
+                            <td class="p-0.5 border-r border-black">Kls 4</td>
+                            <td class="p-0.5 border-r border-black">Kls 5</td>
+                            <td class="p-0.5">Kls 6</td>
+                        </tr>
+                        <tr>
+                            <td class="p-0.5 border-r border-black">${s.class1 || '-'}</td>
+                            <td class="p-0.5 border-r border-black">${s.class2 || '-'}</td>
+                            <td class="p-0.5 border-r border-black">${s.class3 || '-'}</td>
+                            <td class="p-0.5 border-r border-black">${s.class4 || '-'}</td>
+                            <td class="p-0.5 border-r border-black">${s.class5 || '-'}</td>
+                            <td class="p-0.5">${s.class6 || '-'}</td>
+                        </tr>
                     </table>
-                    <table class="w-full text-[11px] mt-2">
-                        <tr><td class="w-48 py-0.5">Tamat Belajar / Tgl Keluar</td><td class="w-3">:</td><td>${s.graduationInfo || '-'} / ${s.exitDate || '-'}</td></tr>
+                    <table class="w-full">
+                        <tr><td class="w-48 py-0.5">Tamata Belajar / Tgl Keluar</td><td class="w-3">:</td><td>${s.graduationInfo || '-'} / ${s.exitDate || '-'}</td></tr>
                         <tr><td class="py-0.5">Status Akhir</td><td>:</td><td class="font-bold uppercase">${s.notes || '-'}</td></tr>
                     </table>
                 </div>
@@ -2539,33 +2626,6 @@
         window.closeIndukPrintModal = function() {
             document.getElementById('indukPrintModal').classList.add('hidden');
             document.getElementById('indukPrintModal').classList.remove('flex');
-        }
-
-        function renderStudentGradesInputTable(existingGrades = {}) {
-            const tbody = document.getElementById('studentGradesInputTbody');
-            if (!tbody) return;
-
-            let html = '';
-            for (let sem = 1; sem <= 12; sem++) {
-                const kls = Math.ceil(sem / 2);
-                const semInKls = (sem % 2 === 1) ? 1 : 2;
-                const semData = existingGrades[`sem${sem}`] || {};
-
-                let inputsHtml = ALL_MAPEL_LIST.map(m => `
-                    <td class="p-0.5 border text-center">
-                        <input type="number" min="0" max="100" id="indukGrade_sem${sem}_${m.key}" value="${semData[m.key] !== undefined ? semData[m.key] : ''}" class="w-10 border rounded text-center text-[10px] py-0.5 focus:ring-1 focus:ring-indigo-500 font-mono">
-                    </td>
-                `).join('');
-
-                html += `
-                    <tr class="hover:bg-slate-50">
-                        <td class="p-1 border font-semibold text-center whitespace-nowrap bg-slate-50">Kls ${kls}/S${semInKls}</td>
-                        ${inputsHtml}
-                    </tr>
-                `;
-            }
-
-            tbody.innerHTML = html;
         }
 
         window.filterByLetter = function(letter) {
@@ -2652,23 +2712,12 @@
                 document.getElementById('class4').value = s.class4 || '';
                 document.getElementById('class5').value = s.class5 || '';
                 document.getElementById('class6').value = s.class6 || '';
-
-                document.getElementById('avgKls1').value = s.avgKls1 || '';
-                document.getElementById('avgKls2').value = s.avgKls2 || '';
-                document.getElementById('avgKls3').value = s.avgKls3 || '';
-                document.getElementById('avgKls4').value = s.avgKls4 || '';
-                document.getElementById('avgKls5').value = s.avgKls5 || '';
-                document.getElementById('avgKls6').value = s.avgKls6 || '';
-
-                renderStudentGradesInputTable(s.grades || {});
-
                 document.getElementById('graduationInfo').value = s.graduationInfo || '';
                 document.getElementById('exitDate').value = s.exitDate || '';
                 document.getElementById('notes').value = s.notes || '';
                 document.getElementById('modalTitle').textContent = 'Edit Data Isian Buku Induk (A s.d J)';
             } else {
                 document.getElementById('modalTitle').textContent = 'Tambah Data Siswa Baru';
-                renderStudentGradesInputTable({});
             }
 
             document.getElementById('studentModal').classList.remove('hidden');
@@ -2685,18 +2734,7 @@
             if (currentUserRole !== 'ADMIN') return;
 
             const key = document.getElementById('studentKey').value;
-            const gradesPayload = {};
-
-            for (let sem = 1; sem <= 12; sem++) {
-                gradesPayload[`sem${sem}`] = {};
-                ALL_MAPEL_LIST.forEach(m => {
-                    const val = document.getElementById(`indukGrade_sem${sem}_${m.key}`)?.value || '';
-                    if (val !== '') {
-                        gradesPayload[`sem${sem}`][m.key] = val;
-                    }
-                });
-            }
-
+            
             const studentPayload = {
                 nis: document.getElementById('nis').value.trim(),
                 nisn: document.getElementById('nisn').value.trim(),
@@ -2745,16 +2783,6 @@
                 class4: document.getElementById('class4').value.trim(),
                 class5: document.getElementById('class5').value.trim(),
                 class6: document.getElementById('class6').value.trim(),
-
-                avgKls1: document.getElementById('avgKls1').value.trim(),
-                avgKls2: document.getElementById('avgKls2').value.trim(),
-                avgKls3: document.getElementById('avgKls3').value.trim(),
-                avgKls4: document.getElementById('avgKls4').value.trim(),
-                avgKls5: document.getElementById('avgKls5').value.trim(),
-                avgKls6: document.getElementById('avgKls6').value.trim(),
-
-                grades: gradesPayload,
-
                 graduationInfo: document.getElementById('graduationInfo').value.trim(),
                 exitDate: document.getElementById('exitDate').value.trim(),
                 notes: document.getElementById('notes').value.trim().toUpperCase()
@@ -2937,7 +2965,7 @@
                     "Pindahan Dari", "Nama Ayah", "TTL Ayah", "Pendidikan Ayah", "Pekerjaan Ayah", "Penghasilan Ayah", 
                     "Nama Ibu", "TTL Ibu", "Pendidikan Ibu", "Pekerjaan Ibu", "Penghasilan Ibu", "Nama Wali", 
                     "Hubungan Wali", "No HP/WA", "Tes IQ", "Prestasi", "Beasiswa", "Kelas 1", "Kelas 2", 
-                    "Kelas 3", "Kelas 4", "Kelas 5", "Kelas 6", "Rata2 Kls 1", "Rata2 Kls 2", "Rata2 Kls 3", "Rata2 Kls 4", "Rata2 Kls 5", "Rata2 Kls 6", "No. Ijazah Kelulusan", "Tanggal Keluar", "Status"
+                    "Kelas 3", "Kelas 4", "Kelas 5", "Kelas 6", "No. Ijazah Kelulusan", "Tanggal Keluar", "Status"
                 ]
             ];
 
@@ -2950,7 +2978,7 @@
                     s.transferFrom||'', s.fatherName||'', s.fatherPobDob||'', s.fatherEdu||'', s.fatherJob||'', s.fatherIncome||'', 
                     s.motherName||'', s.motherPobDob||'', s.motherEdu||'', s.motherJob||'', s.motherIncome||'', s.parentName||'', 
                     s.guardianDetails||'', s.phone||'', s.iqTest||'', s.achievements||'', s.scholarship||'', s.class1||'', s.class2||'', 
-                    s.class3||'', s.class4||'', s.class5||'', s.class6||'', s.avgKls1||'', s.avgKls2||'', s.avgKls3||'', s.avgKls4||'', s.avgKls5||'', s.avgKls6||'', s.graduationInfo||'', s.exitDate||'', s.notes||''
+                    s.class3||'', s.class4||'', s.class5||'', s.class6||'', s.graduationInfo||'', s.exitDate||'', s.notes||''
                 ]);
             });
 
