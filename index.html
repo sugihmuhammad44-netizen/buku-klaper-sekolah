@@ -20,7 +20,7 @@
             th, td { border: 1px solid #000 !important; padding: 2px 4px !important; }
             #printHeader { display: block !important; margin-bottom: 10px; text-align: center; }
             #indukSheetContent, #suratReceiptContent, #raporSheetContent { border: none !important; box-shadow: none !important; padding: 0 !important; }
-            .page-break { page-break-after: always; }
+            .page-break { page-break-after: always; break-after: page; }
         }
     </style>
 </head>
@@ -322,14 +322,11 @@
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
-                    <!-- FILTER TAHUN AJARAN BARU -->
+                    <!-- FILTER TAHUN AJARAN DINAMIS SECARA OTOMATIS DARI BUKU INDUK -->
                     <div class="flex items-center gap-2">
                         <label for="raporTahunAjaranFilter" class="text-xs font-semibold text-slate-600 whitespace-nowrap">Tahun Ajaran:</label>
                         <select id="raporTahunAjaranFilter" onchange="renderRaporGrid()" class="border border-indigo-300 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-indigo-50 font-bold text-indigo-900">
                             <option value="ALL">Semua Tahun Ajaran</option>
-                            <option value="2023/2024">2023/2024</option>
-                            <option value="2024/2025">2024/2025</option>
-                            <option value="2025/2026">2025/2026</option>
                         </select>
                     </div>
 
@@ -900,16 +897,16 @@
         </div>
     </div>
 
-    <!-- MODAL CETAK LEMBAR RAPOR CAPAIAN SISWA -->
+    <!-- MODAL CETAK LEMBAR RAPOR CAPAIAN SISWA (LENGKAP KELAS 1-6) -->
     <div id="raporPrintModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-2 sm:p-4 no-print">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col my-auto overflow-hidden">
             <div class="flex justify-between items-center px-6 py-3.5 bg-slate-800 text-white shrink-0 border-b border-slate-700 no-print">
                 <h3 class="text-sm sm:text-base font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-graduation-cap text-yellow-400"></i> Pratinjau Lembar Rapor Capaian Competensi Siswa
+                    <i class="fa-solid fa-graduation-cap text-yellow-400"></i> Pratinjau Lembar Rapor Capaian Siswa (Kelas 1 s.d Kelas 6)
                 </h3>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-print"></i> Cetak Lembar Rapor
+                        <i class="fa-solid fa-print"></i> Cetak Semua Rapor (Kls 1-6)
                     </button>
                     <button onclick="closeRaporPrintModal()" class="bg-slate-600 hover:bg-slate-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
                         <i class="fa-solid fa-xmark"></i> Tutup
@@ -918,7 +915,7 @@
             </div>
 
             <div class="p-4 sm:p-8 overflow-y-auto flex-grow bg-slate-100">
-                <div id="raporSheetContent" class="p-6 bg-white text-black font-serif text-[11px] leading-snug border border-slate-300 shadow-md max-w-3xl mx-auto"></div>
+                <div id="raporSheetContent" class="p-6 bg-white text-black font-serif text-[11px] leading-snug border border-slate-300 shadow-md max-w-3xl mx-auto space-y-8"></div>
             </div>
         </div>
     </div>
@@ -1096,7 +1093,7 @@
         const studentsRef = ref(db, 'students');
         const suratRef = ref(db, 'surat_keluar');
 
-        // MAP MATA PELAJARAN SESUAI KELAS (TEMPLATE WORD)
+        // MAP MATA PELAJARAN SESUAI KELAS
         const MAPEL_BY_KELAS = {
             "1": ["Pendidikan Agama dan Budi Pekerti", "Pendidikan Pancasila", "Bahasa Indonesia", "Matematika", "Bahasa Inggris", "Seni Budaya / Seni Rupa", "Pendidikan Jasmani, Olahraga & Kesehatan", "Muatan Lokal (Bahasa Sunda)", "Pendidikan Lingkungan Hidup (PLH)"],
             "2": ["Pendidikan Agama dan Budi Pekerti", "Pendidikan Pancasila", "Bahasa Indonesia", "Matematika", "Bahasa Inggris", "Seni Budaya / Seni Rupa", "Pendidikan Jasmani, Olahraga & Kesehatan", "Muatan Lokal (Bahasa Sunda)", "Pendidikan Lingkungan Hidup (PLH)"],
@@ -1197,6 +1194,7 @@
                 document.getElementById('syncIndicator').className = "h-3 w-3 rounded-full bg-emerald-500";
                 document.getElementById('syncText').textContent = "Terhubung ke Cloud Database";
                 updateYearFilterControls();
+                updateRaporTahunAjaranOptions();
                 renderData();
                 renderIndukGrid();
                 renderRaporGrid();
@@ -1261,6 +1259,46 @@
 
             klaperSelect.value = currentYearFilter;
             indukSelect.value = currentYearFilter;
+        }
+
+        function updateRaporTahunAjaranOptions() {
+            const select = document.getElementById('raporTahunAjaranFilter');
+            if (!select) return;
+
+            const selectedValue = select.value;
+            const yearSet = new Set();
+
+            Object.values(studentsData).forEach(siswa => {
+                for (let i = 1; i <= 6; i++) {
+                    const val = String(siswa[`class${i}`] || '');
+                    if (val) {
+                        const matches = val.match(/(\d{2}\/\d{2}|\d{4}\/\d{4})/g);
+                        if (matches) {
+                            matches.forEach(m => {
+                                if (m.length === 5) {
+                                    const [p1, p2] = m.split('/');
+                                    yearSet.add(`20${p1}/20${p2}`);
+                                } else if (m.length === 9) {
+                                    yearSet.add(m);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+
+            const sortedYears = Array.from(yearSet).sort((a, b) => b.localeCompare(a));
+
+            let html = `<option value="ALL">Semua Tahun Ajaran</option>`;
+            sortedYears.forEach(yr => {
+                html += `<option value="${yr}">${yr}</option>`;
+            });
+
+            select.innerHTML = html;
+
+            if (sortedYears.includes(selectedValue)) {
+                select.value = selectedValue;
+            }
         }
 
         window.filterByYear = function(year) {
@@ -1609,19 +1647,15 @@
             renderIndukGrid();
         }
 
-        // --- MANAJEMEN RAPOR SISWA & LOGIKA RIWAYAT TAHUN AJARAN ---
         function getKelasDanTahunDariSiswa(s, targetTahunFull) {
             if (!s || !targetTahunFull || targetTahunFull === 'ALL') return null;
 
-            // Mengubah format "2023/2024" menjadi "23/24"
             const shortYear = targetTahunFull.split('/').map(y => y.trim().slice(-2)).join('/');
             
-            // Periksa field class1 s.d class6
             const classFields = [s.class1, s.class2, s.class3, s.class4, s.class5, s.class6];
             for (let i = 0; i < classFields.length; i++) {
                 const text = String(classFields[i] || '');
                 if (text.includes(shortYear) || text.includes(targetTahunFull)) {
-                    // Cari tingkat kelas (1..6)
                     const matchTingkat = text.match(/kls\s*([1-6])/i) || text.match(/kelas\s*([1-6])/i);
                     const tingkat = matchTingkat ? matchTingkat[1] : String(i + 1);
                     return {
@@ -1641,7 +1675,6 @@
             let list = Object.keys(studentsData).map(k => ({ key: k, ...studentsData[k] }));
             list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
-            // Filter Berdasarkan Tahun Ajaran Riwayat (Misal 2023/2024 -> th 23/24)
             if (filterTahunAjaran !== 'ALL') {
                 list = list.filter(s => {
                     const info = getKelasDanTahunDariSiswa(s, filterTahunAjaran);
@@ -1649,14 +1682,12 @@
                 });
             }
 
-            // Filter Berdasarkan Tingkat Kelas
             if (filterKelas !== 'ALL') {
                 list = list.filter(s => {
                     if (filterTahunAjaran !== 'ALL') {
                         const info = getKelasDanTahunDariSiswa(s, filterTahunAjaran);
                         return info && info.tingkatKelas === filterKelas;
                     } else {
-                        // Jika tidak difilter tahun ajaran, cek apakah pernah di kelas tsb
                         const rawStr = `${s.class1||''} ${s.class2||''} ${s.class3||''} ${s.class4||''} ${s.class5||''} ${s.class6||''}`;
                         return rawStr.includes(`kls ${filterKelas}`) || rawStr.includes(`kelas ${filterKelas}`) || Boolean(s[`class${filterKelas}`]);
                     }
@@ -1724,8 +1755,8 @@
                                         <i class="fa-solid fa-pen-to-square"></i> Input / Edit Rapor
                                     </button>
                                 ` : ''}
-                                <button onclick="selectRaporToPrint('${s.key}', '${infoTahun ? infoTahun.tingkatKelas : ''}')" class="${currentUserRole === 'ADMIN' ? '' : 'col-span-2'} bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-1.5 px-2 rounded-lg text-xs transition flex items-center justify-center gap-1">
-                                    <i class="fa-solid fa-print"></i> Cetak Lembar Rapor
+                                <button onclick="printAllRaporSheets('${s.key}')" class="${currentUserRole === 'ADMIN' ? '' : 'col-span-2'} bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-1.5 px-2 rounded-lg text-xs transition flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-print"></i> Cetak Semua Rapor (Kls 1-6)
                                 </button>
                             </div>
                         </div>
@@ -1922,132 +1953,137 @@
             closeRaporModal();
         }
 
-        window.selectRaporToPrint = function(key, defaultKelas = "") {
-            const s = studentsData[key];
-            if (!s) return;
-
-            const availableClasses = Object.keys(s.raporData || {});
-            const presetKelas = defaultKelas || (availableClasses.length > 0 ? availableClasses[0].replace('kelas_', '') : '1');
-
-            const chosenClassStr = prompt(`Pilih Kelas Rapor yang ingin dicetak (1, 2, 3, 4, 5, atau 6):\nTersedia data: ${availableClasses.join(', ')}`, presetKelas);
-            if (!chosenClassStr) return;
-
-            const chosenSem = prompt("Pilih Semester (1 atau 2):", "1");
-            if (!chosenSem) return;
-
-            printRaporSheet(key, chosenClassStr.trim(), chosenSem.trim());
-        }
-
-        window.printRaporSheet = function(key, kelas, semester) {
-            const s = studentsData[key];
-            if (!s) return;
-
-            const raporObj = (s.raporData && s.raporData[`kelas_${kelas}`] && s.raporData[`kelas_${kelas}`][`sem_${semester}`]) ? s.raporData[`kelas_${kelas}`][`sem_${semester}`] : null;
-
-            if (!raporObj) {
-                alert(`Data Rapor untuk Kelas ${kelas} Semester ${semester} belum diisi.`);
-                return;
-            }
+        // FUNGSI MEMBANGUN TEMPLATE SELEMBAR RAPOR PER KELAS & SEMESTER (TETAP TERCETAK WALAU NILAI KOSONG)
+        function generateSingleRaporHTML(s, kelas, semester) {
+            const raporObj = (s.raporData && s.raporData[`kelas_${kelas}`] && s.raporData[`kelas_${kelas}`][`sem_${semester}`]) 
+                ? s.raporData[`kelas_${kelas}`][`sem_${semester}`] 
+                : {};
 
             const mapelList = MAPEL_BY_KELAS[kelas] || MAPEL_BY_KELAS["1"];
             const mapelRows = mapelList.map((m, idx) => {
-                const mp = raporObj.mapelData ? raporObj.mapelData[idx] : null;
+                const mp = (raporObj.mapelData && raporObj.mapelData[idx]) ? raporObj.mapelData[idx] : null;
                 return `
                     <tr class="border-b border-black">
                         <td class="p-1 text-center border-r border-black">${idx + 1}</td>
                         <td class="p-1 border-r border-black font-semibold">${m}</td>
-                        <td class="p-1 text-center border-r border-black font-bold">${mp ? (mp.nilai || '-') : '-'}</td>
-                        <td class="p-1">${mp ? (mp.capaian || '-') : '-'}</td>
+                        <td class="p-1 text-center border-r border-black font-bold">${mp ? (mp.nilai || '') : ''}</td>
+                        <td class="p-1">${mp ? (mp.capaian || '') : ''}</td>
                     </tr>
                 `;
             }).join('');
 
-            const html = `
-                ${OFFICIAL_KOP_SURAT_HTML}
+            return `
+                <div class="rapor-page-item ${kelas < 6 || semester < 2 ? 'page-break border-b border-dashed border-slate-300 pb-8 mb-8' : ''}">
+                    ${OFFICIAL_KOP_SURAT_HTML}
 
-                <div class="text-center font-bold text-xs uppercase mb-3">
-                    <h2 class="text-sm underline">LAPORAN CAPAIAN KOMPETENSI SISWA — KELAS ${kelas}</h2>
-                </div>
-
-                <div class="mb-3 text-xs">
-                    <div class="flex justify-between border-b border-black pb-1 mb-1">
-                        <span><strong>Nama Peserta Didik:</strong> <span class="uppercase font-bold">${s.name || '-'}</span></span>
-                        <span><strong>NIS:</strong> ${s.nis || '-'} &nbsp;|&nbsp; <strong>NISN:</strong> ${s.nisn || '-'}</span>
+                    <div class="text-center font-bold text-xs uppercase mb-3">
+                        <h2 class="text-sm underline">LAPORAN CAPAIAN KOMPETENSI SISWA — KELAS ${kelas}</h2>
                     </div>
-                    <div class="flex justify-between font-semibold">
-                        <span>Kelas / Fase : Kelas ${kelas}</span>
-                        <span>Tahun Pelajaran : ${raporObj.tahunAjar || '20.... / 20....'}</span>
-                        <span>Semester : ${semester}</span>
+
+                    <div class="mb-3 text-xs">
+                        <div class="flex justify-between border-b border-black pb-1 mb-1">
+                            <span><strong>Nama Peserta Didik:</strong> <span class="uppercase font-bold">${s.name || '-'}</span></span>
+                            <span><strong>NIS:</strong> ${s.nis || '-'} &nbsp;|&nbsp; <strong>NISN:</strong> ${s.nisn || '-'}</span>
+                        </div>
+                        <div class="flex justify-between font-semibold">
+                            <span>Kelas / Fase : Kelas ${kelas}</span>
+                            <span>Tahun Pelajaran : ${raporObj.tahunAjar || '20.... / 20....'}</span>
+                            <span>Semester : ${semester} (${semester === '1' || semester === 1 ? 'Ganjil' : 'Genap'})</span>
+                        </div>
                     </div>
-                </div>
 
-                <table class="w-full border border-black text-[11px] mb-3">
-                    <thead>
-                        <tr class="bg-gray-100 font-bold border-b border-black text-center">
-                            <td class="p-1 border-r border-black w-8">No.</td>
-                            <td class="p-1 border-r border-black min-w-[180px]">MATA PELAJARAN</td>
-                            <td class="p-1 border-r border-black w-16">NILAI</td>
-                            <td class="p-1">CAPAIAN KOMPETENSI</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${mapelRows}
-                    </tbody>
-                </table>
-
-                <div class="grid grid-cols-2 gap-4 mb-3 text-[11px]">
-                    <div>
-                        <p class="font-bold uppercase mb-1">EKSTRAKURIKULER (KELAS ${kelas} - SEMESTER ${semester})</p>
-                        <table class="w-full border border-black text-center">
-                            <tr class="bg-gray-100 font-bold border-b border-black">
-                                <td class="p-1 border-r border-black text-left">Kegiatan Ekstrakurikuler</td>
-                                <td class="p-1 border-r border-black w-12">Nilai</td>
-                                <td class="p-1 text-left">Keterangan</td>
+                    <table class="w-full border border-black text-[11px] mb-3">
+                        <thead>
+                            <tr class="bg-gray-100 font-bold border-b border-black text-center">
+                                <td class="p-1 border-r border-black w-8">No.</td>
+                                <td class="p-1 border-r border-black min-w-[180px]">MATA PELAJARAN</td>
+                                <td class="p-1 border-r border-black w-16">NILAI</td>
+                                <td class="p-1">CAPAIAN KOMPETENSI</td>
                             </tr>
-                            <tr class="border-b border-black"><td class="p-1 text-left border-r border-black">1. Pramuka</td><td class="p-1 border-r border-black font-bold">${raporObj.ekstra1 ? raporObj.ekstra1.nilai || '-' : '-'}</td><td class="p-1 text-left">${raporObj.ekstra1 ? raporObj.ekstra1.ket || '-' : '-'}</td></tr>
-                            <tr class="border-b border-black"><td class="p-1 text-left border-r border-black">2. Seni Tari</td><td class="p-1 border-r border-black font-bold">${raporObj.ekstra2 ? raporObj.ekstra2.nilai || '-' : '-'}</td><td class="p-1 text-left">${raporObj.ekstra2 ? raporObj.ekstra2.ket || '-' : '-'}</td></tr>
-                            <tr><td class="p-1 text-left border-r border-black">3. Futsal</td><td class="p-1 border-r border-black font-bold">${raporObj.ekstra3 ? raporObj.ekstra3.nilai || '-' : '-'}</td><td class="p-1 text-left">${raporObj.ekstra3 ? raporObj.ekstra3.ket || '-' : '-'}</td></tr>
-                        </table>
+                        </thead>
+                        <tbody>
+                            ${mapelRows}
+                        </tbody>
+                    </table>
+
+                    <div class="grid grid-cols-2 gap-4 mb-3 text-[11px]">
+                        <div>
+                            <p class="font-bold uppercase mb-1">EKSTRAKURIKULER (KELAS ${kelas} - SEMESTER ${semester})</p>
+                            <table class="w-full border border-black text-center">
+                                <tr class="bg-gray-100 font-bold border-b border-black">
+                                    <td class="p-1 border-r border-black text-left">Kegiatan Ekstrakurikuler</td>
+                                    <td class="p-1 border-r border-black w-12">Nilai</td>
+                                    <td class="p-1 text-left">Keterangan</td>
+                                </tr>
+                                <tr class="border-b border-black"><td class="p-1 text-left border-r border-black">1. Pramuka</td><td class="p-1 border-r border-black font-bold">${raporObj.ekstra1 ? (raporObj.ekstra1.nilai || '') : ''}</td><td class="p-1 text-left">${raporObj.ekstra1 ? (raporObj.ekstra1.ket || '') : ''}</td></tr>
+                                <tr class="border-b border-black"><td class="p-1 text-left border-r border-black">2. Seni Tari</td><td class="p-1 border-r border-black font-bold">${raporObj.ekstra2 ? (raporObj.ekstra2.nilai || '') : ''}</td><td class="p-1 text-left">${raporObj.ekstra2 ? (raporObj.ekstra2.ket || '') : ''}</td></tr>
+                                <tr><td class="p-1 text-left border-r border-black">3. Futsal</td><td class="p-1 border-r border-black font-bold">${raporObj.ekstra3 ? (raporObj.ekstra3.nilai || '') : ''}</td><td class="p-1 text-left">${raporObj.ekstra3 ? (raporObj.ekstra3.ket || '') : ''}</td></tr>
+                            </table>
+                        </div>
+
+                        <div>
+                            <p class="font-bold uppercase mb-1">KETIDAKHADIRAN (KELAS ${kelas} - SEMESTER ${semester})</p>
+                            <table class="w-full border border-black text-center">
+                                <tr class="bg-gray-100 font-bold border-b border-black">
+                                    <td class="p-1 border-r border-black text-left">Alasan Ketidakhadiran</td>
+                                    <td class="p-1 w-24">Jumlah Hari</td>
+                                </tr>
+                                <tr class="border-b border-black"><td class="p-1 text-left border-r border-black">Sakit</td><td class="p-1 font-bold">${raporObj.sakit || '0'} hari</td></tr>
+                                <tr><td class="p-1 text-left border-r border-black">Izin</td><td class="p-1 font-bold">${raporObj.izin || '0'} hari</td></tr>
+                            </table>
+                        </div>
                     </div>
 
-                    <div>
-                        <p class="font-bold uppercase mb-1">KETIDAKHADIRAN (KELAS ${kelas} - SEMESTER ${semester})</p>
-                        <table class="w-full border border-black text-center">
-                            <tr class="bg-gray-100 font-bold border-b border-black">
-                                <td class="p-1 border-r border-black text-left">Alasan Ketidakhadiran</td>
-                                <td class="p-1 w-24">Jumlah Hari</td>
-                            </tr>
-                            <tr class="border-b border-black"><td class="p-1 text-left border-r border-black">Sakit</td><td class="p-1 font-bold">${raporObj.sakit || '0'} hari</td></tr>
-                            <tr><td class="p-1 text-left border-r border-black">Izin</td><td class="p-1 font-bold">${raporObj.izin || '0'} hari</td></tr>
-                        </table>
-                    </div>
-                </div>
+                    ${(semester === "2" || semester === 2) ? `
+                        <div class="p-2 border border-black bg-gray-50 text-[11px] mb-4">
+                            <p class="font-bold">Keputusan Akhir Tahun Pelajaran:</p>
+                            <p>Berdasarkan pencapaian Semester 1 & 2, peserta didik ditetapkan: <strong class="uppercase underline text-black">${raporObj.keputusan ? (raporObj.keputusan.status || 'NAIK KELAS') : '...................'}</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tanggal: ${raporObj.keputusan ? (raporObj.keputusan.tanggal || '......................... 20....') : '......................... 20....'}</p>
+                        </div>
+                    ` : ''}
 
-                ${semester === "2" && raporObj.keputusan ? `
-                    <div class="p-2 border border-black bg-gray-50 text-[11px] mb-4">
-                        <p class="font-bold">Keputusan Akhir Tahun Pelajaran:</p>
-                        <p>Berdasarkan pencapaian Semester 1 & 2, peserta didik ditetapkan: <strong class="uppercase underline text-black">${raporObj.keputusan.status || 'NAIK KELAS'}</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tanggal: ${raporObj.keputusan.tanggal || '......................... 20....'}</p>
-                    </div>
-                ` : ''}
-
-                <div class="mt-6 flex justify-between items-end text-[11px]">
-                    <div class="text-center">
-                        <p>Mengetahui,</p>
-                        <p class="mb-10">Orang Tua / Wali Siswa</p>
-                        <p class="font-bold underline">_________________________</p>
-                    </div>
-                    <div class="text-center">
-                        <p>Bandung, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                        <p class="mb-10">Wali Kelas / Guru</p>
-                        <p class="font-bold underline">_________________________</p>
-                        <p>NIP. .................................................</p>
+                    <div class="mt-6 flex justify-between items-end text-[11px]">
+                        <div class="text-center">
+                            <p>Mengetahui,</p>
+                            <p class="mb-10">Orang Tua / Wali Siswa</p>
+                            <p class="font-bold underline">_________________________</p>
+                        </div>
+                        <div class="text-center">
+                            <p>Bandung, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                            <p class="mb-10">Wali Kelas / Guru</p>
+                            <p class="font-bold underline">_________________________</p>
+                            <p>NIP. .................................................</p>
+                        </div>
                     </div>
                 </div>
             `;
+        }
 
-            document.getElementById('raporSheetContent').innerHTML = html;
+        // FUNGSI MENCETAK SELURUH RAPOR KELAS 1 S.D KELAS 6 SECARA BERURUTAN
+        window.printAllRaporSheets = function(key) {
+            const s = studentsData[key];
+            if (!s) return;
+
+            let fullRaporHTML = '';
+
+            // Looping dari Kelas 1 s.d Kelas 6 (Semester 1 & 2 untuk setiap kelas)
+            for (let k = 1; k <= 6; k++) {
+                for (let sem = 1; sem <= 2; sem++) {
+                    fullRaporHTML += generateSingleRaporHTML(s, String(k), String(sem));
+                }
+            }
+
+            document.getElementById('raporSheetContent').innerHTML = fullRaporHTML;
             document.getElementById('raporPrintModal').classList.remove('hidden');
             document.getElementById('raporPrintModal').classList.add('flex');
+        }
+
+        // ALIAS UNTUK MEMASTIKAN FUNGSI EKSISTING TETAP BERJALAN NORMAL
+        window.selectRaporToPrint = function(key) {
+            printAllRaporSheets(key);
+        }
+
+        window.printRaporSheet = function(key, kelas, semester) {
+            printAllRaporSheets(key);
         }
 
         window.closeRaporPrintModal = function() {
